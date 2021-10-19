@@ -15,3 +15,6 @@
 <br/><br/>
 
 **아워 펫, 검증받은 펫 시터가 내 아이와 함께합니다.**
+
+# Need More Information?
+[Check out OurPet wiki page!](https://github.com/TTurbo0824/OurPet/wiki)
