@@ -62,8 +62,8 @@ export const MypageButton = styled.button`
 
 const Mypage = ({ modal, handleMessage, handleNotice }) => {
   const token = useSelector((state) => state.user).token;
-  const userID = useSelector((state) => state.user).userID;
-  const isExpired = useSelector((state) => state.user).isExpired;
+  const nickname = useSelector((state) => state.user).userInfo[0].nickname;
+  const isExpired = useSelector((state) => state.user).userInfo[0].isExpired;
 
   const [checkPassword, setCheckPassword] = useState(false);
   const [checkRetypePassword, setCheckRetypePassword] = useState(false);
@@ -151,7 +151,7 @@ const Mypage = ({ modal, handleMessage, handleNotice }) => {
       <div className='main'>
         <MypageView>
           <MypageInputContainer>
-            <InputField disabled placeholder={userID} />
+            <InputField disabled placeholder={nickname} />
             <InputField
               type='password'
               onChange={inputCheck('password')}

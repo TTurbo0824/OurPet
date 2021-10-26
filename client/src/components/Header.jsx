@@ -55,7 +55,9 @@ export const HeaderButton = styled.button`
 function Header ({ login, signup, modal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user).token;
-  const isExpired = useSelector((state) => state.user).isExpired;
+
+  console.log(isLogin)
+  const isExpired = useSelector((state) => state.user).userInfo[0].isExpired;
 
   const handleLogoutRequest = () => {
     const token = isLogin;

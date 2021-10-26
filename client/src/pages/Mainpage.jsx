@@ -1,3 +1,4 @@
+import {useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
 
 export const MainpageWrapper = styled.div`
@@ -7,10 +8,13 @@ export const MainpageWrapper = styled.div`
   }
 `;
 
-function Mainpage () {
+function Mainpage() {
+  const dogWalker = useSelector((state) => state.dogwalker);
+  console.log(dogWalker);
+  
   return (
     <MainpageWrapper>
-      <div className='main' />
+      <div className="main" />
     </MainpageWrapper>
   );
 }

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from './redux/reducer';
 import styled from 'styled-components';
 import { useJwt } from 'react-jwt';
 import Header from './components/Header';

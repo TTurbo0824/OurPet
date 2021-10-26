@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { userLogin } from '../redux/action';
 import logo from '../images/logo.png';
 import { Colors } from '../components/utils/_var';
@@ -79,7 +79,11 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
       setErrorMsg('모든 항목을 입력해 주세요');
     } else {
       // JUST FOR TESTING PURPOSES
-      dispatch(userLogin('access token', loginInfo.id));
+      const token = 'access token';
+      const userInfo = {
+        nickname: loginInfo.id
+      }
+      dispatch(userLogin(token, loginInfo.id));
       handleModal();
       handleNotice(true);
       handleMessage('로그인 성공!');
@@ -90,7 +94,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true
         })
-        .then((res: AxiosResponse<any>) => {
+        .then((res) => {
           localStorage.setItem('accessToken', res.data.accessToken);
           localStorage.setItem('accessTokenTime', String(new Date().getTime()));
           handleModal();
@@ -106,7 +110,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
                 'Content-Type': 'application/json'
               }
             })
-            .then((res: AxiosResponse<any>) => {
+            .then((res) => {
               dispatch(userLogin(token, false, res.data.data));
               localStorage.setItem('userId', JSON.stringify(res.data.data));
             });
