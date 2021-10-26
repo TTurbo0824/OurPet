@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import axios from 'axios';
-import { Colors } from '../components/utils/_var';
-import { Alertbox, InputField } from '../components/UserComponents';
+import { Colors } from '../../components/utils/_var';
+import { Alertbox, InputField } from '../../components/UserComponents';
 
 export const MypageWrapper = styled.div`
   .main {
@@ -152,7 +152,11 @@ const Mypage = ({ modal, handleMessage, handleNotice }) => {
         <MypageView>
           <MypageInputContainer>
             <InputField disabled placeholder={userID} />
-            <InputField type='password' onChange={inputCheck('password')} placeholder='비밀번호' />
+            <InputField
+              type='password'
+              onChange={inputCheck('password')}
+              placeholder='비밀번호'
+            />
             <InputField
               type='password'
               onChange={handleCheckPassword}
@@ -162,7 +166,10 @@ const Mypage = ({ modal, handleMessage, handleNotice }) => {
           <MypageButton onClick={handleEditRequest} color={Colors.lightYellow}>
             정보수정
           </MypageButton>
-          <MypageButton onClick={handleWithdrawalRequest} color={Colors.darkGray}>
+          <MypageButton
+            onClick={handleWithdrawalRequest}
+            color={Colors.darkGray}
+          >
             회원탈퇴
           </MypageButton>
           <Alertbox>{errorMsg}</Alertbox>
