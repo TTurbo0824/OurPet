@@ -9,7 +9,7 @@ import Footer from './components/Footer';
 import Mainpage from './pages/Mainpage';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Mypage from './pages/Mypage';
+import Mypage from './pages/Mypage/Myinfo';
 import Modal from './components/Modal';
 import Notification from './components/Notification';
 import { tokenExpired } from './redux/action';

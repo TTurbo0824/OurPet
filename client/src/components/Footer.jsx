@@ -47,12 +47,11 @@ const FooterWrapper = styled.div`
 `;
 
 function Footer () {
-  const developer = 
-    {
-      name: '하경주',
-      repository: 'https://github.com/TTurbo0824'
-    }
-  ;
+  const developer = {
+    name: '하경주',
+    repository: 'https://github.com/TTurbo0824'
+  };
+
   return (
     <FooterWrapper>
       <div className='footer'>
@@ -75,12 +74,18 @@ function Footer () {
               target='_blank'
               rel='noopener noreferrer'
             >
-              <FontAwesomeIcon icon={faGithub} size='1x' color={Colors.lightGray} /> {developer.name}
+              <FontAwesomeIcon
+                icon={faGithub}
+                size='1x'
+                color={Colors.lightGray}
+              />{' '}
+              {developer.name}
             </a>
           </div>
           <div className='container-empty' />
           <span className='copyright'>
-            copyright &copy; {new Date().getFullYear()} Kyungjoo Ha All rights reserved.
+            copyright &copy; {new Date().getFullYear()} Kyungjoo Ha All rights
+            reserved.
           </span>
         </div>
       </div>

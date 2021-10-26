@@ -38,7 +38,7 @@ export const Message = styled.div`
 
 export const NoticeButton = styled.button`
   margin-top: 1rem;
-  background-color: ${Colors.lightGreen};
+  background-color: ${Colors.lightYellow};
   border: none;
   border-radius: 10px;
   height: 1.7rem;
@@ -47,13 +47,13 @@ export const NoticeButton = styled.button`
   color: white;
   cursor: pointer;
   :hover {
-    background-color: ${Colors.darkGreen};
+    background-color: ${Colors.darkYellow};
   }
 `;
 
 export const NoticeClose = styled.button`
   margin-top: 1rem;
-  background-color: ${Colors.lightGreen};
+  background-color: ${Colors.lightYellow};
   border: none;
   border-radius: 10px;
   width: 7rem;
@@ -62,7 +62,7 @@ export const NoticeClose = styled.button`
   color: white;
   cursor: pointer;
   :hover {
-    background-color: ${Colors.darkGreen};
+    background-color: ${Colors.darkYellow};
   }
 `;
 
