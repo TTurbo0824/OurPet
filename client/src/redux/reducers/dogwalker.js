@@ -1,12 +1,12 @@
-import {REQUEST_DOGWALKER, CANCEL_DOGWALKER} from '../action';
-import {initialState} from './initialState';
+import { REQUEST_DOGWALKER, CANCEL_DOGWALKER } from '../action';
+import { initialState } from './initialState';
 
-function dogwalker(state = initialState, action) {
+function dogwalker (state = initialState, action) {
   switch (action.type) {
     case REQUEST_DOGWALKER:
-      return {...state};
+      return { ...state };
     case CANCEL_DOGWALKER:
-      return {...state};
+      return { ...state };
     default:
       return state;
   }

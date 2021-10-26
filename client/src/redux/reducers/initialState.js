@@ -3,8 +3,8 @@ export const initialState = {
   userInfo: [
     {
       isExpired: false,
-      nickname: '',
-    },
+      nickname: ''
+    }
   ],
   dogWalkers: [
     {
@@ -17,9 +17,9 @@ export const initialState = {
         소형견30: 15000,
         중형견30: 15000,
         소형견60: 20000,
-        중형견60: 20000,
+        중형견60: 20000
       },
-      certified: true,
+      certified: true
     },
     {
       id: 2,
@@ -31,9 +31,9 @@ export const initialState = {
         소형견30: 15000,
         중형견30: 15000,
         소형견60: 20000,
-        중형견60: 20000,
+        중형견60: 20000
       },
-      certified: true,
+      certified: true
     },
     {
       id: 3,
@@ -45,10 +45,10 @@ export const initialState = {
         중형견30: 15000,
         대형견30: 18000,
         중형견60: 20000,
-        대형견60: 22000,
+        대형견60: 22000
       },
-      certified: true,
-    },
+      certified: true
+    }
   ],
   dogWalkerRequest: [],
   dogWalkerHistory: [
@@ -62,9 +62,9 @@ export const initialState = {
         소형견30: 15000,
         중형견30: 15000,
         소형견60: 20000,
-        중형견60: 20000,
+        중형견60: 20000
       },
-      certified: true,
-    },
-  ],
+      certified: true
+    }
+  ]
 };

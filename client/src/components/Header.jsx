@@ -56,7 +56,7 @@ function Header ({ login, signup, modal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user).token;
 
-  console.log(isLogin)
+  console.log(isLogin);
   const isExpired = useSelector((state) => state.user).userInfo[0].isExpired;
 
   const handleLogoutRequest = () => {

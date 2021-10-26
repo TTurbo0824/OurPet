@@ -82,7 +82,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
       const token = 'access token';
       const userInfo = {
         nickname: loginInfo.id
-      }
+      };
       dispatch(userLogin(token, loginInfo.id));
       handleModal();
       handleNotice(true);

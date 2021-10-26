@@ -1,7 +1,7 @@
-import {LOG_IN, LOG_OUT, TOKEN_EXPIRED} from '../action';
-import {initialState} from './initialState';
+import { LOG_IN, LOG_OUT, TOKEN_EXPIRED } from '../action';
+import { initialState } from './initialState';
 
-function user(state = initialState, action) {
+function user (state = initialState, action) {
   switch (action.type) {
     case LOG_IN:
       return {
@@ -10,20 +10,20 @@ function user(state = initialState, action) {
         userInfo: [
           {
             isExpired: false,
-            nickname: action.payload,
-          },
-        ],
+            nickname: action.payload
+          }
+        ]
       };
     case LOG_OUT:
       return {
         ...state,
         token: '',
-        userInfo: [{isExpired: false, nickname: ''}],
+        userInfo: [{ isExpired: false, nickname: '' }]
       };
     case TOKEN_EXPIRED:
       return {
         ...state,
-        userInfo: [...state.userInfo, {isExpired: true}],
+        userInfo: [...state.userInfo, { isExpired: true }]
       };
     default:
       return state;
