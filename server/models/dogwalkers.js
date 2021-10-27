@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate (models) {
       // define association here
       dogwalkers.hasMany(models.requests, {
         foreignKey: 'dogwalkerId'
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'dogwalkerId'
       });
     }
-  };
+  }
   dogwalkers.init({
     name: DataTypes.STRING,
     age: DataTypes.INTEGER,
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     certified: DataTypes.BOOLEAN
   }, {
     sequelize,
-    modelName: 'dogwalkers',
+    modelName: 'dogwalkers'
   });
   return dogwalkers;
 };
