@@ -128,6 +128,11 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
     }
   };
 
+  const goSignup = () => {
+    handleModal();
+    signup();
+  };
+
   return (
     <Backdrop>
       <LoginView>
@@ -153,7 +158,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
         <LoginButton onClick={handleLoginRequest}>로그인</LoginButton>
         <div>
           <SignupSpan color={Colors.darkGray}>아직 회원이 아니신가요?</SignupSpan>
-          <SignupSpan color={Colors.yellow}>회원가입</SignupSpan>
+          <SignupSpan color={Colors.yellow} onClick={goSignup}>회원가입</SignupSpan>
         </div>
         <Alertbox>{errorMsg}</Alertbox>
       </LoginView>
