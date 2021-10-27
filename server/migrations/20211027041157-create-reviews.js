@@ -9,7 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       historyId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        field: 'historyId',
+        references: {
+          model: 'histories',
+          key: 'id'
+        },
+        onDelete: 'cascade'
       },
       content: {
         type: Sequelize.TEXT

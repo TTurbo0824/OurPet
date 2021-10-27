@@ -11,6 +11,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      histories.hasMany(models.ratings, {
+        foreignKey: 'historyId'
+      });
+      histories.hasMany(models.reviews, {
+        foreignKey: 'historyId'
+      });
+      histories.belongsTo(models.users, {
+        onDelete: 'CASCADE',
+        foreignKey: 'userId'
+      });
+      histories.belongsTo(models.dogwalkers, {
+        onDelete: 'CASCADE',
+        foreignKey: 'dogwalkerId'
+      });
     }
   };
   histories.init({

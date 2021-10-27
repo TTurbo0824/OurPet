@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('histories', {
+    await queryInterface.createTable('requests', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,10 +9,22 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        field: 'userId',
+        references: {
+          model: 'users',
+          key: 'id'
+        },
+        onDelete: 'cascade'
       },
       dogwalkerId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        field: 'dogwalkerId',
+        references: {
+          model: 'dogwalkers',
+          key: 'id'
+        },
+        onDelete: 'cascade'
       },
       service: {
         type: Sequelize.TEXT
@@ -29,6 +41,9 @@ module.exports = {
       price: {
         type: Sequelize.INTEGER
       },
+      status: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -40,6 +55,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('histories');
+    await queryInterface.dropTable('requests');
   }
 };

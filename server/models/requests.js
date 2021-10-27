@@ -11,6 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      requests.belongsTo(models.users, {
+        onDelete: 'CASCADE',
+        foreignKey: 'userId'
+      });
+      requests.belongsTo(models.dogwalkers, {
+        onDelete: 'CASCADE',
+        foreignKey: 'dogwalkerId'
+      });
     }
   };
   requests.init({

@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      reviews.belongsTo(models.histories, {
+        onDelete: 'CASCADE',
+        foreignKey: 'historyId'
+      });
     }
   };
   reviews.init({

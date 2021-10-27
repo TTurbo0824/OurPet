@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      ratings.belongsTo(models.histories, {
+        onDelete: 'CASCADE',
+        foreignKey: 'historyId'
+      });
     }
   };
   ratings.init({
