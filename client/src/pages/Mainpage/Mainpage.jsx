@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import Dogwalker from './Dogwalker';
+import Dogwalker from './DogWalkerItem';
 
 export const MainpageWrapper = styled.div`
   .main {
@@ -11,8 +12,10 @@ export const MainpageWrapper = styled.div`
 `;
 
 function Mainpage () {
+  const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
-  console.log(dogWalkers);
+  // console.log(dogWalkers);
+
   const allTags = [
     '소형견',
     '중형견',
@@ -25,17 +28,27 @@ function Mainpage () {
   const tags = ['대형견', '야외 배변'];
 
   // dogWalkers = dogWalkers.filter((dogWalker) => dogWalker.locations.includes('종로구'));
-  const tagChecker = (arr, target) => target.every(el => arr.includes(el));
+  const tagChecker = (arr, target) => target.every((el) => arr.includes(el));
 
   dogWalkers = dogWalkers.filter((dogWalker) => {
     if (tagChecker(dogWalker.tags, tags)) return dogWalker;
   });
 
+  const handleClick = (dogwalker) => {
+    history.push({ pathname: `/dogwalker:id=${dogwalker.id}` });
+  };
+
   return (
     <MainpageWrapper>
       <div className='main'>
         {dogWalkers.map((dogWalker, idx) => (
-          <Dogwalker dogWalker={dogWalker} key={idx} />
+          <Dogwalker
+            handleClick={() => {
+              handleClick(dogWalker);
+            }}
+            dogWalker={dogWalker}
+            key={idx}
+          />
         ))}
       </div>
     </MainpageWrapper>

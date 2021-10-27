@@ -12,6 +12,7 @@ import Mypage from './pages/Mypage/Myinfo';
 import Modal from './components/Modal';
 import Notification from './components/Notification';
 import { tokenExpired } from './redux/action';
+import DogWalkerPage from './pages/Dogwalker/DogWalkerPage';
 
 const AppWrapper = styled.div`
   * {
@@ -31,7 +32,7 @@ const AppWrapper = styled.div`
     /* opacity: 0.7; */
   }
   .space {
-    margin-bottom: 6.7rem;
+    margin-bottom: 4.7rem;
   }
 `;
 
@@ -108,7 +109,14 @@ function App () {
             />
           </div>
           <div className='space' />
-          {openModal ? <Modal handleModal={handleModalClose} login={handleLoginModalOpen} /> : null}
+          {openModal
+            ? (
+              <Modal
+                handleModal={handleModalClose}
+                login={handleLoginModalOpen}
+              />
+              )
+            : null}
           <Switch>
             <Route exact path='/' component={Mainpage} />
             <Route path='/mypage'>
@@ -124,6 +132,16 @@ function App () {
                   <Redirect to='/' />
                   )}
             </Route>
+            <Route
+              path='/dogwalker:id'
+              render={() => (
+                <DogWalkerPage
+                  modal={handleModalOpen}
+                  handleMessage={handleMessage}
+                  handleNotice={handleNotice}
+                />
+              )}
+            />
           </Switch>
           {openNotice
             ? (
