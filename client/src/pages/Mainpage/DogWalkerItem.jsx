@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const DogWalkerWrapper = styled.div`
   .dogwalker {
+    cursor: pointer;
     display: inline-block;
     width: 230px;
     height: 300px;
@@ -32,7 +33,7 @@ const DogWalkerWrapper = styled.div`
 export default function Dogwalker ({ dogWalker, handleClick }) {
   return (
     <DogWalkerWrapper>
-      <div key={dogWalker.id} onClick={(e) => handleClick(e)} className='dogwalker'>
+      <div className='dogwalker' key={dogWalker.id} onClick={(e) => handleClick(e)}>
         <img className='dogwalker-img' src={dogWalker.img} alt={dogWalker.name} />
         <span className='dogwalker-name' data-testid={dogWalker.name}>
           {dogWalker.name}
