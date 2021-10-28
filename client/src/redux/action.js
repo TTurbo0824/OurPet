@@ -4,10 +4,10 @@ export const TOKEN_EXPIRED = 'TOKEN_EXPIRED';
 export const REQUEST_DOGWALKER = 'REQUEST_DOGWALKER';
 export const CANCEL_DOGWALKER = 'CANCEL_DOGWALKER';
 
-export const userLogin = (token, nickname) => ({
+export const userLogin = (token, loginData) => ({
   type: LOG_IN,
   token,
-  payload: nickname
+  payload: loginData
 });
 
 export const userLogout = () => ({

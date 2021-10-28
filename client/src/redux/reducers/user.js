@@ -10,7 +10,8 @@ function user (state = initialState, action) {
         userInfo: [
           {
             isExpired: false,
-            nickname: action.payload
+            email: action.payload.email,
+            nickname: action.payload.nickname
           }
         ]
       };
@@ -18,7 +19,7 @@ function user (state = initialState, action) {
       return {
         ...state,
         token: '',
-        userInfo: [{ isExpired: false, nickname: '' }]
+        userInfo: [{ isExpired: false, email: '', nickname: '' }]
       };
     case TOKEN_EXPIRED:
       return {

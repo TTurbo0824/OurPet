@@ -46,8 +46,6 @@ function App () {
   const [scrolled, setScrolled] = useState(false);
   const isLogin = useSelector((state) => state.user).token;
   const token = isLogin;
-  const userId = useSelector((state) => state.user).userID;
-  const { decodedToken, isExpired } = useJwt(token);
 
   useEffect(() => {
     const handleScrolled = () => {
@@ -64,12 +62,16 @@ function App () {
     };
   }, [scrolled]);
 
-  // console.log(decodedToken, isExpired);
+  const { decodedToken, isExpired } = useJwt(token);
+  const all = useSelector((state) => state.user).userInfo;
 
-  if (decodedToken && isExpired) {
-    dispatch(tokenExpired(token, true, userId));
+  const expired = useSelector((state) => state.user).userInfo[all.length - 1].isExpired;
+
+  if (decodedToken && isExpired && expired === false) {
+    dispatch(tokenExpired());
   }
 
+  console.log(decodedToken, isExpired)
   const handleLoginModalOpen = () => {
     setOpenLogin(true);
   };

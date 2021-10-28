@@ -55,25 +55,18 @@ export const HeaderButton = styled.button`
 function Header ({ login, signup, modal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user).token;
-
+  const all = useSelector((state) => state.user).userInfo;
+  const isExpired = useSelector((state) => state.user).userInfo[all.length - 1].isExpired;
   console.log(isLogin);
-  const isExpired = useSelector((state) => state.user).userInfo[0].isExpired;
 
   const handleLogoutRequest = () => {
     const token = isLogin;
-
+    console.log(token);
     if (isExpired) {
       modal();
     } else {
-      // JUST FOR TESTING PURPOSES
-      dispatch(userLogout());
-      localStorage.clear();
-      handleNotice(true);
-      handleMessage('로그아웃 성공!');
-
-      /*
       axios
-        .post(process.env.REACT_APP_API_URL + '/logout', {
+        .post(process.env.REACT_APP_API_URL + '/logout', { data: null }, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -89,7 +82,6 @@ function Header ({ login, signup, modal, handleMessage, handleNotice }) {
         .catch((error) => {
           console.log(error.response.data.message);
         });
-      */
     }
   };
 

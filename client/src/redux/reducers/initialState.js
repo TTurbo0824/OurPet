@@ -3,6 +3,7 @@ export const initialState = {
   userInfo: [
     {
       isExpired: false,
+      email: '',
       nickname: ''
     }
   ],
