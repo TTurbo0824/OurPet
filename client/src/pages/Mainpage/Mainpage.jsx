@@ -7,6 +7,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import Dogwalker from './DogWalkerItem';
+import DropDown from './DropDown';
+import Locations from '../../database/Locations';
 import { Colors } from '../../components/utils/_var';
 
 export const MainpageWrapper = styled.div`
@@ -16,6 +18,12 @@ export const MainpageWrapper = styled.div`
   }
   input:focus {
     outline: none;
+  }
+  input {
+    border: none;
+    width: 15rem;
+    margin: 0 0.3rem 0.35rem;
+    color: ${Colors.darkGray};
   }
   .top-container {
     width: 100vw;
@@ -30,7 +38,8 @@ export const MainpageWrapper = styled.div`
   .location-container {
     grid-area: location;
   }
-  .location-container input {
+  .location-search-container {
+    display: block;
     width: 21rem;
     height: 2rem;
     padding: 0 0.4rem;
@@ -49,6 +58,12 @@ export const MainpageWrapper = styled.div`
   }
   .description {
     margin-bottom: .5rem;
+  }
+  .search-icon {
+    width: 1.3rem;
+    vertical-align: middle;
+    margin-top: -.1rem;
+    margin-right: .2rem;
   }
 `;
 
@@ -74,19 +89,17 @@ const DateContainer = styled.div`
   background-color: white;
   border: 1px solid ${Colors.mediumGray};
 
-  input {
-    border: none;
-    margin: 0 0.3rem 0.35rem;
-    color: ${Colors.darkGray};
-  }
+
 `;
 
 function Mainpage () {
   const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
-  // console.log(dogWalkers);
 
   const [startDate, setStartDate] = useState(new Date());
+  const [inputValue, setInputValue] = useState('');
+  const [options, setOptions] = useState([]);
+  const [dogwalkerResult, setDogwalkerResult] = useState('');
 
   const allTagList = [
     '소형견',
@@ -107,7 +120,6 @@ function Mainpage () {
   });
 
   const handleTagClick = (tag) => {
-    console.log(tag);
     if (allTags[tag] === false) {
       setAllTags({
         ...allTags,
@@ -129,13 +141,39 @@ function Mainpage () {
     }
   }
 
-  // dogWalkers = dogWalkers.filter((dogWalker) => dogWalker.locations.includes('종로구'));
-  
   const tagChecker = (arr, target) => target.every((el) => arr.includes(el));
 
   dogWalkers = dogWalkers.filter((dogWalker) => {
     if (tagChecker(dogWalker.tags, tags)) return dogWalker;
   });
+
+  const handleInputChange = (event) => {
+    setInputValue(event);
+    if (!event) {
+      setOptions([]);
+      setDogwalkerResult('');
+    } else if (event && event.length >= 2) {
+      const filteredOptions = Locations.filter((el) => el.includes(event));
+      setOptions(filteredOptions);
+    }
+  };
+
+  const handleDropDownClick = (clickedOption) => {
+    handleInputChange(clickedOption);
+    setDogwalkerResult(locationResult);
+  };
+
+  let locationResult = '';
+
+  if (options.length > 0) {
+    locationResult = options[0].split(' ')[1];
+  }
+
+  if (dogwalkerResult !== '') {
+    dogWalkers = dogWalkers.filter((dogWalker) => {
+      if (dogWalker.locations.includes(locationResult)) return dogWalker;
+    });
+  }
 
   const handleClick = (dogwalker) => {
     history.push({ pathname: `/dogwalker:id=${dogwalker.id}` });
@@ -148,7 +186,21 @@ function Mainpage () {
           <div className='top-container'>
             <div className='location-container'>
               <div className='description'>원하시는 장소를 선택하세요</div>
-              <input placeholder='동 이름을 검색하세요.' />
+              <div className='location-search-container'>
+                <img
+                  className='search-icon'
+                  src='/images/Search_Icon.svg'
+                  alt='search-icon'
+                />
+                <input
+                  placeholder='구 이름을 검색하세요. (예: 강남구)'
+                  value={inputValue}
+                  onChange={(e) => handleInputChange(e.target.value)}
+                />
+              </div>
+              {inputValue
+                ? (<DropDown options={options} handleDropDownClick={handleDropDownClick} />)
+                : null}
             </div>
             <div className='date-container'>
               <div className='description'>원하시는 날짜를 선택하세요</div>

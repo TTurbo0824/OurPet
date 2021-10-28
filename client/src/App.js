@@ -71,7 +71,7 @@ function App () {
     dispatch(tokenExpired());
   }
 
-  console.log(decodedToken, isExpired)
+  console.log(decodedToken, isExpired);
   const handleLoginModalOpen = () => {
     setOpenLogin(true);
   };
