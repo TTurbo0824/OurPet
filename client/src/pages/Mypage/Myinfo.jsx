@@ -62,7 +62,8 @@ export const MypageButton = styled.button`
 
 const Mypage = ({ modal, handleMessage, handleNotice }) => {
   const token = useSelector((state) => state.user).token;
-  const nickname = useSelector((state) => state.user).userInfo[0].nickname;
+  const myInfo = useSelector((state) => state.user).userInfo[0];
+  const { email, nickname } = myInfo;
   const isExpired = useSelector((state) => state.user).userInfo[0].isExpired;
 
   const [checkPassword, setCheckPassword] = useState(false);
@@ -151,12 +152,9 @@ const Mypage = ({ modal, handleMessage, handleNotice }) => {
       <div className='main'>
         <MypageView>
           <MypageInputContainer>
-            <InputField disabled placeholder={nickname} />
-            <InputField
-              type='password'
-              onChange={inputCheck('password')}
-              placeholder='비밀번호'
-            />
+            <InputField onChange={inputCheck('nickname')} placeholder={nickname} />
+            <InputField disabled placeholder={email} />
+            <InputField type='password' onChange={inputCheck('password')} placeholder='비밀번호' />
             <InputField
               type='password'
               onChange={handleCheckPassword}
@@ -166,10 +164,7 @@ const Mypage = ({ modal, handleMessage, handleNotice }) => {
           <MypageButton onClick={handleEditRequest} color={Colors.lightYellow}>
             정보수정
           </MypageButton>
-          <MypageButton
-            onClick={handleWithdrawalRequest}
-            color={Colors.darkGray}
-          >
+          <MypageButton onClick={handleWithdrawalRequest} color={Colors.darkGray}>
             회원탈퇴
           </MypageButton>
           <Alertbox>{errorMsg}</Alertbox>

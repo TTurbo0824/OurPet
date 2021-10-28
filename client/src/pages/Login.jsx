@@ -46,20 +46,21 @@ export const LoginButton = styled.button`
 `;
 
 export const SignupSpan = styled.span`
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   margin: auto 0.2rem auto 0.1rem;
   text-align: right;
-  color: ${(props) => props.color};
-  cursor: pointer;
+  color: ${Colors.gray};
+  color: ${(props) => props.textColor};
+  cursor: ${(props) => (props.textColor === Colors.gray ? 'pointer' : 'normal')};
   :hover {
-    color: ${(props) => (props.color === Colors.yellow ? Colors.darkYellow : Colors.darkGray)};
+    color: ${(props) => (props.textColor === Colors.gray ? Colors.darkYellow : Colors.darkGray)};
   }
 `;
 
 function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
   const [loginInfo, setLoginInfo] = useState({
-    id: '',
+    email: '',
     password: ''
   });
   const [errorMsg, setErrorMsg] = useState('');
@@ -75,20 +76,9 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   };
 
   const handleLoginRequest = () => {
-    if (loginInfo.id === '' || loginInfo.password === '') {
+    if (loginInfo.email === '' || loginInfo.password === '') {
       setErrorMsg('모든 항목을 입력해 주세요');
     } else {
-      // JUST FOR TESTING PURPOSES
-      const token = 'access token';
-      const userInfo = {
-        nickname: loginInfo.id
-      };
-      dispatch(userLogin(token, loginInfo.id));
-      handleModal();
-      handleNotice(true);
-      handleMessage('로그인 성공!');
-
-      /*
       axios
         .post(`${process.env.REACT_APP_API_URL}/login`, loginInfo, {
           headers: { 'Content-Type': 'application/json' },
@@ -111,8 +101,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
               }
             })
             .then((res) => {
-              dispatch(userLogin(token, false, res.data.data));
-              localStorage.setItem('userId', JSON.stringify(res.data.data));
+              dispatch(userLogin(token, res.data.data));
             });
         })
         .catch((error) => {
@@ -124,13 +113,43 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
           }
           console.log(error.response.data.message);
         });
-      */
     }
   };
 
   const goSignup = () => {
     handleModal();
     signup();
+  };
+
+  const guestLoginRequest = () => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/guest`, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
+      })
+      .then((res) => {
+        localStorage.setItem('accessToken', res.data.accessToken);
+        localStorage.setItem('accessTokenTime', new Date().getTime());
+        handleModal();
+        handleNotice(true);
+        handleMessage('30분간 체험이 가능합니다.');
+        return res.data.accessToken;
+      })
+      .then((token) => {
+        axios
+          .get(process.env.REACT_APP_API_URL + '/user-info', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          })
+          .then((res) => {
+            dispatch(userLogin(token, res.data.data));
+          });
+      })
+      .catch((error) => {
+        console.log('error: ', error.response.data.message);
+      });
   };
 
   return (
@@ -140,11 +159,11 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
         <img className='logo' src={logo} alt='logo' />
         <LoginInputContainer>
           <InputField
-            onChange={handleInputValue('id')}
+            onChange={handleInputValue('email')}
             onKeyPress={(e) => {
               enter(e);
             }}
-            placeholder='아이디'
+            placeholder='이메일'
           />
           <InputField
             type='password'
@@ -157,8 +176,9 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
         </LoginInputContainer>
         <LoginButton onClick={handleLoginRequest}>로그인</LoginButton>
         <div>
-          <SignupSpan color={Colors.darkGray}>아직 회원이 아니신가요?</SignupSpan>
-          <SignupSpan color={Colors.yellow} onClick={goSignup}>회원가입</SignupSpan>
+          <SignupSpan textColor={Colors.gray} onClick={goSignup}>회원가입</SignupSpan>
+          <SignupSpan>|</SignupSpan>
+          <SignupSpan textColor={Colors.gray} onClick={guestLoginRequest}>체험하기</SignupSpan>
         </div>
         <Alertbox>{errorMsg}</Alertbox>
       </LoginView>
