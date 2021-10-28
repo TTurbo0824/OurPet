@@ -4,7 +4,7 @@ import { Colors } from './utils/_var';
 export const Alertbox = styled.div`
   color: red;
   font-size: 0.9rem;
-  margin-top: 0.8rem;
+  margin-top: 0.5rem;
 `;
 
 export const Backdrop = styled.div`
