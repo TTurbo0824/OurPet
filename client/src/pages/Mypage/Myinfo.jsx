@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { editInfo } from '../../redux/action';
 import styled from 'styled-components';
 import axios from 'axios';
 import { Colors } from '../../components/utils/_var';
@@ -60,35 +61,103 @@ export const MypageButton = styled.button`
   }
 `;
 
-const Mypage = ({ modal, handleMessage, handleNotice }) => {
-  const token = useSelector((state) => state.user).token;
-  const myInfo = useSelector((state) => state.user).userInfo[0];
-  const { email, nickname } = myInfo;
-  const isExpired = useSelector((state) => state.user).userInfo[0].isExpired;
+// ==================================================================
+//                               TO DO
+// ==================================================================
+//  1. 게스트 모드일 때, 회원 정보 수정 & 회원 탈퇴 기능 disable
+//  2. 회원 정보 수정 & 탈퇴 기능 서버와 연결
+//  3.
+//
 
-  const [checkPassword, setCheckPassword] = useState(false);
-  const [checkRetypePassword, setCheckRetypePassword] = useState(false);
+function Mypage ({ modal, handleMessage, handleNotice }) {
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.user).token;
+  const userInfo = useSelector((state) => state.user).userInfo;
+  const { email, nickname } = userInfo;
+  const isExpired = useSelector((state) => state.user).userInfo.isExpired;
+  const isGuest = useSelector((state) => state.user).userInfo.nickname.includes('guest#');
+  const [checkNickname, setCheckNickname] = useState('ok');
+  const [checkPassword, setCheckPassword] = useState('ok');
+  const [checkRetypePassword, setCheckRetypePassword] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const [userInfo, setUserInfo] = useState({
+  const [myInfo, setMyInfo] = useState({
+    nickname: '',
     password: ''
   });
 
   const handleInputValue = (key) => (e) => {
-    setUserInfo({ ...userInfo, [key]: e.target.value });
+    setMyInfo({ ...myInfo, [key]: e.target.value || '' });
+  };
+
+  const isValidNickname = (e) => {
+    const regExpSpec = /[~!@#$%^&*()_+|<>?:{}`,.=]/;
+    const regExpKor = /[ㄱ-ㅎ|ㅏ-ㅣ]/;
+    if (e.target.value.length === 0) {
+      if (checkRetypePassword) {
+        setCheckNickname('ok');
+        setErrorMsg('');
+      } else {
+        setCheckNickname('닉네임을 입력해주세요');
+      }
+    } else if (regExpKor.test(e.target.value)) {
+      setCheckNickname('올바른 한글 형식을 따라주세요');
+    } else if (regExpSpec.test(e.target.value)) {
+      setCheckNickname('닉네임에 특수문자를 포함하면 안됩니다');
+    } else if (e.target.value.search(/\s/) !== -1) {
+      setCheckNickname('닉네임에 공백을 포함하면 안됩니다');
+    } else if (e.target.value.length < 3 || e.target.value.length > 8) {
+      setCheckNickname('닉네임은 3-8자입니다');
+    } else {
+      setCheckNickname('ok');
+      if (myInfo.password === '' && myInfo.passwordRetype === '') {
+        setCheckPassword('ok');
+        setCheckRetypePassword(true);
+      }
+    }
   };
 
   const isValidPassword = (e) => {
     const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/;
-    if (regExp.test(e.target.value)) {
-      setCheckPassword(true);
+
+    if (e.target.value === '') {
+      if (myInfo.passwordRetype === '' && checkNickname !== 'ok') {
+        setCheckPassword('empty');
+        setCheckRetypePassword(true);
+      } else if (myInfo.passwordRetype === '' && checkNickname === 'ok') {
+        setCheckPassword('ok');
+        setCheckRetypePassword(true);
+        setErrorMsg('');
+      } else {
+        setCheckPassword('empty');
+        setCheckRetypePassword(false);
+      }
+    } else if (e.target.value !== '') {
+      if (myInfo.passwordRetype === e.target.value) {
+        setCheckRetypePassword(true);
+      } else if (myInfo.passwordRetype !== '' && myInfo.passwordRetype !== e.target.value) {
+        setCheckRetypePassword(false);
+      }
+      if (!regExp.test(e.target.value)) {
+        setCheckPassword('no');
+      } else {
+        setCheckPassword('ok');
+      }
     } else {
-      setCheckPassword(false);
+      setCheckPassword('no');
     }
   };
 
   const handleCheckPassword = (e) => {
-    if (e.target.value !== '' && e.target.value === userInfo.password) {
+    if (e.target.value !== '' && e.target.value === myInfo.password) {
+      setCheckRetypePassword(true);
+      // 비밀번호를 완벽하게 입력했다면 닉네임을 수정할 필요없음
+      if (checkNickname === '닉네임을 입력해주세요') {
+        setCheckNickname('ok');
+      }
+    } else if (e.target.value === '' && myInfo.password === '') {
+      setCheckRetypePassword(true);
+    } else if (e.target.value === myInfo.password) {
       setCheckRetypePassword(true);
     } else {
       setCheckRetypePassword(false);
@@ -97,44 +166,65 @@ const Mypage = ({ modal, handleMessage, handleNotice }) => {
 
   const inputCheck = (key) => (e) => {
     handleInputValue(key)(e);
+    setErrorMsg('');
+    if (key === 'nickname') {
+      isValidNickname(e);
+    }
     if (key === 'password') {
       isValidPassword(e);
     }
+    if (key === 'passwordRetype') {
+      handleCheckPassword(e);
+    }
   };
 
-  const handleEditRequest = () => {
-    if (isExpired) {
-      modal();
-    } else if (userInfo.password === '') {
-      setErrorMsg('수정할 비밀번호를 입력해주세요');
-    } else if (checkPassword !== true) {
-      setErrorMsg('비밀번호 형식을 확인해주세요');
-    } else if (checkRetypePassword !== true) {
-      setErrorMsg('비밀번호가 일치하지 않습니다');
-    } else {
-      // JUST FOR TESTING PURPOSES
-      handleNotice(true);
-      handleMessage('비밀번호가 수정되었습니다.');
+  console.log(checkNickname, checkPassword, checkRetypePassword);
 
-      /*
-      axios
-        .patch(process.env.REACT_APP_API_URL + '/user-info', userInfo, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            handleNotice(true);
-            handleMessage('비밀번호가 수정되었습니다.');
-          }
-        })
-        .catch((error) => {
-          console.log(error.response.data.message);
-        });
-      */
+  const handleEditRequest = () => {
+    // console.log(myInfo);
+    if (checkPassword === 'no') {
+      setErrorMsg('올바른 비밀번호가 아닙니다');
+    } else if (!checkRetypePassword) {
+      setErrorMsg('비밀번호가 일치하지 않습니다');
+    } else if (myInfo.nickname === '' && myInfo.password === '') {
+      setErrorMsg('변경할 정보를 입력해주세요');
+    } else if (checkNickname !== 'ok') {
+      setErrorMsg(checkNickname);
+    } else if (
+      checkPassword !== 'ok' ||
+      checkNickname !== 'ok'
+    ) {
+      setErrorMsg('변경할 정보를 올바르게 입력해주세요');
+    } else {
+      if (myInfo.nickname === '') setMyInfo({ ...myInfo, nickname: userInfo.nickname });
+      setErrorMsg('');
+      dispatch(editInfo(myInfo));
+
+      // axios
+      //   .patch(process.env.REACT_APP_API_URL + '/user-info', myInfo, {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //       'Content-Type': 'application/json'
+      //     }
+      //   })
+      //   .then((res) => {
+      //     if (res.status === 200) {
+      //       handleNotice(true);
+      //       handleMessage('회원정보가 수정되었습니다.');
+      //       if (myInfo.nickname === '') {
+      //         myInfo.nickname = nickname;
+      //       } else {
+      //         myInfo.nickname = myInfo.nickname + `#${id}`;
+      //       }
+      //       if (myInfo.password === '') {
+      //         myInfo.password = '';
+      //       }
+      //       dispatch(editInfo(myInfo));
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err.response);
+      //   });
     }
   };
 
@@ -152,13 +242,23 @@ const Mypage = ({ modal, handleMessage, handleNotice }) => {
       <div className='main'>
         <MypageView>
           <MypageInputContainer>
-            <InputField onChange={inputCheck('nickname')} placeholder={nickname} />
-            <InputField disabled placeholder={email} />
-            <InputField type='password' onChange={inputCheck('password')} placeholder='비밀번호' />
             <InputField
+              disabled={isGuest ? 'disabled' : null}
+              onChange={inputCheck('nickname')}
+              placeholder={nickname}
+            />
+            <InputField disabled placeholder={email} />
+            <InputField
+              disabled={isGuest ? 'disabled' : null}
               type='password'
-              onChange={handleCheckPassword}
+              placeholder='비밀번호 (영문, 숫자 반드시 포함)'
+              onChange={inputCheck('password')}
+            />
+            <InputField
+              disabled={isGuest ? 'disabled' : null}
+              type='password'
               placeholder='비밀번호 재확인'
+              onChange={handleCheckPassword}
             />
           </MypageInputContainer>
           <MypageButton onClick={handleEditRequest} color={Colors.lightYellow}>
@@ -172,6 +272,6 @@ const Mypage = ({ modal, handleMessage, handleNotice }) => {
       </div>
     </MypageWrapper>
   );
-};
+}
 
 export default Mypage;

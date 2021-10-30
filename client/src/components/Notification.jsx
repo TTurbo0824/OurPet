@@ -78,11 +78,10 @@ function Notification ({ message, handleNotice, handleMessage }) {
   const token = useSelector((state) => state.user).token;
 
   const withdrawalRequest = () => {
-    handleNotice(true);
-    handleMessage('회원탈퇴가 완료되었습니다.');
-    localStorage.clear();
+    // handleNotice(true);
+    // handleMessage('회원탈퇴가 완료되었습니다.');
+    // localStorage.clear();
 
-    /*
     axios
       .delete(process.env.REACT_APP_API_URL + '/withdrawal', {
         headers: {
@@ -98,7 +97,6 @@ function Notification ({ message, handleNotice, handleMessage }) {
           localStorage.clear();
         }
       });
-      */
   };
 
   return (

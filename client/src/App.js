@@ -63,15 +63,14 @@ function App () {
   }, [scrolled]);
 
   const { decodedToken, isExpired } = useJwt(token);
-  const all = useSelector((state) => state.user).userInfo;
-
-  const expired = useSelector((state) => state.user).userInfo[all.length - 1].isExpired;
+  const expired = useSelector((state) => state.user).userInfo.isExpired;
 
   if (decodedToken && isExpired && expired === false) {
     dispatch(tokenExpired());
   }
 
-  console.log(decodedToken, isExpired);
+  console.log('expired: ', expired);
+
   const handleLoginModalOpen = () => {
     setOpenLogin(true);
   };
@@ -108,6 +107,7 @@ function App () {
               modal={handleModalOpen}
               handleMessage={handleMessage}
               handleNotice={handleNotice}
+              scrolled={scrolled}
             />
           </div>
           <div className='space' />
