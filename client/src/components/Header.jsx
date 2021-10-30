@@ -6,17 +6,20 @@ import axios from 'axios';
 import { Colors } from '../components/utils/_var';
 import logo from '../images/logo.png';
 
+const HeaderContainer = styled.div`
+  display: grid;
+  height: 3.5rem;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgba(150, 150, 150, 0.2);
+  /* border-bottom: 1px solid; */
+  border-color: ${(props) => props.borderColor};
+  grid-template-areas: 'logo pages';
+  grid-template-columns: 50% 50%;
+`;
+
 const HeaderWrapper = styled.div`
-  .header {
-    display: grid;
-    height: 3.5rem;
-    width: 100vw;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid rgba(150, 150, 150, 0.2);
-    grid-template-areas: 'logo pages';
-    grid-template-columns: 50% 50%;
-  }
   .header-container-1 {
     grid-area: logo;
     text-align: left;
@@ -52,12 +55,10 @@ export const HeaderButton = styled.button`
   }
 `;
 
-function Header ({ login, signup, modal, handleMessage, handleNotice }) {
+function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }) {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user).token;
-  const all = useSelector((state) => state.user).userInfo;
-  const isExpired = useSelector((state) => state.user).userInfo[all.length - 1].isExpired;
-  console.log(isLogin);
+  const isExpired = useSelector((state) => state.user).userInfo.isExpired;
 
   const handleLogoutRequest = () => {
     const token = isLogin;
@@ -87,7 +88,7 @@ function Header ({ login, signup, modal, handleMessage, handleNotice }) {
 
   return (
     <HeaderWrapper>
-      <div className='header'>
+      <HeaderContainer borderColor={scrolled ? 'rgba(150, 150, 150, 0.2)' : 'white'}>
         <div className='header-container-1'>
           <Link to='/'>
             <img src={logo} className='logo-image' alt='logo_img' />
@@ -111,7 +112,7 @@ function Header ({ login, signup, modal, handleMessage, handleNotice }) {
               </Link>
               )}
         </div>
-      </div>
+      </HeaderContainer>
     </HeaderWrapper>
   );
 }
