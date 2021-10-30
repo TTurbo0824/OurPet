@@ -21,9 +21,10 @@ export const MainpageWrapper = styled.div`
   }
   input {
     border: none;
-    width: 15rem;
+    width: 16.5rem;
     margin: 0 0.3rem 0.35rem;
     color: ${Colors.darkGray};
+    /* background-color: lavenderblush; */
   }
   .top-container {
     width: 100vw;
@@ -88,8 +89,15 @@ const DateContainer = styled.div`
   padding: 0 0.4rem;
   background-color: white;
   border: 1px solid ${Colors.mediumGray};
+`;
 
-
+const CloseButton = styled.div`
+  color: ${Colors.darkGray};
+  cursor: pointer;
+  padding-left: .4rem;
+  vertical-align: middle;
+  padding-bottom: .1rem;
+  display: ${(props) => props.show};
 `;
 
 function Mainpage () {
@@ -163,6 +171,12 @@ function Mainpage () {
     setDogwalkerResult(locationResult);
   };
 
+  const handleCloseButtonClick = () => {
+    setInputValue('');
+    setOptions([]);
+    setDogwalkerResult('');
+  };
+
   let locationResult = '';
 
   if (options.length > 0) {
@@ -197,6 +211,11 @@ function Mainpage () {
                   value={inputValue}
                   onChange={(e) => handleInputChange(e.target.value)}
                 />
+                <CloseButton
+                  show={inputValue ? 'inline-block' : 'none'}
+                  onClick={handleCloseButtonClick}
+                >&times;
+                </CloseButton>
               </div>
               {inputValue
                 ? (<DropDown options={options} handleDropDownClick={handleDropDownClick} />)
