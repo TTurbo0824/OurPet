@@ -1,12 +1,13 @@
-export const initialState = {
+export const initialUserState = {
   token: '',
-  userInfo: [
-    {
-      isExpired: false,
-      email: '',
-      nickname: ''
-    }
-  ],
+  userInfo: {
+    isExpired: false,
+    email: '',
+    nickname: ''
+  }
+};
+
+export const initDogWalkerState = {
   dogWalkers: [
     {
       id: 1,

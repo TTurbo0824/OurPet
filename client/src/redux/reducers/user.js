@@ -1,30 +1,37 @@
-import { LOG_IN, LOG_OUT, TOKEN_EXPIRED } from '../action';
-import { initialState } from './initialState';
+import { LOG_IN, LOG_OUT, EDIT_INFO, TOKEN_EXPIRED } from '../action';
+import { initialUserState } from './initialState';
 
-function user (state = initialState, action) {
+function user (state = initialUserState, action) {
   switch (action.type) {
     case LOG_IN:
-      return {
-        ...state,
+      return Object.assign({}, state, {
         token: action.token,
-        userInfo: [
-          {
-            isExpired: false,
-            email: action.payload.email,
-            nickname: action.payload.nickname
-          }
-        ]
-      };
+        userInfo: {
+          isExpired: false,
+          email: action.payload.email,
+          nickname: action.payload.nickname
+        }
+      });
     case LOG_OUT:
+      return Object.assign({}, state, {
+        token: '',
+        userInfo: { isExpired: false, email: '', nickname: '' }
+      });
+    case EDIT_INFO:
       return {
         ...state,
-        token: '',
-        userInfo: [{ isExpired: false, email: '', nickname: '' }]
+        userInfo: {
+          ...state.userInfo,
+          nickname: action.payload.nickname
+        }
       };
     case TOKEN_EXPIRED:
       return {
         ...state,
-        userInfo: [...state.userInfo, { isExpired: true }]
+        userInfo: {
+          ...state.userInfo,
+          isExpired: true
+        }
       };
     default:
       return state;
