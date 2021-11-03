@@ -12,23 +12,23 @@ module.exports = async (req, res) => {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
       const { historyId } = req.body;
-        const userRating = await ratings.findAll({
+      const userRating = await ratings.findAll({
+        where: {
+          historyId: historyId
+        }
+      });
+
+      if (userRating.length === 0) {
+        return res.status(409).json({ message: 'rating is already deleted' });
+      } else {
+        await ratings.destroy({
           where: {
-            historyId: historyId
+            id: historyId
           }
         });
 
-        if (userRating.length === 0) {
-          return res.status(409).json({ message: 'rating is already deleted' });
-        } else {
-          await ratings.destroy({
-            where: {
-              id: historyId
-            }
-          });
-    
-          return res.status(200).json({ message: 'ok' });
-        }
+        return res.status(200).json({ message: 'ok' });
+      }
     }
   } catch (error) {
     res.status(400).json({ message: 'error' });

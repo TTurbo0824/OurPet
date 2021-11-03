@@ -13,23 +13,23 @@ module.exports = async (req, res) => {
     } else {
       const { historyId, rating } = req.body;
 
-        const userRating = await ratings.findAll({
-          where: {
-            historyId: historyId
-          }
-        });
-        console.log(userRating);
-
-        if (userRating.length > 0) {
-          return res.status(409).json({ message: 'already gave the rating' });
-        } else {
-          await ratings.create({
-            historyId: historyId,
-            rating: rating
-          });
-  
-          return res.status(200).json({ message: 'ok' });
+      const userRating = await ratings.findAll({
+        where: {
+          historyId: historyId
         }
+      });
+      console.log(userRating);
+
+      if (userRating.length > 0) {
+        return res.status(409).json({ message: 'already gave the rating' });
+      } else {
+        await ratings.create({
+          historyId: historyId,
+          rating: rating
+        });
+
+        return res.status(200).json({ message: 'ok' });
+      }
     }
   } catch (error) {
     res.status(400).json({ message: 'error' });

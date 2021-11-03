@@ -12,22 +12,22 @@ module.exports = async (req, res) => {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
       const { historyId, review } = req.body;
-        const userReview = await reviews.findAll({
-          where: {
-            historyId: historyId
-          }
+      const userReview = await reviews.findAll({
+        where: {
+          historyId: historyId
+        }
+      });
+
+      if (userReview.length > 0) {
+        return res.status(409).json({ message: 'already wrote the review' });
+      } else {
+        await reviews.create({
+          historyId: historyId,
+          review: review
         });
 
-        if (userReview.length > 0) {
-          return res.status(409).json({ message: 'already wrote the review' });
-        } else {
-          await reviews.create({
-            historyId: historyId,
-            review: review
-          });
-  
-          return res.status(200).json({ message: 'ok' });
-        }
+        return res.status(200).json({ message: 'ok' });
+      }
     }
   } catch (error) {
     res.status(400).json({ message: 'error' });
