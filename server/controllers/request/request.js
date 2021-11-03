@@ -3,8 +3,10 @@ const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
   try {
-    const accessTokenData = isAuthorized(req);
     // console.log(req.headers.authorization);
+    // JUST FOR TESTING PURPOSES
+    const accessTokenData = { id: req.headers.authorization };
+    // const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
