@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 const DogWalkerWrapper = styled.div`
   .dogwalker {
@@ -30,15 +32,20 @@ const DogWalkerWrapper = styled.div`
   }
 `;
 
-export default function Dogwalker ({ dogWalker, handleClick }) {
+export default function Dogwalker({ rating, dogWalker, handleClick }) {
+  console.log(rating);
+  const averageRating = (rating.reduce((acc, cur) => acc + cur) / rating.length).toFixed(1);  
+
   return (
     <DogWalkerWrapper>
-      <div className='dogwalker' key={dogWalker.id} onClick={(e) => handleClick(e)}>
-        <img className='dogwalker-img' src={dogWalker.img} alt={dogWalker.name} />
-        <span className='dogwalker-name' data-testid={dogWalker.name}>
+      <div className="dogwalker" key={dogWalker.id} onClick={(e) => handleClick(e)}>
+        <img className="dogwalker-img" src={dogWalker.img} alt={dogWalker.name} />
+        <span className="dogwalker-name" data-testid={dogWalker.name}>
           {dogWalker.name}
         </span>
-        <span className='dogwalker-location'>{dogWalker.locations.join(' ')}</span>
+        <span className="dogwalker-location">{dogWalker.locations.join(' ')}</span>
+        <FontAwesomeIcon icon={faStar} size="1x" />
+        <div>{averageRating} ({rating.length})</div>
       </div>
     </DogWalkerWrapper>
   );

@@ -103,12 +103,12 @@ const CloseButton = styled.div`
 function Mainpage () {
   const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
-
+  let rating = useSelector((state) => state.rating).dogWalkers;
   const [startDate, setStartDate] = useState(new Date());
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
   const [dogwalkerResult, setDogwalkerResult] = useState('');
-
+  const [previousLocation, setPreviousLocation] = useState('');
   const allTagList = [
     '소형견',
     '중형견',
@@ -169,6 +169,7 @@ function Mainpage () {
   const handleDropDownClick = (clickedOption) => {
     handleInputChange(clickedOption);
     setDogwalkerResult(locationResult);
+    setPreviousLocation(locationResult);
   };
 
   const handleCloseButtonClick = () => {
@@ -183,9 +184,13 @@ function Mainpage () {
     locationResult = options[0].split(' ')[1];
   }
 
-  if (dogwalkerResult !== '') {
+  if (dogwalkerResult !== '' && previousLocation === '') {
     dogWalkers = dogWalkers.filter((dogWalker) => {
       if (dogWalker.locations.includes(locationResult)) return dogWalker;
+    });
+  } else if (previousLocation !== '') {
+    dogWalkers = dogWalkers.filter((dogWalker) => {
+      if (dogWalker.locations.includes(previousLocation)) return dogWalker;
     });
   }
 
@@ -258,6 +263,7 @@ function Mainpage () {
                   handleClick(dogWalker);
                 }}
                 dogWalker={dogWalker}
+                rating={rating[idx].rating}
                 key={idx}
               />
             ))}
