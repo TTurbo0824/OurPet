@@ -3,6 +3,7 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import user from './user';
 import dogwalker from './dogwalker';
+import request from './request';
 import rating from './rating';
 import review from './review';
 
@@ -14,6 +15,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user,
   dogwalker,
+  request,
   rating,
   review
 });

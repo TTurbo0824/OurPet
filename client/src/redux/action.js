@@ -28,8 +28,9 @@ export const tokenExpired = () => ({
   type: TOKEN_EXPIRED
 });
 
-export const requestDogwalker = () => ({
-  type: REQUEST_DOGWALKER
+export const requestDogwalker = (request) => ({
+  type: REQUEST_DOGWALKER,
+  payload: request
 });
 
 export const cancelDogwalker = () => ({

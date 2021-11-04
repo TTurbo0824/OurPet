@@ -55,7 +55,16 @@ export const initDogWalkerState = {
 };
 
 export const initRequestState = {
-  dogWalkerRequest: []
+  dogWalkerRequest: [{
+    id: 1,
+    dogwalkerId: 1,
+    service: ['소형견', '야외 배변'],
+    location: '서대문구',
+    date: '2021.11.03',
+    duration: 60,
+    price: 20000,
+    status: 'pending'
+  }]
 };
 
 export const initHistoryState = {
