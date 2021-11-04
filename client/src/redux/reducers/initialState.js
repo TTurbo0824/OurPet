@@ -51,8 +51,14 @@ export const initDogWalkerState = {
       },
       certified: true
     }
-  ],
-  dogWalkerRequest: [],
+  ]
+};
+
+export const initRequestState = {
+  dogWalkerRequest: []
+};
+
+export const initHistoryState = {
   dogWalkerHistory: [
     {
       id: 1,
@@ -67,6 +73,23 @@ export const initDogWalkerState = {
         중형견60: 20000
       },
       certified: true
+    }
+  ]
+};
+
+export const initRatingState = {
+  dogWalkers: [
+    {
+      id: 1,
+      rating: [4, 5, 5, 4, 5]
+    },
+    {
+      id: 2,
+      rating: [5, 5, 5, 5, 5, 5]
+    },
+    {
+      id: 3,
+      rating: [5, 5, 5, 5, 5, 5, 4, 4, 4, 5, 5, 5]
     }
   ]
 };

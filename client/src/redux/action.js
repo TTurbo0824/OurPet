@@ -4,6 +4,8 @@ export const EDIT_INFO = 'EDIT_INFO';
 export const TOKEN_EXPIRED = 'TOKEN_EXPIRED';
 export const REQUEST_DOGWALKER = 'REQUEST_DOGWALKER';
 export const CANCEL_DOGWALKER = 'CANCEL_DOGWALKER';
+export const GIVE_RATING = 'GIVE_RATING';
+export const CANCEL_RATING = 'CANCEL_RATING';
 
 export const userLogin = (token, loginData) => ({
   type: LOG_IN,
@@ -30,4 +32,12 @@ export const requestDogwalker = () => ({
 
 export const cancelDogwalker = () => ({
   type: CANCEL_DOGWALKER
+});
+
+export const giveRating = () => ({
+  type: GIVE_RATING
+});
+
+export const cancelRating = () => ({
+  type: CANCEL_RATING
 });
