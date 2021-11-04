@@ -17,7 +17,7 @@
 
 |  이름  | Position | Repository |
 | ----- |-------------- | ---------------------------- |
-| 하경주 | **Full-stack**  | [<img src="https://img.shields.io/badge/Github-TTurbo0824-181717?style=for-the-badge&logo=GitHub/">](https://github.com/TTurbo0824) |
+| 하경주 | **Full-stack** | [<img src="https://img.shields.io/badge/Github-TTurbo0824-181717?style=for-the-badge&logo=GitHub/">](https://github.com/TTurbo0824) |
 
 # Tech Stack
 ## FRONT
@@ -29,18 +29,22 @@
 ![](https://img.shields.io/badge/FRONT-styled_components-DB7093?style=for-the-badge&logo=styled-components)  
 
 ## BACK
-(추후 업데이트 예정)
+![](https://img.shields.io/badge/BACK-Node.js-6DA55F?style=for-the-badge&logo=node.js)  
+![](https://img.shields.io/badge/BACK-Express.js-%23404d59.svg?style=for-the-badge&logo=express)  
+![](https://img.shields.io/badge/BACK-MySQL-4479A1?style=for-the-badge&logo=mysql)  
+![](https://img.shields.io/badge/BACK-Sequelize-258FFA?style=for-the-badge&logo=sequelize)    
+![](https://img.shields.io/badge/BACK-JWT-000000?style=for-the-badge&logo=json-web-tokens) 
 
 ## Detailed chart
-| Fields       | Stacks                     |
-| ------------ | ---------------------------- |
-| **Common**   | JavaScript, Git, GitHub, VS code |
-| [**Front-end**](https://github.com/TTurbo0824/WalkingDog/tree/master/client)   | React, Redux, Axios, HTML5, CSS, styled-components |
-| [**Back-end**](https://github.com/TTurbo0824/WalkingDog/tree/master/server) |  |
+| Fields     | Stacks                     |
+| ---------- | -------------------------- |
+| **Common** | JavaScript, Git, GitHub, VS code |
+| [**Front-end**](https://github.com/TTurbo0824/WalkingDog/tree/master/client) | React, Redux, Axios, HTML5, CSS, styled-components |
+| [**Back-end**](https://github.com/TTurbo0824/WalkingDog/tree/master/server)  | Node.js, Express |
 | **Data**   | MySQL, Sequelize |
-| **Auth**   |  |
-| **Deployment**   | AWS, EC2, S3, RDS |
-| **Planning / Design**   | dbdiagram.io, GitBook, Figma, Photoshop, Illustrator |
+| **Auth**   | JSON Web Token (JWT) |
+| **Deployment** | AWS, EC2, S3, RDS |
+| **Planning / Design** | dbdiagram.io, GitBook, Figma, Photoshop, Illustrator |
 
 
 # Architecture
