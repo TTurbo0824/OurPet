@@ -44,7 +44,7 @@ export const initDogWalkerState = {
       locations: ['강남구', '송파구', '서초구'],
       tags: ['중형견', '대형견', '야외 배변', '산책 예절 교육'],
       charges: {
-        중형견30: 15000,
+        중형견30: 17000,
         대형견30: 18000,
         중형견60: 20000,
         대형견60: 22000
@@ -90,6 +90,32 @@ export const initRatingState = {
     {
       id: 3,
       rating: [5, 5, 5, 5, 5, 5, 4, 4, 4, 5, 5, 5]
+    }
+  ]
+};
+
+export const initReviewState = {
+  dogWalkers: [
+    {
+      id: 1,
+      review: [
+        { nickname: 'abc123', content: '만족합니다' },
+        { nickname: 'testuser', content: '감사합니다' }
+      ]
+    },
+    {
+      id: 2,
+      review: [
+        { nickname: 'abc123', content: '만족합니다' },
+        { nickname: 'testuser', content: '감사합니다' }
+      ]
+    },
+    {
+      id: 3,
+      review: [
+        { nickname: 'abc123', content: '만족합니다' },
+        { nickname: 'testuser', content: '감사합니다' }
+      ]
     }
   ]
 };

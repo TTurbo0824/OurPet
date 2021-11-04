@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import user from './user';
 import dogwalker from './dogwalker';
 import rating from './rating';
+import review from './review';
 
 const persistConfig = {
   key: 'root',
@@ -13,7 +14,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user,
   dogwalker,
-  rating
+  rating,
+  review
 });
 
 export default persistReducer(persistConfig, rootReducer);

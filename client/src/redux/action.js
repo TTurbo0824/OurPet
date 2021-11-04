@@ -6,6 +6,8 @@ export const REQUEST_DOGWALKER = 'REQUEST_DOGWALKER';
 export const CANCEL_DOGWALKER = 'CANCEL_DOGWALKER';
 export const GIVE_RATING = 'GIVE_RATING';
 export const CANCEL_RATING = 'CANCEL_RATING';
+export const POST_REVIEW = 'POST_REVIEW';
+export const DELETE_REVIEW = 'DELETE_REVIEW';
 
 export const userLogin = (token, loginData) => ({
   type: LOG_IN,
@@ -40,4 +42,12 @@ export const giveRating = () => ({
 
 export const cancelRating = () => ({
   type: CANCEL_RATING
+});
+
+export const postReview = () => ({
+  type: POST_REVIEW
+});
+
+export const deleteReview = () => ({
+  type: DELETE_REVIEW
 });
