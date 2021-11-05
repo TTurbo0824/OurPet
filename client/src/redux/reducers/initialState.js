@@ -16,8 +16,8 @@ export const initDogWalkerState = {
       locations: ['서대문구', '종로구', '중구'],
       tags: ['소형견', '중형견', '대형견', '야외 배변'],
       charges: {
-        소형견: ['15,000', '20,000'],
-        중형견: ['15,000', '20,000'],
+        소형견: [15000, 20000],
+        중형견: [15000, 20000],
         대형견: ['x', 'x']
       },
       certified: true
@@ -29,8 +29,8 @@ export const initDogWalkerState = {
       locations: ['강남구', '서대문구', '종로구', '중구'],
       tags: ['소형견', '중형견', '야외 배변', '산책 후 뒤처리'],
       charges: {
-        소형견: ['15,000', '20,000'],
-        중형견: ['15,000', '20,000'],
+        소형견: [15000, 20000],
+        중형견: [15000, 20000],
         대형견: ['x', 'x']
       },
       certified: true
@@ -43,8 +43,8 @@ export const initDogWalkerState = {
       tags: ['중형견', '대형견', '야외 배변', '산책 예절 교육'],
       charges: {
         소형견: ['x', 'x'],
-        중형견: ['17,000', '20,000'],
-        대형견: ['18,000', '22,000']
+        중형견: [17000, 20000],
+        대형견: [18000, 22000]
       },
       certified: true
     }
@@ -56,11 +56,11 @@ export const initRequestState = {
     {
       id: 1,
       dogwalkerId: 1,
-      service: ['소형견', '야외 배변'],
+      type: '소형견',
       location: '서대문구',
       date: '2021.11.03',
       duration: 60,
-      price: '20,000',
+      price: 20000,
       status: 'pending'
     }
   ]
@@ -73,10 +73,10 @@ export const initHistoryState = {
       name: 'doglover123',
       img: 'https://images.theconversation.com/files/319375/original/file-20200309-118956-1cqvm6j.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=900.0&fit=crop',
       location: '서대문구',
-      service: ['소형견', '야외 배변'],
+      type: '소형견',
       time: 12,
       duration: 60,
-      price: '20,000'
+      price: 20000
     }
   ]
 };

@@ -11,7 +11,7 @@ function request (state = initRequestState, action) {
           {
             id: action.payload.id,
             dogwalkerId: action.payload.dogwalkerId,
-            service: action.payload.service,
+            type: action.payload.type,
             location: action.payload.location,
             date: action.payload.date,
             duration: action.payload.duration,
