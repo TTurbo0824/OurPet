@@ -21,7 +21,10 @@ function request (state = initRequestState, action) {
         ]
       };
     case CANCEL_DOGWALKER:
-      return { ...state };
+      return {
+        ...state,
+        dogWalkerRequest: state.dogWalkerRequest.filter((el) => el.id !== action.payload.id)
+      };
     default:
       return state;
   }
