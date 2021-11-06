@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
-      const { dogwalkerId, service, location, date, duration, price } = req.body;
+      const { dogwalkerId, type, location, date, duration, price } = req.body;
 
       const isNotNewRequest = await requests.findOne({
         where: {
@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
       await requests.create({
         userId: accessTokenData.id,
         dogwalkerId: dogwalkerId,
-        service: service,
+        type: type,
         location: location,
         date: date,
         duration: duration,

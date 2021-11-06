@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useJwt } from 'react-jwt';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Mainpage from './pages/Mainpage/Mainpage';
@@ -11,7 +10,6 @@ import Signup from './pages/Signup';
 import Mypage from './pages/Mypage/Myinfo';
 import Modal from './components/Modal';
 import Notification from './components/Notification';
-import { tokenExpired } from './redux/action';
 import DogWalkerPage from './pages/Dogwalker/DogWalkerPage';
 
 const AppWrapper = styled.div`
@@ -34,10 +32,12 @@ const AppWrapper = styled.div`
   .space {
     margin-bottom: 4.7rem;
   }
+  input:focus, button:focus, select:focus {
+    outline:  none;
+  }
 `;
 
 function App () {
-  const dispatch = useDispatch();
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -45,7 +45,6 @@ function App () {
   const [openNotice, setOpenNotice] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const isLogin = useSelector((state) => state.user).token;
-  const token = isLogin;
 
   useEffect(() => {
     const handleScrolled = () => {
@@ -61,15 +60,6 @@ function App () {
       window.removeEventListener('scroll', handleScrolled);
     };
   }, [scrolled]);
-
-  const { decodedToken, isExpired } = useJwt(token);
-  const expired = useSelector((state) => state.user).userInfo.isExpired;
-
-  if (decodedToken && isExpired && expired === false) {
-    dispatch(tokenExpired());
-  }
-
-  console.log('expired: ', expired);
 
   const handleLoginModalOpen = () => {
     setOpenLogin(true);
