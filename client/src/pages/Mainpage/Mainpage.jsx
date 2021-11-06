@@ -7,14 +7,14 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import Dogwalker from './DogWalkerItem';
-import DropDown from './DropDown';
-import Locations from '../../database/Locations';
 import { Colors } from '../../components/utils/_var';
+import LocationDropDown from './LocationDropDown';
 
-export const MainpageWrapper = styled.div`
+const MainpageWrapper = styled.div`
   .main {
     display: flex;
     min-height: calc(100vh - 8.9rem);
+    min-height: 80rem;
   }
   input:focus {
     outline: none;
@@ -103,12 +103,9 @@ const CloseButton = styled.div`
 function Mainpage () {
   const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
-  let rating = useSelector((state) => state.rating).dogWalkers;
+  const rating = useSelector((state) => state.rating).dogWalkers;
   const [startDate, setStartDate] = useState(new Date());
-  const [inputValue, setInputValue] = useState('');
-  const [options, setOptions] = useState([]);
-  const [dogwalkerResult, setDogwalkerResult] = useState('');
-  const [previousLocation, setPreviousLocation] = useState('');
+  const [location, setLocation] = useState('');
   const allTagList = [
     '소형견',
     '중형견',
@@ -155,47 +152,28 @@ function Mainpage () {
     if (tagChecker(dogWalker.tags, tags)) return dogWalker;
   });
 
-  const handleInputChange = (event) => {
-    setInputValue(event);
-    if (!event) {
-      setOptions([]);
-      setDogwalkerResult('');
-    } else if (event && event.length >= 2) {
-      const filteredOptions = Locations.filter((el) => el.includes(event));
-      setOptions(filteredOptions);
-    }
-  };
-
-  const handleDropDownClick = (clickedOption) => {
-    handleInputChange(clickedOption);
-    setDogwalkerResult(locationResult);
-    setPreviousLocation(locationResult);
-  };
-
-  const handleCloseButtonClick = () => {
-    setInputValue('');
-    setOptions([]);
-    setDogwalkerResult('');
-  };
-
-  let locationResult = '';
-
-  if (options.length > 0) {
-    locationResult = options[0].split(' ')[1];
-  }
-
-  if (dogwalkerResult !== '' && previousLocation === '') {
+  if (location !== '') {
     dogWalkers = dogWalkers.filter((dogWalker) => {
-      if (dogWalker.locations.includes(locationResult)) return dogWalker;
-    });
-  } else if (previousLocation !== '') {
-    dogWalkers = dogWalkers.filter((dogWalker) => {
-      if (dogWalker.locations.includes(previousLocation)) return dogWalker;
+      if (dogWalker.locations.includes(location)) return dogWalker;
     });
   }
 
   const handleClick = (dogwalker) => {
     history.push({ pathname: `/dogwalker:id=${dogwalker.id}` });
+  };
+
+  const getMinValue = (charges) => {
+    const allCharge = [];
+
+    Object.values(charges).map((charge) => {
+      for (const el of charge) {
+        if (typeof el === 'number') {
+          allCharge.push(el);
+        }
+      }
+    });
+
+    return Math.min(...allCharge);
   };
 
   return (
@@ -205,26 +183,9 @@ function Mainpage () {
           <div className='top-container'>
             <div className='location-container'>
               <div className='description'>원하시는 장소를 선택하세요</div>
-              <div className='location-search-container'>
-                <img
-                  className='search-icon'
-                  src='/images/Search_Icon.svg'
-                  alt='search-icon'
-                />
-                <input
-                  placeholder='구 이름을 검색하세요. (예: 강남구)'
-                  value={inputValue}
-                  onChange={(e) => handleInputChange(e.target.value)}
-                />
-                <CloseButton
-                  show={inputValue ? 'inline-block' : 'none'}
-                  onClick={handleCloseButtonClick}
-                >&times;
-                </CloseButton>
-              </div>
-              {inputValue
-                ? (<DropDown options={options} handleDropDownClick={handleDropDownClick} />)
-                : null}
+              <LocationDropDown
+                setLocation={setLocation}
+              />
             </div>
             <div className='date-container'>
               <div className='description'>원하시는 날짜를 선택하세요</div>
@@ -257,16 +218,19 @@ function Mainpage () {
             </div>
           </div>
           <div className='bottom-container'>
-            {dogWalkers.map((dogWalker, idx) => (
-              <Dogwalker
-                handleClick={() => {
-                  handleClick(dogWalker);
-                }}
-                dogWalker={dogWalker}
-                rating={rating[idx].rating}
-                key={idx}
-              />
-            ))}
+            {dogWalkers.length === 0
+              ? <div>검색 결과가 없습니다</div>
+              : dogWalkers.map((dogWalker, idx) => (
+                <Dogwalker
+                  handleClick={() => {
+                    handleClick(dogWalker);
+                  }}
+                  dogWalker={dogWalker}
+                  rating={rating[idx].rating}
+                  minPrice={getMinValue(dogWalker.charges)}
+                  key={idx}
+                />
+              ))}
           </div>
         </div>
       </div>
