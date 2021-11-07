@@ -30,11 +30,13 @@ module.exports = (sequelize, DataTypes) => {
   histories.init({
     userId: DataTypes.INTEGER,
     dogwalkerId: DataTypes.INTEGER,
-    service: DataTypes.TEXT,
-    location: DataTypes.TEXT,
+    type: DataTypes.STRING,
+    location: DataTypes.STRING,
     date: DataTypes.STRING,
+    time: DataTypes.STRING,
     duration: DataTypes.INTEGER,
-    price: DataTypes.INTEGER
+    price: DataTypes.INTEGER,
+    status: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'histories'
