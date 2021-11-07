@@ -1,5 +1,5 @@
 import { POST_REVIEW, DELETE_REVIEW } from '../action';
-import { initReviewState } from './initialState';
+import { initReviewState } from './initialState/initReviewState';
 
 function review (state = initReviewState, action) {
   switch (action.type) {

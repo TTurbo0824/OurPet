@@ -1,5 +1,5 @@
 import { LOG_IN, LOG_OUT, EDIT_INFO, TOKEN_EXPIRED } from '../action';
-import { initialUserState } from './initialState';
+import { initialUserState } from './initialState/initialState';
 
 function user (state = initialUserState, action) {
   switch (action.type) {

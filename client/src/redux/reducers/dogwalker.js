@@ -1,5 +1,5 @@
 import { REQUEST_DOGWALKER, CANCEL_DOGWALKER } from '../action';
-import { initDogWalkerState } from './initialState';
+import { initDogWalkerState } from './initialState/initDogWalkerState';
 
 function dogwalker (state = initDogWalkerState, action) {
   switch (action.type) {

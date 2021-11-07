@@ -1,5 +1,5 @@
 import { REQUEST_DOGWALKER, CANCEL_DOGWALKER } from '../action';
-import { initRequestState } from './initialState';
+import { initRequestState } from './initialState/initialState';
 
 function request (state = initRequestState, action) {
   switch (action.type) {
