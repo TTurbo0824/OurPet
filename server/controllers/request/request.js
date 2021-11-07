@@ -11,13 +11,14 @@ module.exports = async (req, res) => {
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
-      const { dogwalkerId, type, location, date, duration, price } = req.body;
+      const { dogwalkerId, type, location, date, duration, price, time } = req.body;
 
       const isNotNewRequest = await requests.findOne({
         where: {
           userId: accessTokenData.id,
           dogwalkerId: dogwalkerId,
-          date: date
+          date: date,
+          time: time
         }
       });
 
@@ -33,6 +34,7 @@ module.exports = async (req, res) => {
         date: date,
         duration: duration,
         price: price,
+        time: time,
         status: 'pending'
       });
 
