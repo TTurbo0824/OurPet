@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -28,11 +28,11 @@ const MainpageWrapper = styled.div`
   }
   .top-container {
     width: 100vw;
-    padding: 0 .5rem;
+    padding: 0 0.5rem;
     display: grid;
-    grid-template-areas: 
-    'location date'
-    'tag tag';
+    grid-template-areas:
+      'location date'
+      'tag tag';
     grid-template-columns: 50% 50%;
     /* background-color: pink; */
   }
@@ -56,15 +56,17 @@ const MainpageWrapper = styled.div`
   .bottom-container {
     display: flex;
     margin-top: 2rem;
+    width: 100vw;
+    flex-wrap: wrap;
   }
   .description {
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
   .search-icon {
     width: 1.3rem;
     vertical-align: middle;
-    margin-top: -.1rem;
-    margin-right: .2rem;
+    margin-top: -0.1rem;
+    margin-right: 0.2rem;
   }
 `;
 
@@ -72,7 +74,7 @@ const Tag = styled.div`
   cursor: pointer;
   display: inline-block;
   margin: 0.2rem 0.4rem 0.2rem 0;
-  padding: .05rem 1rem .2rem ;
+  padding: 0.05rem 1rem 0.2rem;
   border: solid 1px;
   border-color: ${(props) => props.borderColor};
   border-radius: 20px;
@@ -94,18 +96,20 @@ const DateContainer = styled.div`
 const CloseButton = styled.div`
   color: ${Colors.darkGray};
   cursor: pointer;
-  padding-left: .4rem;
+  padding-left: 0.4rem;
   vertical-align: middle;
-  padding-bottom: .1rem;
+  padding-bottom: 0.1rem;
   display: ${(props) => props.show};
 `;
 
-function Mainpage () {
+function Mainpage() {
   const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
   const rating = useSelector((state) => state.rating).dogWalkers;
   const [startDate, setStartDate] = useState(new Date());
   const [location, setLocation] = useState('');
+  const [walkerResult, setWalkerResult] = useState(dogWalkers);
+
   const allTagList = [
     '소형견',
     '중형견',
@@ -124,6 +128,20 @@ function Mainpage () {
     '산책 예절 교육': false
   });
 
+  useEffect(() => {
+    setWalkerResult(dogWalkers);
+  }, [allTags]);
+
+  const tags = [];
+
+  for (const key in allTags) {
+    if (allTags[key]) {
+      tags.push(key);
+    }
+  }
+
+  const tagChecker = (arr, target) => target.every((el) => arr.includes(el));
+
   const handleTagClick = (tag) => {
     if (allTags[tag] === false) {
       setAllTags({
@@ -138,18 +156,10 @@ function Mainpage () {
     }
   };
 
-  const tags = [];
-
-  for (const key in allTags) {
-    if (allTags[key]) {
-      tags.push(key);
-    }
-  }
-
-  const tagChecker = (arr, target) => target.every((el) => arr.includes(el));
-
   dogWalkers = dogWalkers.filter((dogWalker) => {
-    if (tagChecker(dogWalker.tags, tags)) return dogWalker;
+    if (tagChecker(dogWalker.tags, tags)) {
+      return dogWalker;
+    }
   });
 
   if (location !== '') {
@@ -176,30 +186,64 @@ function Mainpage () {
     return Math.min(...allCharge);
   };
 
+  const getAverageRating = (rating) => {
+    return (rating.reduce((acc, cur) => acc + cur) / rating.length).toFixed(1);
+  };
+
+  function clean(obj) {
+    for (var propName in obj) {
+      if (Object.keys(obj[propName]).length === 0) {
+        delete obj[propName];
+      }
+    }
+  }
+
+  const handleSort = (e) => {
+    const sortby = e.target.innerText;
+
+    if (sortby === '평점순') {
+      rating.sort((a, b) => {
+        if (getAverageRating(b.rating) === getAverageRating(a.rating)) {
+          return b.rating.length - a.rating.length;
+        }
+        return getAverageRating(b.rating) - getAverageRating(a.rating);
+      });
+
+      let newDogWalker = Array(20).fill({});
+
+      rating.map((el, idx) => {
+        newDogWalker[idx] = dogWalkers[el.id - 1];
+      });
+
+      clean(newDogWalker);
+      setWalkerResult(newDogWalker);
+    }
+  };
+
+  // console.log(walkerResult);
+
   return (
     <MainpageWrapper>
-      <div className='main'>
-        <div className='container'>
-          <div className='top-container'>
-            <div className='location-container'>
-              <div className='description'>원하시는 장소를 선택하세요</div>
-              <LocationDropDown
-                setLocation={setLocation}
-              />
+      <div className="main">
+        <div className="container">
+          <div className="top-container">
+            <div className="location-container">
+              <div className="description">원하시는 장소를 선택하세요</div>
+              <LocationDropDown setLocation={setLocation} />
             </div>
-            <div className='date-container'>
-              <div className='description'>원하시는 날짜를 선택하세요</div>
+            <div className="date-container">
+              <div className="description">원하시는 날짜를 선택하세요</div>
               <DateContainer>
-                <FontAwesomeIcon icon={faCalendar} color={Colors.darkGray} size='1x' />
+                <FontAwesomeIcon icon={faCalendar} color={Colors.darkGray} size="1x" />
                 <DatePicker
                   selected={startDate}
-                  dateFormat='yyyy.MM.dd'
+                  dateFormat="yyyy.MM.dd"
                   onChange={(date) => setStartDate(date)}
                 />
               </DateContainer>
             </div>
-            <div className='tag-container'>
-              <div className='description'>원하시는 조건을 선택하세요</div>
+            <div className="tag-container">
+              <div className="description">원하시는 조건을 선택하세요</div>
               {allTagList.map((tag, idx) => {
                 return (
                   <Tag
@@ -209,28 +253,31 @@ function Mainpage () {
                     key={idx}
                     onClick={() => {
                       handleTagClick(tag);
-                    }}
-                  >
+                    }}>
                     {tag}
                   </Tag>
                 );
               })}
             </div>
           </div>
-          <div className='bottom-container'>
-            {dogWalkers.length === 0
-              ? <div>검색 결과가 없습니다</div>
-              : dogWalkers.map((dogWalker, idx) => (
+          <div className="bottom-container">
+            <div onClick={handleSort}>가격순</div>
+            <div onClick={handleSort}>평점순</div>
+            {walkerResult.length === 0 ? (
+              <div>검색 결과가 없습니다</div>
+            ) : (
+              walkerResult.map((dogWalker, idx) => (
                 <Dogwalker
                   handleClick={() => {
                     handleClick(dogWalker);
                   }}
                   dogWalker={dogWalker}
-                  rating={rating[idx].rating}
+                  rating={rating}
                   minPrice={getMinValue(dogWalker.charges)}
                   key={idx}
                 />
-              ))}
+              ))
+            )}
           </div>
         </div>
       </div>
