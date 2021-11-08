@@ -97,7 +97,7 @@ export const initDogWalkerState = {
       name: '이*윤',
       img: 'https://images.theconversation.com/files/319375/original/file-20200309-118956-1cqvm6j.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=900.0&fit=crop',
       locations: ['강북구', '노원구', '도봉구', '성북구'],
-      tags: ['소형견', '중형견','대형견', '야외 배변', '산책 후 뒤처리', '산책 예절 교육'],
+      tags: ['소형견', '중형견', '대형견', '야외 배변', '산책 후 뒤처리', '산책 예절 교육'],
       charges: {
         소형견: [17000, 20000],
         중형견: [17000, 20000],

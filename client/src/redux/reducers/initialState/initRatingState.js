@@ -34,7 +34,7 @@ export const initRatingState = {
     },
     {
       id: 9,
-      rating: [5, 5,5, 5,5, 5, 3, 5, 4, 4, 4, 5, 5, 5]
+      rating: [5, 5, 5, 5, 5, 5, 3, 5, 4, 4, 4, 5, 5, 5]
     },
     {
       id: 10,
@@ -42,7 +42,7 @@ export const initRatingState = {
     },
     {
       id: 11,
-      rating: [4, 4, 4, 4, 5, 5, 4, 4, 4, ]
+      rating: [4, 4, 4, 4, 5, 5, 4, 4, 4]
     },
     {
       id: 12,
@@ -62,7 +62,7 @@ export const initRatingState = {
     },
     {
       id: 16,
-      rating: [4, 4, 4, 4, 5, 5, 4, 4, 4, ]
+      rating: [4, 4, 4, 4, 5, 5, 4, 4, 4]
     },
     {
       id: 17,
