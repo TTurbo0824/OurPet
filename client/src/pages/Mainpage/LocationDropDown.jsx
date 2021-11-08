@@ -25,8 +25,7 @@ function LocationDropDown ({ setLocation }) {
       marginRight: 18,
       marginBottom: 12,
       height: '10px',
-      width: '10px',
-      backgroundSize: 'contain'
+      width: '10px'
     }
   });
 
@@ -42,8 +41,11 @@ function LocationDropDown ({ setLocation }) {
     }),
     control: (base) => ({
       ...base,
-      border: 0,
-      boxShadow: 'none'
+      border: `1px solid ${Colors.mediumGray}`,
+      boxShadow: 'none',
+      '&:hover': {
+        border: `1px solid ${Colors.mediumGray}`
+      }
     }),
     input: (styles) => ({ ...styles, ...icon('hidden') }),
     placeholder: (styles) => ({ ...styles, ...icon() }),
