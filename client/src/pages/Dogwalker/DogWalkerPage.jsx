@@ -15,7 +15,7 @@ import LocationSelector from './LocationSelector';
 
 const DogWalkerPageWrapper = styled.div`
   .main {
-    height: 800rem;
+    /* height: 800rem; */
     min-height: calc(100vh - 10.9rem);
   }
   .top-container {
@@ -126,27 +126,20 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   });
 
   const handleRequest = () => {
-    dispatch(requestDogwalker(requestOptions));
+    // JUST FOR TESTING PURPOSES
+    // dispatch(requestDogwalker(requestOptions));
 
-    /*
     if (!token) {
       handleNotice(true);
       handleMessage('로그인이 필요한 서비스입니다.');
     } else {
       console.log('clicked');
       axios.post(
-        process.env.REACT_APP_API_URL + '/request',
-        {
-          dogwalkerId: dogWalkerId,
-          type: '소형견',
-          location: '서대문구',
-          date: '2021.11.10',
-          duration: 30,
-          price: 15000
-        },
-        {
+        process.env.REACT_APP_API_URL + '/request', requestOptions, {
           headers: {
             Authorization: `Bearer ${token}`,
+            // JUST FOR TESTING PURPOSES
+            // Authorization: '1',
             'Content-Type': 'application/json'
           }
         })
@@ -164,7 +157,6 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
           } else console.log(err.response);
         });
     }
-    */
   };
 
   return (
