@@ -48,7 +48,7 @@ export default function Dogwalker ({ rating, minPrice, dogWalker, handleClick })
         <span className='dogwalker-location'>{dogWalker.locations.join(' ')}</span>
         <div className='rating-container'>
           <FontAwesomeIcon icon={faStar} size='1x' />
-          <div>{averageRating} ({rating.length})</div>
+          <div>{averageRating} ({walkerRating.length})</div>
         </div>
         <div>₩{minPrice}+</div>
       </div>
