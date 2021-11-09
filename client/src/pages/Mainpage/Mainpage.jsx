@@ -93,15 +93,6 @@ const DateContainer = styled.div`
   border: 1px solid ${Colors.mediumGray};
 `;
 
-const CloseButton = styled.div`
-  color: ${Colors.darkGray};
-  cursor: pointer;
-  padding-left: 0.4rem;
-  vertical-align: middle;
-  padding-bottom: 0.1rem;
-  display: ${(props) => props.show};
-`;
-
 function Mainpage () {
   const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
@@ -109,16 +100,6 @@ function Mainpage () {
   const [startDate, setStartDate] = useState(new Date());
   const [location, setLocation] = useState('');
   const [walkerResult, setWalkerResult] = useState(dogWalkers);
-
-  const allTagList = [
-    '소형견',
-    '중형견',
-    '대형견',
-    '야외 배변',
-    '산책 후 뒤처리',
-    '산책 예절 교육'
-  ];
-
   const [allTags, setAllTags] = useState({
     소형견: false,
     중형견: false,
@@ -128,9 +109,25 @@ function Mainpage () {
     '산책 예절 교육': false
   });
 
+  const [sortbyRating, setSortbyRating] = useState('none');
+  const [sortbyPrice, setSortbyPrice] = useState('none');
+
   useEffect(() => {
     setWalkerResult(dogWalkers);
   }, [allTags]);
+
+  useEffect(() => {
+    setWalkerResult(dogWalkers);
+  }, [location]);
+
+  const allTagList = [
+    '소형견',
+    '중형견',
+    '대형견',
+    '야외 배변',
+    '산책 후 뒤처리',
+    '산책 예절 교육'
+  ];
 
   const tags = [];
 
@@ -168,10 +165,6 @@ function Mainpage () {
     });
   }
 
-  const handleClick = (dogwalker) => {
-    history.push({ pathname: `/dogwalker:id=${dogwalker.id}` });
-  };
-
   const getMinValue = (charges) => {
     const allCharge = [];
 
@@ -190,20 +183,43 @@ function Mainpage () {
     return (rating.reduce((acc, cur) => acc + cur) / rating.length).toFixed(1);
   };
 
+  const chargeList = dogWalkers.map((walker) => {
+    const allChargeList = [];
+    Object.values(walker.charges).map((charge) => {
+      for (const el of charge) {
+        if (typeof el === 'number') {
+          allChargeList.push(el);
+        }
+      }
+    });
+    return { id: walker.id, minPrice: Math.min(...allChargeList) };
+  });
+
   const handleSort = (e) => {
     const sortby = e.target.innerText;
+    let newDogWalker = Array(20).fill({});
 
     if (sortby === '평점순') {
-      rating.sort((a, b) => {
-        if (getAverageRating(b.rating) === getAverageRating(a.rating)) {
-          return b.rating.length - a.rating.length;
-        }
-        return getAverageRating(b.rating) - getAverageRating(a.rating);
-      });
+      if (sortbyRating !== 'des') {
+        rating.sort((a, b) => {
+          if (getAverageRating(b.rating) === getAverageRating(a.rating)) {
+            return b.rating.length - a.rating.length;
+          }
+          return getAverageRating(b.rating) - getAverageRating(a.rating);
+        });
+        setSortbyRating('des');
+      } else {
+        rating.sort((a, b) => {
+          if (getAverageRating(b.rating) === getAverageRating(a.rating)) {
+            return b.rating.length - a.rating.length;
+          }
+          return getAverageRating(a.rating) - getAverageRating(b.rating);
+        });
+        setSortbyRating('asc');
+      }
 
-      let newDogWalker = Array(20).fill({});
       const ratingList = [];
-      
+
       rating.map((el) => {
         ratingList.push(el.id);
       });
@@ -211,13 +227,36 @@ function Mainpage () {
       dogWalkers.map((el) => {
         newDogWalker[ratingList.indexOf(el.id)] = el;
       });
+    } else if (sortby === '가격순') {
+      if (sortbyPrice !== 'des') {
+        chargeList.sort((a, b) => {
+          return b.minPrice - a.minPrice;
+        });
+        setSortbyPrice('des');
+      } else {
+        chargeList.sort((a, b) => {
+          return a.minPrice - b.minPrice;
+        });
+        setSortbyPrice('asc');
+      }
 
-      newDogWalker = newDogWalker.filter(el => Object.keys(el).length !== 0);
-      setWalkerResult(newDogWalker);
+      const minChargeList = [];
+
+      chargeList.map((el) => {
+        minChargeList.push(el.id);
+      });
+
+      dogWalkers.map((el) => {
+        newDogWalker[minChargeList.indexOf(el.id)] = el;
+      });
     }
+    newDogWalker = newDogWalker.filter((el) => Object.keys(el).length !== 0);
+    setWalkerResult(newDogWalker);
   };
 
-  // console.log(walkerResult);
+  const handleClick = (dogwalker) => {
+    history.push({ pathname: `/dogwalker:id=${dogwalker.id}` });
+  };
 
   return (
     <MainpageWrapper>
