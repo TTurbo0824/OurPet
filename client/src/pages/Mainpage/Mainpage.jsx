@@ -102,7 +102,7 @@ const CloseButton = styled.div`
   display: ${(props) => props.show};
 `;
 
-function Mainpage() {
+function Mainpage () {
   const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
   const rating = useSelector((state) => state.rating).dogWalkers;
@@ -190,14 +190,6 @@ function Mainpage() {
     return (rating.reduce((acc, cur) => acc + cur) / rating.length).toFixed(1);
   };
 
-  function clean(obj) {
-    for (var propName in obj) {
-      if (Object.keys(obj[propName]).length === 0) {
-        delete obj[propName];
-      }
-    }
-  }
-
   const handleSort = (e) => {
     const sortby = e.target.innerText;
 
@@ -210,12 +202,17 @@ function Mainpage() {
       });
 
       let newDogWalker = Array(20).fill({});
-
-      rating.map((el, idx) => {
-        newDogWalker[idx] = dogWalkers[el.id - 1];
+      const ratingList = [];
+      
+      rating.map((el) => {
+        ratingList.push(el.id);
       });
 
-      clean(newDogWalker);
+      dogWalkers.map((el) => {
+        newDogWalker[ratingList.indexOf(el.id)] = el;
+      });
+
+      newDogWalker = newDogWalker.filter(el => Object.keys(el).length !== 0);
       setWalkerResult(newDogWalker);
     }
   };
@@ -224,26 +221,26 @@ function Mainpage() {
 
   return (
     <MainpageWrapper>
-      <div className="main">
-        <div className="container">
-          <div className="top-container">
-            <div className="location-container">
-              <div className="description">원하시는 장소를 선택하세요</div>
+      <div className='main'>
+        <div className='container'>
+          <div className='top-container'>
+            <div className='location-container'>
+              <div className='description'>원하시는 장소를 선택하세요</div>
               <LocationDropDown setLocation={setLocation} />
             </div>
-            <div className="date-container">
-              <div className="description">원하시는 날짜를 선택하세요</div>
+            <div className='date-container'>
+              <div className='description'>원하시는 날짜를 선택하세요</div>
               <DateContainer>
-                <FontAwesomeIcon icon={faCalendar} color={Colors.darkGray} size="1x" />
+                <FontAwesomeIcon icon={faCalendar} color={Colors.darkGray} size='1x' />
                 <DatePicker
                   selected={startDate}
-                  dateFormat="yyyy.MM.dd"
+                  dateFormat='yyyy.MM.dd'
                   onChange={(date) => setStartDate(date)}
                 />
               </DateContainer>
             </div>
-            <div className="tag-container">
-              <div className="description">원하시는 조건을 선택하세요</div>
+            <div className='tag-container'>
+              <div className='description'>원하시는 조건을 선택하세요</div>
               {allTagList.map((tag, idx) => {
                 return (
                   <Tag
@@ -253,31 +250,34 @@ function Mainpage() {
                     key={idx}
                     onClick={() => {
                       handleTagClick(tag);
-                    }}>
+                    }}
+                  >
                     {tag}
                   </Tag>
                 );
               })}
             </div>
           </div>
-          <div className="bottom-container">
+          <div className='bottom-container'>
             <div onClick={handleSort}>가격순</div>
             <div onClick={handleSort}>평점순</div>
-            {walkerResult.length === 0 ? (
-              <div>검색 결과가 없습니다</div>
-            ) : (
-              walkerResult.map((dogWalker, idx) => (
-                <Dogwalker
-                  handleClick={() => {
-                    handleClick(dogWalker);
-                  }}
-                  dogWalker={dogWalker}
-                  rating={rating}
-                  minPrice={getMinValue(dogWalker.charges)}
-                  key={idx}
-                />
-              ))
-            )}
+            {walkerResult.length === 0
+              ? (
+                <div>검색 결과가 없습니다</div>
+                )
+              : (
+                  walkerResult.map((dogWalker, idx) => (
+                    <Dogwalker
+                      handleClick={() => {
+                        handleClick(dogWalker);
+                      }}
+                      dogWalker={dogWalker}
+                      rating={rating}
+                      minPrice={getMinValue(dogWalker.charges)}
+                      key={idx}
+                    />
+                  ))
+                )}
           </div>
         </div>
       </div>

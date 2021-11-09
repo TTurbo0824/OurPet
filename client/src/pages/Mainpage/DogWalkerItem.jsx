@@ -35,7 +35,7 @@ const DogWalkerWrapper = styled.div`
 
 export default function Dogwalker ({ rating, minPrice, dogWalker, handleClick }) {
   let walkerRating = rating.filter((el) => el.id === dogWalker.id);
-  walkerRating = walkerRating[0].rating
+  walkerRating = walkerRating[0].rating;
   const averageRating = (walkerRating.reduce((acc, cur) => acc + cur) / walkerRating.length).toFixed(1);
 
   return (
