@@ -159,13 +159,13 @@ export const initDogWalkerState = {
     },
     {
       id: 13,
-      name: '이*준',
+      name: '이*민',
       img: 'https://images.theconversation.com/files/319375/original/file-20200309-118956-1cqvm6j.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=900.0&fit=crop',
       locations: ['동작구', '양천구', '영등포구'],
       tags: ['소형견', '중형견', '야외 배변', '산책 후 뒤처리', '산책 예절 교육'],
       charges: {
         소형견: [12000, 18000],
-        중형견: [12000, 18000],
+        중형견: ['x', 'x'],
         대형견: ['x', 'x']
       },
       certified: true
@@ -243,7 +243,7 @@ export const initDogWalkerState = {
       tags: ['소형견', '중형견', '야외 배변'],
       charges: {
         소형견: [12000, 18000],
-        중형견: [12000, 18000],
+        중형견: ['x', 'x'],
         대형견: ['x', 'x']
       },
       certified: true

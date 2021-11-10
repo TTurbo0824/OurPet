@@ -4,6 +4,7 @@ export const EDIT_INFO = 'EDIT_INFO';
 export const TOKEN_EXPIRED = 'TOKEN_EXPIRED';
 export const REQUEST_DOGWALKER = 'REQUEST_DOGWALKER';
 export const CANCEL_DOGWALKER = 'CANCEL_DOGWALKER';
+export const GET_HISTORY = 'GET_HISTORY';
 export const GIVE_RATING = 'GIVE_RATING';
 export const CANCEL_RATING = 'CANCEL_RATING';
 export const POST_REVIEW = 'POST_REVIEW';
@@ -35,6 +36,10 @@ export const requestDogwalker = (request) => ({
 
 export const cancelDogwalker = () => ({
   type: CANCEL_DOGWALKER
+});
+
+export const getHistory = () => ({
+  type: GET_HISTORY
 });
 
 export const giveRating = () => ({
