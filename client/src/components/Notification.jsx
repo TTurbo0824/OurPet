@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { cancelDogwalker } from '../redux/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Colors } from './utils/_var';
@@ -75,6 +76,7 @@ export const CloseIcon = styled.div`
 `;
 
 function Notification ({ message, handleNotice, handleMessage }) {
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.user).token;
 
   const withdrawalRequest = () => {
@@ -97,6 +99,11 @@ function Notification ({ message, handleNotice, handleMessage }) {
           localStorage.clear();
         }
       });
+  };
+
+  const cancelRequest = (id) => {
+    dispatch(cancelDogwalker(Number(id)));
+    handleNotice(false);
   };
 
   return (
@@ -122,7 +129,7 @@ function Notification ({ message, handleNotice, handleMessage }) {
               : '1rem'
           }
         >
-          {message}
+          {message.includes('정말 요청을 취소하시겠습니까?') ? message.split('!')[0] : message}
         </Message>
         {message === '로그인 성공!' ||
         message === '로그아웃 성공!' ||
@@ -151,7 +158,11 @@ function Notification ({ message, handleNotice, handleMessage }) {
               ? (
                 <NoticeButton onClick={withdrawalRequest}>탈퇴하기</NoticeButton>
                 )
-              : null}
+              : message.includes('정말 요청을 취소하시겠습니까?')
+                ? (
+                  <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>취소하기</NoticeButton>
+                  )
+                : null}
       </NoticeView>
     </NoticeBackdrop>
   );

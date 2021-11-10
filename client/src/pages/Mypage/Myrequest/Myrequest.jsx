@@ -60,9 +60,9 @@ export const MyRequestWrapper = styled.div`
     justify-content: center;
     /* background-color: navajowhite; */
   }
-`
+`;
 
-function MyRequest () {
+function MyRequest ({ handleMessage, handleNotice }) {
   const dispatch = useDispatch();
   const dogWalkerList = useSelector((state) => state.dogwalker).dogWalkers;
   let requestList = useSelector((state) => state.request).dogWalkerRequest;
@@ -79,6 +79,12 @@ function MyRequest () {
 
   console.log(requestList);
 
+  const deleteClick = (id) => {
+    console.log(id);
+    handleNotice(true);
+    handleMessage(`정말 요청을 취소하시겠습니까?!${id}`);
+  };
+
   return (
     <MyRequestWrapper>
       <TopNavigation />
@@ -89,12 +95,13 @@ function MyRequest () {
               <div className='card' key={idx}>
                 <img className='dogwalker-img' src={el.img} alt={el.name} />
                 <div className='name'>{el.name}</div>
-                  <div className='info'>{el.date} <span>|</span> {el.duration}분 / {el.price}원</div>
+                <div className='info'>{el.date} <span>|</span> {el.duration}분 / {el.price}원</div>
                 <div className='type'>{el.type}</div>
                 <div className='status'>{el.status}</div>
-                <div className='cancel'>요청 취소</div>
+                <div className='cancel' onClick={() => deleteClick(el.id)}>요청 취소</div>
               </div>
-          )})}
+            );
+          })}
         </div>
       </div>
     </MyRequestWrapper>
