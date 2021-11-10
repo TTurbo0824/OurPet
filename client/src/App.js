@@ -7,7 +7,9 @@ import Footer from './components/Footer';
 import Mainpage from './pages/Mainpage/Mainpage';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Mypage from './pages/Mypage/Myinfo';
+import Myinfo from './pages/Mypage/Myinfo';
+import Myrequest from './pages/Mypage/Myrequest/Myrequest';
+import Myhistory from './pages/Mypage/Myhistory/Myhistory';
 import Modal from './components/Modal';
 import Notification from './components/Notification';
 import DogWalkerPage from './pages/Dogwalker/DogWalkerPage';
@@ -114,7 +116,7 @@ function App () {
             <Route path='/mypage'>
               {isLogin
                 ? (
-                  <Mypage
+                  <Myinfo
                     modal={handleModalOpen}
                     handleMessage={handleMessage}
                     handleNotice={handleNotice}
@@ -123,6 +125,20 @@ function App () {
                 : (
                   <Redirect to='/' />
                   )}
+            </Route>
+            <Route path='/myrequest'>
+              <Myrequest
+                modal={handleModalOpen}
+                handleMessage={handleMessage}
+                handleNotice={handleNotice}
+              />
+            </Route>
+            <Route path='/myhistory'>
+              <Myhistory
+                modal={handleModalOpen}
+                handleMessage={handleMessage}
+                handleNotice={handleNotice}
+              />
             </Route>
             <Route
               path='/dogwalker:id'

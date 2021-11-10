@@ -5,15 +5,16 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { Colors } from '../../components/utils/_var';
 import { Alertbox, InputField } from '../../components/UserComponents';
+import TopNavigation from '../../components/TopNavigation';
 
-export const MypageWrapper = styled.div`
+export const MyinfoWrapper = styled.div`
   .main {
     display: flex;
-    min-height: calc(100vh - 10.9rem);
+    min-height: calc(100vh - 8.9rem);
   }
 `;
 
-export const MypageView = styled.div`
+export const MyinfoView = styled.div`
   margin: 4rem auto;
   padding-top: 0.7rem;
   box-sizing: border-box;
@@ -29,13 +30,13 @@ export const MypageView = styled.div`
   }
 `;
 
-export const MypageInputContainer = styled.div`
+export const MyinfoInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-export const MypageButton = styled.button`
+export const MyinfoButton = styled.button`
   cursor: pointer;
   width: 5.8rem;
   margin: 0.3rem 0.5rem;
@@ -69,7 +70,7 @@ export const MypageButton = styled.button`
 //  3.
 //
 
-function Mypage ({ modal, handleMessage, handleNotice }) {
+function Myinfo ({ modal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user).token;
   const userInfo = useSelector((state) => state.user).userInfo;
@@ -238,10 +239,11 @@ function Mypage ({ modal, handleMessage, handleNotice }) {
   };
 
   return (
-    <MypageWrapper>
+    <MyinfoWrapper>
+      <TopNavigation />
       <div className='main'>
-        <MypageView>
-          <MypageInputContainer>
+        <MyinfoView>
+          <MyinfoInputContainer>
             <InputField
               disabled={isGuest ? 'disabled' : null}
               onChange={inputCheck('nickname')}
@@ -260,18 +262,18 @@ function Mypage ({ modal, handleMessage, handleNotice }) {
               placeholder='비밀번호 재확인'
               onChange={handleCheckPassword}
             />
-          </MypageInputContainer>
-          <MypageButton onClick={handleEditRequest} color={Colors.lightYellow}>
+          </MyinfoInputContainer>
+          <MyinfoButton onClick={handleEditRequest} color={Colors.lightYellow}>
             정보수정
-          </MypageButton>
-          <MypageButton onClick={handleWithdrawalRequest} color={Colors.darkGray}>
+          </MyinfoButton>
+          <MyinfoButton onClick={handleWithdrawalRequest} color={Colors.darkGray}>
             회원탈퇴
-          </MypageButton>
+          </MyinfoButton>
           <Alertbox>{errorMsg}</Alertbox>
-        </MypageView>
+        </MyinfoView>
       </div>
-    </MypageWrapper>
+    </MyinfoWrapper>
   );
 }
 
-export default Mypage;
+export default Myinfo;
