@@ -10,7 +10,7 @@ import TopNavigation from '../../components/TopNavigation';
 export const MyinfoWrapper = styled.div`
   .main {
     display: flex;
-    min-height: calc(100vh - 8.9rem);
+    min-height: calc(100vh - 10.9rem);
   }
 `;
 
@@ -61,14 +61,6 @@ export const MyinfoButton = styled.button`
     background-color: ${Colors.black};
   }
 `;
-
-// ==================================================================
-//                               TO DO
-// ==================================================================
-//  1. 게스트 모드일 때, 회원 정보 수정 & 회원 탈퇴 기능 disable
-//  2. 회원 정보 수정 & 탈퇴 기능 서버와 연결
-//  3.
-//
 
 function Myinfo ({ modal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
@@ -179,7 +171,7 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
     }
   };
 
-  console.log(checkNickname, checkPassword, checkRetypePassword);
+  // console.log(checkNickname, checkPassword, checkRetypePassword);
 
   const handleEditRequest = () => {
     // console.log(myInfo);
