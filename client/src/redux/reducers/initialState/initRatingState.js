@@ -80,5 +80,6 @@ export const initRatingState = {
       id: 20,
       rating: [5, 5, 5, 5, 5, 5, 3, 3]
     }
-  ]
+  ],
+  givenRating: []
 };
