@@ -1,8 +1,15 @@
 import styled from 'styled-components';
 import Select from 'react-select';
-// import { customStyles } from '../../components/SelectBoxStyle';
 import Locations from '../../database/Locations';
 import { Colors } from '../../components/utils/_var';
+import { media } from '../../components/utils/_media';
+
+const LocationWrapper = styled.div`
+  width: 80%;
+  margin-bottom: 1rem;
+  ${media.tablet`width: 21rem; margin-bottom: 3rem;`}
+  ${media.laptop`width: 28rem;`}
+`;
 
 function LocationDropDown ({ setLocation }) {
   const selectLocation = (e) => {
@@ -23,7 +30,7 @@ function LocationDropDown ({ setLocation }) {
       transform: 'scale(.014)',
       display: display,
       marginRight: 18,
-      marginBottom: 12,
+      marginBottom: 14,
       height: '10px',
       width: '10px'
     }
@@ -53,12 +60,14 @@ function LocationDropDown ({ setLocation }) {
   };
 
   return (
-    <Select
-      onChange={selectLocation}
-      styles={customStyles}
-      placeholder='구 이름을 검색하세요. (예: 강남구)'
-      options={options}
-    />
+    <LocationWrapper>
+      <Select
+        onChange={selectLocation}
+        styles={customStyles}
+        placeholder='구 이름을 검색하세요. (예: 강남구)'
+        options={options}
+      />
+    </LocationWrapper>
   );
 }
 
