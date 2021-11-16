@@ -9,8 +9,7 @@ const getDate = (day) => {
 
 export const initialUserState = {
   token: '',
-  userInfo: {
-    isExpired: false,
+  walkingDogUserInfo: {
     email: '',
     nickname: ''
   }
