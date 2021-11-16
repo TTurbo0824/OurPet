@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { postReview } from '../../../redux/action';
+import { postReview, trackReview } from '../../../redux/action';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Alertbox, Backdrop } from '../../../components/UserComponents';
@@ -16,7 +16,7 @@ export const ReviewView = styled.div`
   padding-top: 0.7rem;
   box-shadow: 10px 10px grey;
   .description {
-    margin: 1rem auto 0.8rem;
+    margin: .7rem auto 0.8rem;
   }
 `;
 
@@ -26,10 +26,12 @@ const ReviewInput = styled.textarea`
   width: 80%;
   height: 8rem;
   padding: 0.5rem;
+  border-color: ${Colors.lightGray};
+  font-family: 'Noto Sans KR', sans-serif;
 `;
 
 const ReviewButton = styled.button`
-  margin: 1rem 0.6rem 0.8rem;
+  margin: 1rem 0.6rem 0.5rem;
   cursor: pointer;
   font-size: 0.9rem;
   background-color: ${Colors.lightYellow};
@@ -43,9 +45,12 @@ const ReviewButton = styled.button`
   }
 `;
 
-function Review({ handleModal, dogwalkerId }) {
+function Review ({ serviceDate, handleModal, dogwalkerId }) {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user).userInfo;
+  const userInfo = useSelector((state) => state.user).walkingDogUserInfo;
+  const review = useSelector((state) => state.review).dogWalkers;
+  const track = useSelector((state) => state.review).givenReview;
+  const indexNum = review[dogwalkerId - 1].review.length;
   const { nickname } = userInfo;
   const [errorMsg, setErrorMsg] = useState('');
   const [walkerReview, setWalkerReview] = useState(null);
@@ -54,16 +59,25 @@ function Review({ handleModal, dogwalkerId }) {
     setWalkerReview(e.target.value);
   };
 
+  console.log(indexNum);
+  const reviewInfo = {
+    dogwalkerId: dogwalkerId,
+    historyId: track.length + 1,
+    index: indexNum
+  };
+
   const handleReview = () => {
-    if (walkerReview) {
-      dispatch(postReview(dogwalkerId, walkerReview));
-      handleModal();
-    } else if (walkerReview.length < 10) {
+    if (!walkerReview || walkerReview.length < 5) {
+    // if (!walkerReview || walkerReview.length < 10) {
       setErrorMsg('리뷰를 10자 이상 작성해 주세요');
+    } else if (walkerReview.length < 10) {
+      dispatch(postReview(dogwalkerId, nickname, walkerReview, serviceDate));
+      dispatch(trackReview(reviewInfo));
+      handleModal();
     }
   };
 
-  console.log(dogwalkerId, nickname, walkerReview);
+  // console.log(dogwalkerId, nickname, walkerReview, serviceDate);
 
   return (
     <Backdrop>
