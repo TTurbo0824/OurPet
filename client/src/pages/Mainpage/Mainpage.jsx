@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar } from '@fortawesome/free-regular-svg-icons';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
-import Dogwalker from './DogWalkerItem';
 import { Colors } from '../../components/utils/_var';
+import { media } from '../../components/utils/_media';
+import Dogwalker from './DogWalkerItem';
 import LocationDropDown from './LocationDropDown';
-
+import DateSelector from './DateSelector';
 const MainpageWrapper = styled.div`
   .main {
     display: flex;
     min-height: calc(100vh - 8.9rem);
     min-height: 80rem;
+  }
+  .container {
+    margin: 0 auto;
+    display: block;
+    padding: 0 auto;
+    ${media.tablet`width: 90%;`}
+    /* background-color: lime; */
   }
   input:focus {
     outline: none;
@@ -27,13 +31,14 @@ const MainpageWrapper = styled.div`
     /* background-color: lavenderblush; */
   }
   .top-container {
-    width: 100vw;
+    /* width: 100vw; */
+    width: 100%;
     padding: 0 0.5rem;
     display: grid;
-    grid-template-areas:
-      'location date'
-      'tag tag';
-    grid-template-columns: 50% 50%;
+    grid-template-areas: 'location' 'date' 'tag';
+    grid-template-columns: 100%;
+    ${media.tablet`grid-template-areas: 'location date' 'tag tag';`}
+    ${media.tablet`grid-template-columns: 50% 50%;`}
     /* background-color: pink; */
   }
   .location-container {
@@ -56,18 +61,38 @@ const MainpageWrapper = styled.div`
   .bottom-container {
     display: flex;
     margin-top: 2rem;
-    width: 100vw;
+    /* width: 100vw; */
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .dogwalker-container {
+    display: flex;
     flex-wrap: wrap;
   }
   .description {
     margin-bottom: 0.5rem;
   }
-  .search-icon {
-    width: 1.3rem;
-    vertical-align: middle;
-    margin-top: -0.1rem;
-    margin-right: 0.2rem;
+  .sorting-container {
+    display: flex;
+    width: 100%;
+    padding: 1rem;
+    justify-content: right;
+    /* background-color: lavender; */
   }
+  .sorting {
+    cursor: pointer;
+    margin-left: .5rem;
+    font-size: .9rem;
+    color: ${Colors.mediumGray};
+
+  }
+`;
+
+const Sorting = styled.div`
+  cursor: pointer;
+  margin-left: .5rem;
+  font-size: .9rem;
+  color: ${(props) => props.textColor};
 `;
 
 const Tag = styled.div`
@@ -82,22 +107,10 @@ const Tag = styled.div`
   color: ${(props) => props.textColor};
 `;
 
-const DateContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 21rem;
-  height: 2rem;
-  padding: 0 0.4rem;
-  background-color: white;
-  border: 1px solid ${Colors.mediumGray};
-`;
-
 function Mainpage () {
   const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
   const rating = useSelector((state) => state.rating).dogWalkers;
-  const [startDate, setStartDate] = useState(new Date());
   const [location, setLocation] = useState('');
   const [walkerResult, setWalkerResult] = useState(dogWalkers);
   const [allTags, setAllTags] = useState({
@@ -114,10 +127,14 @@ function Mainpage () {
 
   useEffect(() => {
     setWalkerResult(dogWalkers);
+    setSortbyRating('none');
+    setSortbyPrice('none');
   }, [allTags]);
 
   useEffect(() => {
     setWalkerResult(dogWalkers);
+    setSortbyRating('none');
+    setSortbyPrice('none');
   }, [location]);
 
   const allTagList = [
@@ -200,6 +217,7 @@ function Mainpage () {
     let newDogWalker = Array(20).fill({});
 
     if (sortby === '평점순') {
+      setSortbyPrice('none');
       if (sortbyRating !== 'des') {
         rating.sort((a, b) => {
           if (getAverageRating(b.rating) === getAverageRating(a.rating)) {
@@ -228,6 +246,7 @@ function Mainpage () {
         newDogWalker[ratingList.indexOf(el.id)] = el;
       });
     } else if (sortby === '가격순') {
+      setSortbyRating('none');
       if (sortbyPrice !== 'des') {
         chargeList.sort((a, b) => {
           return b.minPrice - a.minPrice;
@@ -269,14 +288,7 @@ function Mainpage () {
             </div>
             <div className='date-container'>
               <div className='description'>원하시는 날짜를 선택하세요</div>
-              <DateContainer>
-                <FontAwesomeIcon icon={faCalendar} color={Colors.darkGray} size='1x' />
-                <DatePicker
-                  selected={startDate}
-                  dateFormat='yyyy.MM.dd'
-                  onChange={(date) => setStartDate(date)}
-                />
-              </DateContainer>
+              <DateSelector />
             </div>
             <div className='tag-container'>
               <div className='description'>원하시는 조건을 선택하세요</div>
@@ -298,25 +310,29 @@ function Mainpage () {
             </div>
           </div>
           <div className='bottom-container'>
-            <div onClick={handleSort}>가격순</div>
-            <div onClick={handleSort}>평점순</div>
-            {walkerResult.length === 0
-              ? (
-                <div>검색 결과가 없습니다</div>
-                )
-              : (
-                  walkerResult.map((dogWalker, idx) => (
-                    <Dogwalker
-                      handleClick={() => {
-                        handleClick(dogWalker);
-                      }}
-                      dogWalker={dogWalker}
-                      rating={rating}
-                      minPrice={getMinValue(dogWalker.charges)}
-                      key={idx}
-                    />
-                  ))
-                )}
+            <div className='sorting-container'>
+              <Sorting onClick={handleSort} textColor={sortbyPrice === 'none' ? Colors.mediumGray : 'black'}>가격순</Sorting>
+              <Sorting onClick={handleSort} textColor={sortbyRating === 'none' ? Colors.mediumGray : 'black'}>평점순</Sorting>
+            </div>
+            <div className='dogwalker-container'>
+              {walkerResult.length === 0
+                ? (
+                  <div>검색 결과가 없습니다</div>
+                  )
+                : (
+                    walkerResult.map((dogWalker, idx) => (
+                      <Dogwalker
+                        handleClick={() => {
+                          handleClick(dogWalker);
+                        }}
+                        dogWalker={dogWalker}
+                        rating={rating}
+                        minPrice={getMinValue(dogWalker.charges)}
+                        key={idx}
+                      />
+                    ))
+                  )}
+            </div>
           </div>
         </div>
       </div>
