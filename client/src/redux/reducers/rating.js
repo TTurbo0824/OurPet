@@ -1,4 +1,4 @@
-import { GIVE_RATING, CANCEL_RATING, TRACK_RATING } from '../action';
+import { GIVE_RATING, CANCEL_RATING, TRACK_RATING, UNTRACK_RATING } from '../action';
 import { initRatingState } from './initialState/initRatingState';
 
 function rating (state = initRatingState, action) {
@@ -25,6 +25,11 @@ function rating (state = initRatingState, action) {
       return {
         ...state,
         givenRating: [...state.givenRating, action.payload]
+      };
+    case UNTRACK_RATING:
+      return {
+        ...state,
+        givenRating: state.givenRating.filter((_, idx) => idx !== action.payload.id)
       };
     default:
       return state;

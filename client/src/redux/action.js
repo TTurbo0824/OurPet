@@ -1,14 +1,16 @@
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
 export const EDIT_INFO = 'EDIT_INFO';
-export const TOKEN_EXPIRED = 'TOKEN_EXPIRED';
 export const REQUEST_DOGWALKER = 'REQUEST_DOGWALKER';
 export const CANCEL_DOGWALKER = 'CANCEL_DOGWALKER';
 export const GET_HISTORY = 'GET_HISTORY';
 export const GIVE_RATING = 'GIVE_RATING';
 export const TRACK_RATING = 'TRACK_RATING';
+export const UNTRACK_RATING = 'UNTRACK_RATING';
 export const CANCEL_RATING = 'CANCEL_RATING';
 export const POST_REVIEW = 'POST_REVIEW';
+export const TRACK_REVIEW = 'TRACK_REVIEW';
+export const UNTRACK_REVIEW = 'UNTRACK_REVIEW';
 export const DELETE_REVIEW = 'DELETE_REVIEW';
 
 export const userLogin = (token, loginData) => ({
@@ -24,10 +26,6 @@ export const userLogout = () => ({
 export const editInfo = (userData) => ({
   type: EDIT_INFO,
   payload: userData
-});
-
-export const tokenExpired = () => ({
-  type: TOKEN_EXPIRED
 });
 
 export const requestDogwalker = (request) => ({
@@ -54,13 +52,29 @@ export const trackRating = (ratingInfo) => ({
   payload: ratingInfo
 });
 
+export const untrackRating = (id) => ({
+  type: UNTRACK_RATING,
+  payload: { id }
+});
+
 export const cancelRating = (id, idx) => ({
   type: CANCEL_RATING,
   payload: { id, idx }
 });
 
-export const postReview = () => ({
-  type: POST_REVIEW
+export const postReview = (id, nickname, content, date) => ({
+  type: POST_REVIEW,
+  payload: { id, nickname, content, date }
+});
+
+export const trackReview = (reviewInfo) => ({
+  type: TRACK_REVIEW,
+  payload: reviewInfo
+});
+
+export const untrackReview = (id, idx) => ({
+  type: UNTRACK_REVIEW,
+  payload: { id, idx }
 });
 
 export const deleteReview = () => ({
