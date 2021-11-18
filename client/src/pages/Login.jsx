@@ -76,44 +76,46 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   };
 
   const handleLoginRequest = () => {
-    if (loginInfo.email === '' || loginInfo.password === '') {
-      setErrorMsg('모든 항목을 입력해 주세요');
-    } else {
-      axios
-        .post(`${process.env.REACT_APP_API_URL}/login`, loginInfo, {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true
-        })
-        .then((res) => {
-          localStorage.setItem('accessToken', res.data.accessToken);
-          localStorage.setItem('accessTokenTime', String(new Date().getTime()));
-          handleModal();
-          handleNotice(true);
-          handleMessage('로그인 성공!');
-          return res.data.accessToken;
-        })
-        .then((token) => {
-          axios
-            .get(process.env.REACT_APP_API_URL + '/user-info', {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
-              }
-            })
-            .then((res) => {
-              dispatch(userLogin(token, res.data.data));
-            });
-        })
-        .catch((error) => {
-          if (error.response.data.message === 'please check your password and try again') {
-            setErrorMsg('잘못된 비밀번호입니다');
-          }
-          if (error.response.data.message === 'Invalid user') {
-            setErrorMsg('등록되지 않은 이메일입니다');
-          }
-          console.log(error.response.data.message);
-        });
-    }
+    dispatch(userLogin('token', { email: '123', nickname: 'testuser' }));
+
+    // if (loginInfo.email === '' || loginInfo.password === '') {
+    //   setErrorMsg('모든 항목을 입력해 주세요');
+    // } else {
+    //   axios
+    //     .post(`${process.env.REACT_APP_API_URL}/login`, loginInfo, {
+    //       headers: { 'Content-Type': 'application/json' },
+    //       withCredentials: true
+    //     })
+    //     .then((res) => {
+    //       localStorage.setItem('accessToken', res.data.accessToken);
+    //       localStorage.setItem('accessTokenTime', String(new Date().getTime()));
+    //       handleModal();
+    //       handleNotice(true);
+    //       handleMessage('로그인 성공!');
+    //       return res.data.accessToken;
+    //     })
+    //     .then((token) => {
+    //       axios
+    //         .get(process.env.REACT_APP_API_URL + '/user-info', {
+    //           headers: {
+    //             Authorization: `Bearer ${token}`,
+    //             'Content-Type': 'application/json'
+    //           }
+    //         })
+    //         .then((res) => {
+    //           dispatch(userLogin(token, res.data.data));
+    //         });
+    //     })
+    //     .catch((error) => {
+    //       if (error.response.data.message === 'please check your password and try again') {
+    //         setErrorMsg('잘못된 비밀번호입니다');
+    //       }
+    //       if (error.response.data.message === 'Invalid user') {
+    //         setErrorMsg('등록되지 않은 이메일입니다');
+    //       }
+    //       console.log(error.response.data.message);
+    //     });
+    // }
   };
 
   const goSignup = () => {
