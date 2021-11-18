@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { cancelRating } from '../../../redux/action';
+import { useHistory } from 'react-router';
+import { cancelRating, untrackRating } from '../../../redux/action';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
@@ -25,10 +26,11 @@ export const MyHistoryWrapper = styled.div`
     margin: 0 auto;
     /* text-align: center; */
     border-top: 1px solid ${Colors.lightGray};
-    padding: .4rem 1rem;
+    padding: 0.4rem 1rem;
     width: 40rem;
   }
   .dogwalker-img {
+    cursor: pointer;
     grid-area: img;
     width: 7.5rem;
     height: 7.5rem;
@@ -67,15 +69,24 @@ export const MyHistoryWrapper = styled.div`
 
 function MyHistory () {
   const dispatch = useDispatch();
+  const history = useHistory();
   const historyList = useSelector((state) => state.history).dogWalkerHistory;
+  const givenRating = useSelector((state) => state.rating).givenRating;
+  const givenReview = useSelector((state) => state.review).givenReview;
   const [openRating, setOpenRating] = useState(false);
   const [openReview, setOpenReview] = useState(false);
-  const [walkerId, setWalkerId] = useState(0);
+  const [historyInfo, setHistoryInfo] = useState({ dogwalkerId: null, historyId: null });
+  const [serviceDate, setServiceDate] = useState(null);
 
   // console.log(historyList);
 
-  const handleRatingOpen = (id) => {
-    setWalkerId(id);
+  const givenRatingIds = givenRating.map((el) => el.historyId) || [];
+  const givenReviewIds = givenReview.map((el) => el.historyId);
+
+  console.log(givenRatingIds);
+  const handleRatingOpen = (dogwalkerId, index) => {
+    console.log(dogwalkerId);
+    setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: index });
     setOpenRating(true);
   };
 
@@ -83,8 +94,9 @@ function MyHistory () {
     setOpenRating(false);
   };
 
-  const handleReviewOpen = (id) => {
-    setWalkerId(id);
+  const handleReviewOpen = (dogwalkerId, historyId, date) => {
+    setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: historyId });
+    setServiceDate(date);
     setOpenReview(true);
   };
 
@@ -92,8 +104,13 @@ function MyHistory () {
     setOpenReview(false);
   };
 
-  const handleCancel = () => {
-    dispatch(cancelRating(1, 5));
+  const handleCancelRating = (dogwalkerId, idx) => {
+    dispatch(cancelRating(dogwalkerId, givenRating[idx].index));
+    dispatch(untrackRating(idx));
+  };
+
+  const handleClick = (id) => {
+    history.push({ pathname: `/dogwalker:id=${id}` });
   };
 
   return (
@@ -104,18 +121,62 @@ function MyHistory () {
           {historyList.map((el, idx) => {
             return (
               <div className='card' key={idx}>
-                <img className='dogwalker-img' src={el.img} alt={el.name} />
+                <img
+                  className='dogwalker-img'
+                  src={el.img}
+                  alt={el.name}
+                  onClick={() => handleClick(el.dogwalkerId)}
+                />
                 <div className='name'>{el.name}</div>
-                <div className='info'>{el.date} <span>|</span> {el.duration}분 / {el.price}원</div>
+                <div className='info'>
+                  {el.date} <span>|</span> {el.duration}분 / {el.price}원
+                </div>
                 <div className='type'>{el.type}</div>
-                <div className='bnt rating' onClick={() => handleRatingOpen(el.dogwalkerId)}>평점 등록</div>
-                <div className='bnt review' onClick={() => handleReviewOpen(el.dogwalkerId)}>리뷰 등록</div>
+                {givenRatingIds.includes(idx + 1)
+                  ? (
+                    <div
+                      className='bnt rating'
+                      onClick={() => handleCancelRating(el.dogwalkerId, idx)}
+                    >
+                      평점 삭제
+                    </div>
+                    )
+                  : (
+                    <div className='bnt rating' onClick={() => handleRatingOpen(el.dogwalkerId, idx)}>
+                      평점 등록
+                    </div>
+                    )}
+                {givenReviewIds.includes(idx + 1)
+                  ? (
+                    <div
+                      className='bnt review'
+                      onClick={() => handleReviewOpen(el.dogwalkerId, idx, el.date)}
+                    >
+                      리뷰 삭제
+                    </div>
+                    )
+                  : (
+                    <div
+                      className='bnt review'
+                      onClick={() => handleReviewOpen(el.dogwalkerId, idx, el.date)}
+                    >
+                      리뷰 등록
+                    </div>
+                    )}
               </div>
             );
           })}
         </div>
-        {openRating ? <Rating handleModal={handleRatingClose} dogwalkerId={walkerId} /> : null}
-        {openReview ? <Review handleModal={handleReviewClose} dogwalkerId={walkerId} /> : null}
+        {openRating ? <Rating handleModal={handleRatingClose} historyInfo={historyInfo} /> : null}
+        {openReview
+          ? (
+            <Review
+              handleModal={handleReviewClose}
+              dogwalkerId={historyInfo.dogwalkerId}
+              serviceDate={serviceDate}
+            />
+            )
+          : null}
       </div>
     </MyHistoryWrapper>
   );
