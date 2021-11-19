@@ -1,37 +1,41 @@
 import styled from 'styled-components';
-// import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-// import {faGithub} from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { Colors } from '../components/utils/_var';
-
+import logo from '../images/logo_white.png';
 const FooterWrapper = styled.div`
   .footer {
-    padding: 2.25rem 0.8rem 0.5rem ;
-    background-color: ${Colors.darkGray};
+    padding: 1rem 0.5rem ;
+    background-color: ${Colors.black};
     width: 100vw;
   }
-  .sub-container {
-    display: flex;
+  .container {
+    justify-content: center;
+    margin: 0 auto;
+    text-align: center;
   }
-  .link,
-  .copyright {
-    color: ${Colors.lightGray};
+  .logo-image {
+    width: 8.5rem;
+  }
+  .link-container {
+    margin: .8rem auto;
   }
   .link {
     cursor: pointer;
     text-decoration: none;
-    min-width: 14rem;
-    margin: auto .25rem;
+    color: ${Colors.lightGray};
+    font-size: 1.5rem;
+    margin: auto .5rem;
     &:hover {
       color: ${Colors.lightYellow};
     }
   }
   .copyright {
+    text-decoration: none;
+    color: ${Colors.mediumGray};
     min-width: 24rem;
     margin-right: .25rem;
     text-align: right;
-  }
-  .container-empty {
-    width: 100%;
   }
 `;
 
@@ -44,28 +48,30 @@ function Footer () {
   return (
     <FooterWrapper>
       <div className='footer'>
-        <div className='sub-container'>
+        <div className='container'>
           <a
             className='link'
             href='https://github.com/TTurbo0824/WalkingDog'
             target='_blank'
             rel='noopener noreferrer'
           >
-            WalkingDog Repository Link
+            <img src={logo} className='logo-image' alt='logo_img' />
           </a>
-          <div className='container-empty' />
-          <span className='copyright'>
-            copyright &copy; {new Date().getFullYear()}
+          {/* <div className='link-container'>
             <a
               className='link'
-              href={developer.repository}
+              href='https://github.com/TTurbo0824/WalkingDog'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Kyungjoo Ha
+              <FontAwesomeIcon icon={faGithub} size='1x' color={Colors.lightGray} />
             </a>
-            All rights reserved.
-          </span>
+          </div> */}
+          <div>
+            <span className='copyright'>
+              &copy; {`Kyungjoo Ha ${new Date().getFullYear()}`}
+            </span>
+          </div>
         </div>
       </div>
     </FooterWrapper>
