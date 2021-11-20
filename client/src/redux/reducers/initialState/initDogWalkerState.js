@@ -6,7 +6,7 @@ export const initDogWalkerState = {
       name: '안*영',
       img: 'https://images.theconversation.com/files/319375/original/file-20200309-118956-1cqvm6j.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=900.0&fit=crop',
       locations: ['서대문구', '종로구', '중구'],
-      tags: ['소형견', '중형견', '대형견', '야외 배변'],
+      tags: ['소형견', '중형견', '야외 배변'],
       charges: {
         소형견: [15000, 20000],
         중형견: [15000, 20000],
@@ -58,7 +58,7 @@ export const initDogWalkerState = {
       name: '최*진',
       img: 'https://images.theconversation.com/files/319375/original/file-20200309-118956-1cqvm6j.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=900.0&fit=crop',
       locations: ['강남구', '서초구', '송파구'],
-      tags: ['중형견', '대형견', '야외 배변', '산책 예절 교육'],
+      tags: ['소형견', '중형견', '야외 배변', '산책 예절 교육'],
       charges: {
         소형견: [15000, 20000],
         중형견: [15000, 20000],
@@ -162,7 +162,7 @@ export const initDogWalkerState = {
       name: '이*민',
       img: 'https://images.theconversation.com/files/319375/original/file-20200309-118956-1cqvm6j.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=900.0&fit=crop',
       locations: ['동작구', '양천구', '영등포구'],
-      tags: ['소형견', '중형견', '야외 배변', '산책 후 뒤처리', '산책 예절 교육'],
+      tags: ['소형견', '야외 배변', '산책 후 뒤처리', '산책 예절 교육'],
       charges: {
         소형견: [12000, 18000],
         중형견: ['x', 'x'],
@@ -240,7 +240,7 @@ export const initDogWalkerState = {
       name: '김*나',
       img: 'https://images.theconversation.com/files/319375/original/file-20200309-118956-1cqvm6j.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=900.0&fit=crop',
       locations: ['용산구', '종로구', '중구', '성동구'],
-      tags: ['소형견', '중형견', '야외 배변'],
+      tags: ['소형견', '야외 배변'],
       charges: {
         소형견: [12000, 18000],
         중형견: ['x', 'x'],
