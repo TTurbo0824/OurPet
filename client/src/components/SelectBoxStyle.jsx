@@ -1,4 +1,5 @@
 import { Colors } from './utils/_var';
+import styled from 'styled-components';
 
 export const customStyles = {
   menu: (base) => ({
@@ -15,10 +16,15 @@ export const customStyles = {
   control: (base) => ({
     ...base,
     // width: '10rem',
-    border: `1px solid ${Colors.mediumGray}`,
+    border: `1px solid ${Colors.lightGray}`,
     boxShadow: 'none',
     '&:hover': {
-      border: `1px solid ${Colors.mediumGray}`
+      border: `1px solid ${Colors.lightGray}`
     }
   })
 };
+
+export const Description = styled.div`
+  margin-top: 1.3rem;
+  margin-bottom: .5rem;
+`;
