@@ -27,6 +27,23 @@ const ChargeWrapper = styled.div`
     font-weight: bold;
     font-size: 1rem;
   }
+  .h-line {
+    width: 100%;
+    height: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgb(175, 175, 175, 0.4);
+  }
+  .type-container {
+    margin-top: .5rem;
+  }
+  .type {
+    padding-left: .2rem;
+    margin-right: 4.5rem;
+  }
+  .weight {
+    color: ${Colors.darkGray};
+
+  }
 `;
 
 function Charge ({ chargeList }) {
@@ -37,8 +54,10 @@ function Charge ({ chargeList }) {
       charge.splice(-4, 0, ',');
       charge = charge.join('');
     }
-    return charge
-  })
+    return charge;
+  });
+
+  const dogType = [{ 소형견: '7kg 미만' }, { 중형견: '7~14.9kg' }, { 대형견: '15kg 이상' }];
 
   return (
     <ChargeWrapper>
@@ -62,13 +81,19 @@ function Charge ({ chargeList }) {
             })}
           </tr>
           <tr>
-          {/* String(minPrice).split(''); */}
+            {/* String(minPrice).split(''); */}
             {chargeList.map((charge, idx) => {
               return idx / 3 < 3 && idx / 3 >= 2 ? <td key={idx}>{charge}</td> : null;
             })}
           </tr>
         </tbody>
       </table>
+      <div className='h-line' />
+      {dogType.map((el, idx) =>
+        <div className='type-container' key={idx}>
+          <span className='type'>{Object.keys(el)}</span>
+          <span className='weight'>{Object.values(el)}</span>
+        </div>)}
     </ChargeWrapper>
   );
 }
