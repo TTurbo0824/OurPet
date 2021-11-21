@@ -58,32 +58,34 @@ export const HeaderButton = styled.button`
 function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }) {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user).token;
-  const isExpired = useSelector((state) => state.user).userInfo.isExpired;
 
   const handleLogoutRequest = () => {
     const token = isLogin;
-    console.log(token);
-    if (isExpired) {
-      modal();
-    } else {
-      axios
-        .post(process.env.REACT_APP_API_URL + '/logout', { data: null }, {
+    // console.log(token);
+
+    axios
+      .post(
+        process.env.REACT_APP_API_URL + '/logout',
+        { data: null },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
           withCredentials: true
-        })
-        .then(() => {
-          dispatch(userLogout());
-          localStorage.clear();
-          handleNotice(true);
-          handleMessage('로그아웃 성공!');
-        })
-        .catch((error) => {
-          console.log(error.response.data.message);
-        });
-    }
+        }
+      )
+      .then(() => {
+        dispatch(userLogout());
+        localStorage.clear();
+        handleNotice(true);
+        handleMessage('로그아웃 성공!');
+      })
+      .catch((err) => {
+        if (err.response.data.message === 'You\'re not logged in') {
+          modal();
+        } else console.log(err.response.data.message);
+      });
   };
 
   return (
