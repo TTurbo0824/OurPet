@@ -1,8 +1,14 @@
 import styled from 'styled-components';
 import Time from '../../database/Time';
 import Select from 'react-select';
-import { customStyles } from '../../components/SelectBoxStyle';
+import { customStyles, Description } from '../../components/SelectBoxStyle';
+
 const TimePickerWrapper = styled.div`
+  /* background-color: pink; */
+  width: 50%;
+  padding-right: .45rem;
+  .description {
+  }
 `;
 
 function TimeSelector ({ requestOptions, setRequestOptions }) {
@@ -16,8 +22,8 @@ function TimeSelector ({ requestOptions, setRequestOptions }) {
 
   return (
     <TimePickerWrapper>
-      <div className='time-container'>
-        <div className='description'>언제 산책을 원하시나요?</div>
+      <Description>시작 시간</Description>
+      <div>
         <Select
           onChange={timeSelected}
           styles={customStyles}

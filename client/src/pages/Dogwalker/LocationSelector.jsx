@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Select from 'react-select';
-import { customStyles } from '../../components/SelectBoxStyle';
+import { customStyles, Description } from '../../components/SelectBoxStyle';
 const LocationPickerWrapper = styled.div``;
 
 function LocationSelector ({ locations, requestOptions, setRequestOptions }) {
@@ -15,7 +15,7 @@ function LocationSelector ({ locations, requestOptions, setRequestOptions }) {
   return (
     <LocationPickerWrapper>
       <div className='type-container'>
-        <div className='description'>어디에서 산책을 원하시나요?</div>
+        <Description>어디에서 산책을 원하시나요?</Description>
         <Select
           onChange={setLocation}
           styles={customStyles}

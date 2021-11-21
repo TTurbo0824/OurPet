@@ -1,7 +1,14 @@
 import styled from 'styled-components';
 import Select from 'react-select';
-import { customStyles } from '../../components/SelectBoxStyle';
-const DurationPickerWrapper = styled.div``;
+import { customStyles, Description } from '../../components/SelectBoxStyle';
+
+const DurationPickerWrapper = styled.div`
+  /* background-color: lavender; */
+  width: 50%;
+  padding-left: .45rem;
+  .description {
+  }
+`;
 
 function DurationSelector ({ requestOptions, setRequestOptions }) {
   const durationSelected = (e) => {
@@ -15,8 +22,8 @@ function DurationSelector ({ requestOptions, setRequestOptions }) {
 
   return (
     <DurationPickerWrapper>
-      <div className='time-container'>
-        <div className='description'>산책 시간</div>
+      <Description>산책 시간</Description>
+      <div>
         <Select
           onChange={durationSelected}
           styles={customStyles}

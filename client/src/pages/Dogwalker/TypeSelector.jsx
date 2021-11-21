@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Select from 'react-select';
-import { customStyles } from '../../components/SelectBoxStyle';
+import { customStyles, Description } from '../../components/SelectBoxStyle';
 const TypePickerWrapper = styled.div``;
 
 function TypeSelector ({ dogType, requestOptions, setRequestOptions }) {
@@ -21,7 +21,7 @@ function TypeSelector ({ dogType, requestOptions, setRequestOptions }) {
   return (
     <TypePickerWrapper>
       <div className='type-container'>
-        <div className='description'>언제 산책을 원하시나요?</div>
+        <Description>반려동물 종류</Description>
         <Select
           onChange={setType}
           styles={customStyles}
