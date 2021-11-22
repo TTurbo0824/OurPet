@@ -12,141 +12,141 @@ export const initReviewState = {
     {
       id: 1,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 2,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 3,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 4,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 5,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 6,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 7,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 8,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 9,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 10,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 11,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 12,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 13,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 14,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 15,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 16,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 17,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 18,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 19,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     },
     {
       id: 20,
       review: [
-        { nickname: 'abc123', content: '만족합니다', date: getDate(-4) },
-        { nickname: 'testuser', content: '감사합니다', date: getDate(-2) }
+        { nickname: 'pugqueen', content: '도그워킹 서비스는 이번에 처음 접해보았는데요~ 아이가 낯가림도 심한 편이라 처음에는 불안하기도 했는데 도그 워커님께서 너무 잘 맞춰주시고 아이가 안정될 때까지 침착하게 기다려 주셨어요~ 앞으로도 자주 이용할 것 같습니다~', date: getDate(-4) },
+        { nickname: 'doglover0522', content: '산책 후 아이 발도 깨끗이 닦아주셨고 아이가 너무 에너지가 넘쳐서 감당하기 어려우시진 않으실까 걱정을 많이 했었는데 괜한 걱정이었네요. 앞으로도 종종 이용할 거 같습니다. 다음번에도 잘 부탁드릴게요~', date: getDate(-2) }
       ]
     }
   ],
