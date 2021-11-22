@@ -11,13 +11,14 @@ const MainpageWrapper = styled.div`
   .main {
     display: flex;
     min-height: calc(100vh - 8.9rem);
-    min-height: 80rem;
+    padding-top: 1rem;
   }
   .container {
     margin: 0 auto;
     display: block;
     padding: 0 auto;
-    ${media.tablet`width: 90%;`}
+    ${media.tablet`width: 90vw;`}
+    max-width: 62rem;
     /* background-color: lime; */
   }
   input:focus {
@@ -25,15 +26,15 @@ const MainpageWrapper = styled.div`
   }
   input {
     border: none;
-    width: 16.5rem;
+    /* width: 16.5rem; */
+    width: 100%;
     margin: 0 0.3rem 0.35rem;
     color: ${Colors.darkGray};
-    /* background-color: lavenderblush; */
   }
   .top-container {
     /* width: 100vw; */
     width: 100%;
-    padding: 0 0.5rem;
+    /* padding: 0 0.5rem; */
     display: grid;
     grid-template-areas: 'location' 'date' 'tag';
     grid-template-columns: 100%;
@@ -43,20 +44,20 @@ const MainpageWrapper = styled.div`
   }
   .location-container {
     grid-area: location;
-  }
-  .location-search-container {
-    display: block;
-    width: 21rem;
-    height: 2rem;
-    padding: 0 0.4rem;
-    border: 1px solid ${Colors.mediumGray};
+    /* padding: 0 1rem; */
+    /* background-color: pink; */
   }
   .date-container {
     grid-area: date;
+    ${media.tablet`justify-self: right;`}
+    margin-right: 0;
+    /* padding: 0 1rem; */
     margin-bottom: 1rem;
   }
-  .tag-container {
+  .top-tag-container {
     grid-area: tag;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid ${Colors.lightGray};
   }
   .bottom-container {
     display: flex;
@@ -68,6 +69,8 @@ const MainpageWrapper = styled.div`
   .dogwalker-container {
     display: flex;
     flex-wrap: wrap;
+    /* justify-content: space-evenly; */
+    justify-content: space-between;
   }
   .description {
     margin-bottom: 0.5rem;
@@ -75,16 +78,14 @@ const MainpageWrapper = styled.div`
   .sorting-container {
     display: flex;
     width: 100%;
-    padding: 1rem;
+    padding: 1rem 0 1.5rem;
     justify-content: right;
-    /* background-color: lavender; */
   }
   .sorting {
     cursor: pointer;
     margin-left: .5rem;
     font-size: .9rem;
     color: ${Colors.mediumGray};
-
   }
 `;
 
@@ -107,6 +108,15 @@ const Tag = styled.div`
   color: ${(props) => props.textColor};
 `;
 
+const LoadingWrapper = styled.div`
+  margin: 0 auto;
+  .loading {
+    width: 3rem;
+    margin-top: -.5rem;
+    margin-bottom: 1.2rem;
+  }
+`;
+
 function Mainpage () {
   const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
@@ -124,6 +134,24 @@ function Mainpage () {
 
   const [sortbyRating, setSortbyRating] = useState('none');
   const [sortbyPrice, setSortbyPrice] = useState('none');
+  const [isScrollCnt, setIsScrollCnt] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadingTime = (Math.random() + 1) * 1000;
+
+  const dogwalkerCount = 5;
+  window.onscroll = () => {
+    const scrollLocation = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const fullHeight = document.body.scrollHeight;
+    if ((fullHeight <= scrollLocation + windowHeight) && (Math.ceil(walkerResult.length / dogwalkerCount) > isScrollCnt)) {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        setIsScrollCnt(isScrollCnt + 1);
+      }, loadingTime);
+    }
+  };
 
   useEffect(() => {
     setWalkerResult(dogWalkers);
@@ -290,7 +318,7 @@ function Mainpage () {
               <div className='description'>원하시는 날짜를 선택하세요</div>
               <DateSelector />
             </div>
-            <div className='tag-container'>
+            <div className='top-tag-container'>
               <div className='description'>원하시는 조건을 선택하세요</div>
               {allTagList.map((tag, idx) => {
                 return (
@@ -320,19 +348,27 @@ function Mainpage () {
                   <div>검색 결과가 없습니다</div>
                   )
                 : (
-                    walkerResult.map((dogWalker, idx) => (
-                      <Dogwalker
-                        handleClick={() => {
-                          handleClick(dogWalker);
-                        }}
-                        dogWalker={dogWalker}
-                        rating={rating}
-                        minPrice={getMinValue(dogWalker.charges)}
-                        key={idx}
-                      />
-                    ))
-                  )}
+                    walkerResult.map((dogWalker, idx) => {
+                      if ((idx + 1) <= (isScrollCnt * dogwalkerCount)) {
+                        return (
+                          <Dogwalker
+                            handleClick={() => {
+                              handleClick(dogWalker);
+                            }}
+                            dogWalker={dogWalker}
+                            rating={rating}
+                            minPrice={getMinValue(dogWalker.charges)}
+                            key={idx}
+                            tags={dogWalker.tags}
+                          />
+                        );
+                      }
+                    }))}
             </div>
+            {isLoading &&
+              <LoadingWrapper>
+                <img className='loading' src='images/loading.gif' alt='loading' />
+              </LoadingWrapper>}
           </div>
         </div>
       </div>
