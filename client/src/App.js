@@ -13,6 +13,7 @@ import Myhistory from './pages/Mypage/Myhistory/Myhistory';
 import Modal from './components/Modal';
 import Notification from './components/Notification';
 import DogWalkerPage from './pages/Dogwalker/DogWalkerPage';
+import MoveTop from './components/MoveTop';
 
 const AppWrapper = styled.div`
   * {
@@ -87,6 +88,9 @@ function App () {
   const handleNotice = (boolean) => {
     setOpenNotice(boolean);
   };
+  const moveToTop = () => {
+    document.documentElement.scrollTop = 0;
+  };
 
   return (
     <BrowserRouter>
@@ -160,6 +164,7 @@ function App () {
               />
               )
             : null}
+          {scrolled ? <MoveTop moveToTop={moveToTop} /> : null}
           <Footer />
           {openSignup
             ? (
