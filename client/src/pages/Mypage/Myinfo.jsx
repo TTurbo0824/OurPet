@@ -65,10 +65,9 @@ export const MyinfoButton = styled.button`
 function Myinfo ({ modal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user).token;
-  const userInfo = useSelector((state) => state.user).userInfo;
+  const userInfo = useSelector((state) => state.user).walkingDogUserInfo;
   const { email, nickname } = userInfo;
-  const isExpired = useSelector((state) => state.user).userInfo.isExpired;
-  const isGuest = useSelector((state) => state.user).userInfo.nickname.includes('guest#');
+  const isGuest = nickname.includes('guest#');
   const [checkNickname, setCheckNickname] = useState('ok');
   const [checkPassword, setCheckPassword] = useState('ok');
   const [checkRetypePassword, setCheckRetypePassword] = useState(true);
@@ -183,10 +182,7 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
       setErrorMsg('변경할 정보를 입력해주세요');
     } else if (checkNickname !== 'ok') {
       setErrorMsg(checkNickname);
-    } else if (
-      checkPassword !== 'ok' ||
-      checkNickname !== 'ok'
-    ) {
+    } else if (checkPassword !== 'ok' || checkNickname !== 'ok') {
       setErrorMsg('변경할 정보를 올바르게 입력해주세요');
     } else {
       if (myInfo.nickname === '') setMyInfo({ ...myInfo, nickname: userInfo.nickname });
@@ -222,12 +218,22 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleWithdrawalRequest = () => {
-    if (isExpired) {
-      modal();
-    } else {
-      handleNotice(true);
-      handleMessage('정말 탈퇴하시겠습니까?');
-    }
+    axios
+      .get(process.env.REACT_APP_API_URL + '/user-info', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(() => {
+        handleNotice(true);
+        handleMessage('정말 탈퇴하시겠습니까?');
+      })
+      .catch((err) => {
+        if (err.response.data.message === 'You\'re not logged in') {
+          modal();
+        } else console.log(err.response.data.message);
+      });
   };
 
   return (

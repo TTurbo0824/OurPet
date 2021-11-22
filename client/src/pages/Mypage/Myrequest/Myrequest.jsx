@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import TopNavigation from '../../../components/TopNavigation';
 import { Colors } from '../../../components/utils/_var';
@@ -26,6 +27,7 @@ export const MyRequestWrapper = styled.div`
     width: 40rem;
   }
   .dogwalker-img {
+    cursor: pointer;
     grid-area: img;
     width: 7.5rem;
     height: 7.5rem;
@@ -64,6 +66,7 @@ export const MyRequestWrapper = styled.div`
 
 function MyRequest ({ handleMessage, handleNotice }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const dogWalkerList = useSelector((state) => state.dogwalker).dogWalkers;
   let requestList = useSelector((state) => state.request).dogWalkerRequest;
 
@@ -85,6 +88,10 @@ function MyRequest ({ handleMessage, handleNotice }) {
     handleMessage(`정말 요청을 취소하시겠습니까?!${id}`);
   };
 
+  const handleClick = (id) => {
+    history.push({ pathname: `/dogwalker:id=${id}` });
+  };
+
   return (
     <MyRequestWrapper>
       <TopNavigation />
@@ -93,7 +100,7 @@ function MyRequest ({ handleMessage, handleNotice }) {
           {requestList.map((el, idx) => {
             return (
               <div className='card' key={idx}>
-                <img className='dogwalker-img' src={el.img} alt={el.name} />
+                <img className='dogwalker-img' src={el.img} alt={el.name} onClick={() => handleClick(el.dogwalkerId)} />
                 <div className='name'>{el.name}</div>
                 <div className='info'>{el.date} <span>|</span> {el.duration}분 / {el.price}원</div>
                 <div className='type'>{el.type}</div>

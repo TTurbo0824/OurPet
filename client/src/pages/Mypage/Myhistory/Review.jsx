@@ -59,7 +59,6 @@ function Review ({ serviceDate, handleModal, dogwalkerId }) {
     setWalkerReview(e.target.value);
   };
 
-  console.log(indexNum);
   const reviewInfo = {
     dogwalkerId: dogwalkerId,
     historyId: track.length + 1,

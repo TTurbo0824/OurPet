@@ -53,14 +53,13 @@ const RatingButton = styled.button`
 //  1. 별점 Select box 생성
 //
 
-function Rating ({ handleModal, dogwalkerId }) {
+function Rating ({ handleModal, historyInfo }) {
   const dispatch = useDispatch();
   const ratings = useSelector((state) => state.rating).dogWalkers;
-  const track = useSelector((state) => state.rating).givenRating;
+  const { dogwalkerId, historyId } = historyInfo;
   const indexNum = ratings[dogwalkerId - 1].rating.length;
   const [walkerRate, setWalkerRate] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
-  // console.log(dogwalkerId, track, indexNum);
 
   const options = [
     {
@@ -132,7 +131,7 @@ function Rating ({ handleModal, dogwalkerId }) {
 
   const ratingInfo = {
     dogwalkerId: dogwalkerId,
-    historyId: track.length + 1,
+    historyId: historyId + 1,
     index: indexNum
   };
 
