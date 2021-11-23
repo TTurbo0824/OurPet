@@ -28,8 +28,7 @@ const MainpageWrapper = styled.div`
     border: none;
     /* width: 16.5rem; */
     width: 100%;
-    margin: 0 0.3rem 0.35rem;
-    color: ${Colors.darkGray};
+    color: ${Colors.gray};
   }
   .top-container {
     /* width: 100vw; */
@@ -56,7 +55,7 @@ const MainpageWrapper = styled.div`
   }
   .top-tag-container {
     grid-area: tag;
-    padding-bottom: 2rem;
+    padding-bottom: .75rem;
     border-bottom: 1px solid ${Colors.lightGray};
   }
   .bottom-container {
@@ -86,6 +85,14 @@ const MainpageWrapper = styled.div`
     margin-left: .5rem;
     font-size: .9rem;
     color: ${Colors.mediumGray};
+  }
+  .reset {
+    cursor: pointer;
+    margin-top: .5rem;
+    justify-content: right;
+    display: flex;
+    font-size: .9rem;
+    color: ${Colors.gray};
   }
 `;
 
@@ -307,6 +314,10 @@ function Mainpage () {
     history.push({ pathname: `/dogwalker:id=${dogwalker.id}` });
   };
 
+  const resetSearch = () => {
+    window.location.replace('/');
+  };
+
   return (
     <MainpageWrapper>
       <div className='main'>
@@ -337,6 +348,7 @@ function Mainpage () {
                   </Tag>
                 );
               })}
+              <div className='reset' onClick={resetSearch}>검색 초기화</div>
             </div>
           </div>
           <div className='bottom-container'>
