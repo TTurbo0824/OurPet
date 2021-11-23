@@ -154,9 +154,11 @@ function Mainpage () {
   };
 
   useEffect(() => {
-    setWalkerResult(dogWalkers);
-    setSortbyRating('none');
-    setSortbyPrice('none');
+    if (allTags) {
+      setWalkerResult(dogWalkers);
+      setSortbyRating('none');
+      setSortbyPrice('none');
+    }
   }, [allTags]);
 
   useEffect(() => {
