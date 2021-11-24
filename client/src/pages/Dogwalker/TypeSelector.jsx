@@ -3,18 +3,18 @@ import Select from 'react-select';
 import { customStyles, Description } from '../../components/SelectBoxStyle';
 const TypePickerWrapper = styled.div``;
 
-function TypeSelector ({ dogType, requestOptions, setRequestOptions }) {
+function TypeSelector ({ dogType, requestOptions, setRequestOptions, chargeList }) {
   const setType = (e) => {
-    setRequestOptions({ ...requestOptions, type: e.value });
+    if (requestOptions.duration === 30) {
+      setRequestOptions({ ...requestOptions, price: chargeList[chargeList.indexOf(e.value) + 1], type: e.value });
+    } else if (requestOptions.duration === 60) {
+      setRequestOptions({ ...requestOptions, price: chargeList[chargeList.indexOf(e.value) + 2], type: e.value });
+    } else {
+      setRequestOptions({ ...requestOptions, type: e.value });
+    }
   };
 
-  const types = dogType.filter((type) => {
-    if (type.length === 3) {
-      return type;
-    }
-  });
-
-  const options = types.map((type) => {
+  const options = dogType.map((type) => {
     return { value: type, label: type };
   });
 
