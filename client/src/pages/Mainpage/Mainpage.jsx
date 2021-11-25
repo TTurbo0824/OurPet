@@ -161,17 +161,25 @@ function Mainpage () {
   };
 
   useEffect(() => {
-    if (allTags) {
-      setWalkerResult(dogWalkers);
-      setSortbyRating('none');
-      setSortbyPrice('none');
-    }
+    setWalkerResult(dogWalkers);
+    setSortbyRating('none');
+    setSortbyPrice('none');
+    return () => {
+      setWalkerResult({});
+      setSortbyRating({});
+      setSortbyPrice({});
+    };
   }, [allTags]);
 
   useEffect(() => {
     setWalkerResult(dogWalkers);
     setSortbyRating('none');
     setSortbyPrice('none');
+    return () => {
+      setWalkerResult({});
+      setSortbyRating({});
+      setSortbyPrice({});
+    };
   }, [location]);
 
   const allTagList = [
@@ -210,19 +218,20 @@ function Mainpage () {
   dogWalkers = dogWalkers.filter((dogWalker) => {
     if (tagChecker(dogWalker.tags, tags)) {
       return dogWalker;
-    }
+    } else return null;
   });
 
   if (location !== '') {
     dogWalkers = dogWalkers.filter((dogWalker) => {
       if (dogWalker.locations.includes(location)) return dogWalker;
+      else return null;
     });
   }
 
   const getMinValue = (charges) => {
     const allCharge = [];
 
-    Object.values(charges).map((charge) => {
+    Object.values(charges).forEach((charge) => {
       for (const el of charge) {
         if (typeof el === 'number') {
           allCharge.push(el);
@@ -239,7 +248,7 @@ function Mainpage () {
 
   const chargeList = dogWalkers.map((walker) => {
     const allChargeList = [];
-    Object.values(walker.charges).map((charge) => {
+    Object.values(walker.charges).forEach((charge) => {
       for (const el of charge) {
         if (typeof el === 'number') {
           allChargeList.push(el);
@@ -275,11 +284,11 @@ function Mainpage () {
 
       const ratingList = [];
 
-      rating.map((el) => {
+      rating.forEach((el) => {
         ratingList.push(el.id);
       });
 
-      dogWalkers.map((el) => {
+      dogWalkers.forEach((el) => {
         newDogWalker[ratingList.indexOf(el.id)] = el;
       });
     } else if (sortby === '가격순') {
@@ -298,11 +307,11 @@ function Mainpage () {
 
       const minChargeList = [];
 
-      chargeList.map((el) => {
+      chargeList.forEach((el) => {
         minChargeList.push(el.id);
       });
 
-      dogWalkers.map((el) => {
+      dogWalkers.forEach((el) => {
         newDogWalker[minChargeList.indexOf(el.id)] = el;
       });
     }
@@ -376,7 +385,7 @@ function Mainpage () {
                             tags={dogWalker.tags}
                           />
                         );
-                      }
+                      } else return null;
                     }))}
             </div>
             {isLoading &&
