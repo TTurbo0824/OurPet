@@ -10,8 +10,9 @@ export const UNTRACK_RATING = 'UNTRACK_RATING';
 export const CANCEL_RATING = 'CANCEL_RATING';
 export const POST_REVIEW = 'POST_REVIEW';
 export const TRACK_REVIEW = 'TRACK_REVIEW';
-export const UNTRACK_REVIEW = 'UNTRACK_REVIEW';
 export const DELETE_REVIEW = 'DELETE_REVIEW';
+export const UNTRACK_REVIEW = 'UNTRACK_REVIEW';
+export const EDIT_REVIEW = 'EDIT_REVIEW';
 
 export const userLogin = (token, loginData) => ({
   type: LOG_IN,
@@ -77,6 +78,12 @@ export const untrackReview = (id) => ({
   payload: { id }
 });
 
-export const deleteReview = () => ({
-  type: DELETE_REVIEW
+export const deleteReview = (id, idx) => ({
+  type: DELETE_REVIEW,
+  payload: { id, idx }
+});
+
+export const editReview = (id, idx, content) => ({
+  type: EDIT_REVIEW,
+  payload: { id, idx, content }
 });

@@ -12,21 +12,33 @@ function review (state = initReviewState, action) {
                 ...el,
                 review: [
                   ...el.review,
-                  { nickname: action.payload.nickname, content: action.payload.content, date: action.payload.date }
+                  {
+                    nickname: action.payload.nickname,
+                    content: action.payload.content,
+                    date: action.payload.date
+                  }
                 ]
               }
             : el
         )
       };
-      case EDIT_REVIEW:
-        return {
-          ...state,
-          dogWalkers: state.dogWalkers.map((el) =>
-            el.id === action.payload.id
-              ? { ...el, review: el.review.map((review) => review.content = action.payload.content) }
-              : el
-          )
-        };
+    case EDIT_REVIEW:
+      return {
+        ...state,
+        dogWalkers: state.dogWalkers.map((el) =>
+          el.id === action.payload.id
+            ? {
+                ...el,
+                review: el.review.map((review, idx) => {
+                  if (idx === action.payload.idx) {
+                    review.content = action.payload.content;
+                  }
+                  return review;
+                })
+              }
+            : el
+        )
+      };
     case DELETE_REVIEW:
       return {
         ...state,
