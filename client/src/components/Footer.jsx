@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { Colors } from '../components/utils/_var';
 import logo from '../images/logo_white.png';
 const FooterWrapper = styled.div`
@@ -40,10 +40,10 @@ const FooterWrapper = styled.div`
 `;
 
 function Footer () {
-  const developer = {
-    name: '하경주',
-    repository: 'https://github.com/TTurbo0824'
-  };
+  // const developer = {
+  //   name: '하경주',
+  //   repository: 'https://github.com/TTurbo0824'
+  // };
 
   return (
     <FooterWrapper>
