@@ -72,9 +72,9 @@ export const trackReview = (reviewInfo) => ({
   payload: reviewInfo
 });
 
-export const untrackReview = (id, idx) => ({
+export const untrackReview = (id) => ({
   type: UNTRACK_REVIEW,
-  payload: { id, idx }
+  payload: { id }
 });
 
 export const deleteReview = () => ({

@@ -1,4 +1,4 @@
-import { POST_REVIEW, DELETE_REVIEW, TRACK_REVIEW } from '../action';
+import { POST_REVIEW, DELETE_REVIEW, TRACK_REVIEW, UNTRACK_REVIEW } from '../action';
 import { initReviewState } from './initialState/initReviewState';
 
 function review (state = initReviewState, action) {
@@ -32,6 +32,11 @@ function review (state = initReviewState, action) {
         ...state,
         givenReview: [...state.givenReview, action.payload]
       };
+      case UNTRACK_REVIEW:
+        return {
+          ...state,
+          givenReview: state.givenReview.filter((el) => el.historyId !== action.payload.id)
+        };
     default:
       return state;
   }
