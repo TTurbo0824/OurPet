@@ -29,7 +29,7 @@ function rating (state = initRatingState, action) {
     case UNTRACK_RATING:
       return {
         ...state,
-        givenRating: state.givenRating.filter((_, idx) => idx !== action.payload.id)
+        givenRating: state.givenRating.filter((el) => el.historyId !== action.payload.id)
       };
     default:
       return state;
