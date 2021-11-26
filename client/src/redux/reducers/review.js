@@ -1,4 +1,4 @@
-import { POST_REVIEW, DELETE_REVIEW, TRACK_REVIEW, UNTRACK_REVIEW } from '../action';
+import { POST_REVIEW, DELETE_REVIEW, EDIT_REVIEW, TRACK_REVIEW, UNTRACK_REVIEW } from '../action';
 import { initReviewState } from './initialState/initReviewState';
 
 function review (state = initReviewState, action) {
@@ -18,6 +18,15 @@ function review (state = initReviewState, action) {
             : el
         )
       };
+      case EDIT_REVIEW:
+        return {
+          ...state,
+          dogWalkers: state.dogWalkers.map((el) =>
+            el.id === action.payload.id
+              ? { ...el, review: el.review.map((review) => review.content = action.payload.content) }
+              : el
+          )
+        };
     case DELETE_REVIEW:
       return {
         ...state,
@@ -32,11 +41,11 @@ function review (state = initReviewState, action) {
         ...state,
         givenReview: [...state.givenReview, action.payload]
       };
-      case UNTRACK_REVIEW:
-        return {
-          ...state,
-          givenReview: state.givenReview.filter((el) => el.historyId !== action.payload.id)
-        };
+    case UNTRACK_REVIEW:
+      return {
+        ...state,
+        givenReview: state.givenReview.filter((el) => el.historyId !== action.payload.id)
+      };
     default:
       return state;
   }
