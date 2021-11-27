@@ -7,6 +7,7 @@ import { Colors } from '../../../components/utils/_var';
 import TopNavigation from '../../../components/TopNavigation';
 import Rating from './Rating';
 import Review from './Review';
+import ReviewEdit from './ReviewEdit';
 
 export const MyHistoryWrapper = styled.div`
   .main {
@@ -22,7 +23,7 @@ export const MyHistoryWrapper = styled.div`
       'img title rating review'
       'img info rating review'
       'img type rating review';
-    grid-template-columns: 23% 47% 15% 15%;
+    grid-template-columns: 7.25rem 50% 15% 15%;
     margin: 0 auto;
     /* text-align: center; */
     border-top: 1px solid ${Colors.lightGray};
@@ -32,8 +33,8 @@ export const MyHistoryWrapper = styled.div`
   .dogwalker-img {
     cursor: pointer;
     grid-area: img;
-    width: 7.5rem;
-    height: 7.5rem;
+    width: 6rem;
+    height: 6rem;
     border: 0.5px solid rgb(238, 238, 238);
     object-fit: cover;
   }
@@ -46,16 +47,22 @@ export const MyHistoryWrapper = styled.div`
   .type {
     grid-area: type;
   }
+  .name, .info, .type {
+    font-size: .9rem;
+  }
   .rating {
     grid-area: rating;
-    background-color: honeydew;
   }
   .review {
     grid-area: review;
-    background-color: mediumturquoise;
   }
   .bnt {
     cursor: pointer;
+    align-self: center;
+    justify-self: center;
+    padding: .4rem .7rem;
+    font-size: .85rem;
+    border: 1px solid ${Colors.mediumLightGray};
   }
 `;
 
@@ -75,15 +82,15 @@ function MyHistory () {
   const givenReview = useSelector((state) => state.review).givenReview;
   const [openRating, setOpenRating] = useState(false);
   const [openReview, setOpenReview] = useState(false);
+  const [openReviewEdit, setOpenReviewEdit] = useState(false);
   const [historyInfo, setHistoryInfo] = useState({ dogwalkerId: null, historyId: null });
   const [serviceDate, setServiceDate] = useState(null);
-
-  // console.log(historyList);
+  const review = useSelector((state) => state.review).dogWalkers;
 
   const givenRatingIds = givenRating.map((el) => el.historyId) || [];
   const givenReviewIds = givenReview.map((el) => el.historyId);
 
-  console.log(givenRatingIds);
+  // console.log(givenRatingIds);
   const handleRatingOpen = (dogwalkerId, index) => {
     console.log(dogwalkerId);
     setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: index });
@@ -104,13 +111,34 @@ function MyHistory () {
     setOpenReview(false);
   };
 
+  const handleReviewEditOpen = (dogwalkerId, historyId) => {
+    setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: historyId });
+    setOpenReviewEdit(true);
+    console.log(review[dogwalkerId - 1]);
+  };
+
+  const handleReviewEditClose = () => {
+    setOpenReviewEdit(false);
+  };
+
   const handleCancelRating = (dogwalkerId, idx) => {
-    dispatch(cancelRating(dogwalkerId, givenRating[idx].index));
+    let index;
+    givenRating.forEach((el) => {
+      if (el.historyId === idx) index = el.index;
+    });
+    dispatch(cancelRating(dogwalkerId, index));
     dispatch(untrackRating(idx));
   };
 
   const handleClick = (id) => {
     history.push({ pathname: `/dogwalker:id=${id}` });
+  };
+
+  const addComma = (num) => {
+    num = String(num).split('');
+    num.splice(-3, 0, ',');
+    num = num.join('');
+    return num;
   };
 
   return (
@@ -129,10 +157,10 @@ function MyHistory () {
                 />
                 <div className='name'>{el.name}</div>
                 <div className='info'>
-                  {el.date} <span>|</span> {el.duration}분 / {el.price}원
+                  {el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원
                 </div>
                 <div className='type'>{el.type}</div>
-                {givenRatingIds.includes(idx + 1)
+                {givenRatingIds.includes(idx)
                   ? (
                     <div
                       className='bnt rating'
@@ -146,13 +174,14 @@ function MyHistory () {
                       평점 등록
                     </div>
                     )}
-                {givenReviewIds.includes(idx + 1)
+                {givenReviewIds.includes(idx)
                   ? (
                     <div
                       className='bnt review'
-                      onClick={() => handleReviewOpen(el.dogwalkerId, idx, el.date)}
+                      onClick={() => handleReviewEditOpen(el.dogwalkerId, idx)}
+                      // onClick={() => handleDeleteReview(el.dogwalkerId, idx)}
                     >
-                      리뷰 삭제
+                      리뷰 확인
                     </div>
                     )
                   : (
@@ -173,7 +202,17 @@ function MyHistory () {
             <Review
               handleModal={handleReviewClose}
               dogwalkerId={historyInfo.dogwalkerId}
+              historyId={historyInfo.historyId}
               serviceDate={serviceDate}
+            />
+            )
+          : null}
+        {openReviewEdit
+          ? (
+            <ReviewEdit
+              handleModal={handleReviewEditClose}
+              dogwalkerId={historyInfo.dogwalkerId}
+              historyId={historyInfo.historyId}
             />
             )
           : null}
