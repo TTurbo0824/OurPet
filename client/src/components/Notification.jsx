@@ -98,6 +98,9 @@ function Notification ({ message, handleNotice, handleMessage }) {
           handleMessage('회원탈퇴가 완료되었습니다.');
           localStorage.clear();
         }
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
       });
   };
 
