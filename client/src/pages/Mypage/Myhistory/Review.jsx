@@ -45,11 +45,10 @@ const ReviewButton = styled.button`
   }
 `;
 
-function Review ({ serviceDate, handleModal, dogwalkerId }) {
+function Review ({ serviceDate, handleModal, dogwalkerId, historyId }) {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user).walkingDogUserInfo;
   const review = useSelector((state) => state.review).dogWalkers;
-  const track = useSelector((state) => state.review).givenReview;
   const indexNum = review[dogwalkerId - 1].review.length;
   const { nickname } = userInfo;
   const [errorMsg, setErrorMsg] = useState('');
@@ -61,7 +60,7 @@ function Review ({ serviceDate, handleModal, dogwalkerId }) {
 
   const reviewInfo = {
     dogwalkerId: dogwalkerId,
-    historyId: track.length + 1,
+    historyId: historyId,
     index: indexNum
   };
 
@@ -69,7 +68,7 @@ function Review ({ serviceDate, handleModal, dogwalkerId }) {
     if (!walkerReview || walkerReview.length < 5) {
     // if (!walkerReview || walkerReview.length < 10) {
       setErrorMsg('리뷰를 10자 이상 작성해 주세요');
-    } else if (walkerReview.length < 10) {
+    } else {
       dispatch(postReview(dogwalkerId, nickname, walkerReview, serviceDate));
       dispatch(trackReview(reviewInfo));
       handleModal();

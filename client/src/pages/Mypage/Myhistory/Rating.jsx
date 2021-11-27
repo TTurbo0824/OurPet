@@ -131,7 +131,7 @@ function Rating ({ handleModal, historyInfo }) {
 
   const ratingInfo = {
     dogwalkerId: dogwalkerId,
-    historyId: historyId + 1,
+    historyId: historyId,
     index: indexNum
   };
 
