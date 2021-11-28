@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import LandingPage from './pages/Landing/LadingPage';
 import Mainpage from './pages/Mainpage/Mainpage';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -51,9 +52,9 @@ function App () {
 
   useEffect(() => {
     const handleScrolled = () => {
-      if (!scrolled && window.scrollY > 30) {
+      if (!scrolled && window.scrollY > 15) {
         setScrolled(true);
-      } else if (scrolled && window.scrollY <= 30) {
+      } else if (scrolled && window.scrollY <= 15) {
         setScrolled(false);
       }
     };
@@ -116,6 +117,7 @@ function App () {
               )
             : null}
           <Switch>
+            <Route path='/landing' component={LandingPage} />
             <Route exact path='/' component={Mainpage} />
             <Route path='/mypage'>
               {isLogin
