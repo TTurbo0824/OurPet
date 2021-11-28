@@ -3,27 +3,37 @@ import styled from 'styled-components';
 import { Colors } from './utils/_var';
 
 const TopNaviWrapper = styled.div`
-  /* background-color: lavender; */
   height: 2rem;
   width: 100vw;
   margin: 0 auto;
   text-align: center;
+  margin-bottom: .8rem;
+  .button-container {
+    display: flex;
+    width: 28rem;
+    height: 1.98rem;
+    margin: 0 auto;
+    justify-content: space-between;
+    /* background-color: lavender; */
+  }
 `;
 
 const MyPageButton = styled.button`
   cursor: pointer;
+  width: 4.2rem;
+  height: 2rem;
   border: none;
+  border-bottom: solid 2px ${(props) => props.borderColor};
   background-color: transparent;
-  /* background-color: lavenderblush; */
+  color: ${Colors.darkGray};
   margin: 0 .8rem;
   padding: 0;
-  border-bottom: solid 1px ${(props) => props.borderColor};
   font-size: 1rem;
 `;
 
 function TopNavigation () {
   const history = useHistory();
-  const mypageButton = ['My Info', 'My Request', 'My History'];
+  const mypageButton = ['내 정보', '요청 내역', '이용 내역'];
   const mypageEndpoint = ['/mypage', '/myrequest', '/myhistory'];
 
   const handleClicked = (idx) => {
@@ -34,17 +44,19 @@ function TopNavigation () {
 
   return (
     <TopNaviWrapper>
-      {mypageButton.map((el, idx) => {
-        return (
-          <MyPageButton
-            key={idx}
-            borderColor={idx === mypageEndpoint.indexOf(history.location.pathname) ? 'black' : 'white'}
-            onClick={() => handleClicked(idx)}
-          >
-            {el}
-          </MyPageButton>
-        );
-      })}
+      <div className='button-container'>
+        {mypageButton.map((el, idx) => {
+          return (
+            <MyPageButton
+              key={idx}
+              borderColor={idx === mypageEndpoint.indexOf(history.location.pathname) ? Colors.lightYellow : 'transparent'}
+              onClick={() => handleClicked(idx)}
+            >
+              {el}
+            </MyPageButton>
+          );
+        })}
+      </div>
     </TopNaviWrapper>
   );
 }
