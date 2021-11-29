@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import './date-picker.css';
 import { Colors } from '../../components/utils/_var';
 import { media } from '../../components/utils/_media';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
