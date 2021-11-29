@@ -324,7 +324,7 @@ function Mainpage () {
   };
 
   const resetSearch = () => {
-    window.location.replace('/');
+    window.location.replace('/search');
   };
 
   return (
