@@ -4,8 +4,6 @@ import { requestDogwalker } from '../../redux/action';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { Colors } from '../../components/utils/_var';
 import Charge from './Charge';
 import DateSelector from './DateSelector';
@@ -13,10 +11,10 @@ import DurationSelector from './DurationSelector';
 import TimeSelector from './TimeSelector';
 import TypeSelector from './TypeSelector';
 import LocationSelector from './LocationSelector';
+import ReviewContainer from './ReviewContainer';
 import profile from '../../images/profile_sample.jpeg';
 const DogWalkerPageWrapper = styled.div`
   .main {
-    /* height: 800rem; */
     min-height: calc(100vh - 10.9rem);
     max-width: 62rem;
     margin: 0 auto;
@@ -30,18 +28,15 @@ const DogWalkerPageWrapper = styled.div`
     grid-template-rows: 2rem 1fr;
     padding-top: 2rem;
     margin-bottom: 1rem;
-    /* justify-content: stretch; */
   }
   .image-container {
     grid-area: img;
-    /* border: 1px solid black; */
   }
   .dogwalker-img {
     width: 10rem;
   }
   .name, .location {
     padding-left: 1rem;
-    /* border: 1px solid black; */
   }
   .name {
     grid-area: nickname;
@@ -53,7 +48,7 @@ const DogWalkerPageWrapper = styled.div`
     content: '·';
     margin-left: .25rem;
   }
-  .rating {
+  .review-rating {
     display: flex;
     align-items: center;
   }
@@ -65,18 +60,17 @@ const DogWalkerPageWrapper = styled.div`
   }
   .left-container {
     grid-area: left-c;
-    /* border: 1px solid black; */
-    padding-right: 1rem;
+    padding-right: 3rem;
   }
   .right-container {
     grid-area: right-c;
-    /* border: 1px solid black; */
   }
   .request-container {
     border: 1px solid ${Colors.lightGray};
     border-radius: 6px;
     padding: 1.5rem;
     margin-bottom: 1rem;
+    margin-top: 1.3rem;
     box-shadow: 2px 2px 3px ${Colors.lightGray};
   }
   .time-container {
@@ -85,17 +79,18 @@ const DogWalkerPageWrapper = styled.div`
     justify-content: space-between;
   }
   .tag-container {
-    border: 1px solid black;
-    background-color: ${Colors.mediumGray};
-  }
-  .review {
     margin-bottom: 1rem;
-    border: 1px solid black;
+  }
+  .title {
+    margin: 1rem 0 1rem;
+    font-weight: bold;
   }
   .pro-description {
     /* color: ${Colors.darkYellow}; */
   }
-
+  .charge-container {
+    margin-top: 2rem;
+  }
 `;
 
 const Tag = styled.div`
@@ -109,15 +104,19 @@ const Tag = styled.div`
 `;
 
 const RequestButton = styled.button`
+  cursor: pointer;
   width: 100%;
   height: 2.5rem;
   margin: 2rem auto .5rem;
-  background-color: ${Colors.darkYellow};
+  background-color: ${Colors.yellow};
   color: white;
   font-size: 0.9rem;
   font-weight: bold;
   border: 0;
   border-radius: 4px;
+  &:hover {
+    background-color: ${Colors.darkYellow};
+  }
 `;
 
 const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
@@ -146,19 +145,15 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
 
   const [requestOptions, setRequestOptions] = useState(requestInitial);
 
-  const requestList = {
-    id: reviews.length + 1,
-    dogwalkerId: dogWalkerId,
-    type: '소형견',
-    location: '서대문구',
-    date: '2021.11.10',
-    duration: 30,
-    price: 15000
-  };
-
   dogWalker = dogWalker[0];
 
   // console.log(requestOptions);
+
+  const dogType = dogWalker.tags.filter((type) => {
+    if (type.length === 3) {
+      return type;
+    } else return null;
+  });
 
   const charges = dogWalker.charges;
   const chargeList = [];
@@ -171,10 +166,14 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   const handleRequest = () => {
     // JUST FOR TESTING PURPOSES
     // dispatch(requestDogwalker(requestOptions));
-
-    if (!token) {
+    console.log(requestOptions);
+    if (requestOptions.type === '' || requestOptions.location === '' || requestOptions.date === '' || requestOptions.duration === 0) {
       handleNotice(true);
-      handleMessage('로그인이 필요한 서비스입니다.');
+      handleMessage('모든 항목을 입력해주세요.');
+    }
+    if (!token) {
+      // handleNotice(true);
+      // handleMessage('로그인이 필요한 서비스입니다.');
     } else {
       console.log('clicked');
       axios.post(
@@ -188,7 +187,7 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
         })
         .then((res) => {
           if (res.status === 200) {
-            dispatch(requestDogwalker(requestList));
+            dispatch(requestDogwalker(requestOptions));
           }
         })
         .catch((err) => {
@@ -216,25 +215,12 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
           <div className='left-container'>
             <div className='tag-container'>
               <div className='title'>이용 가능 서비스</div>
-              {dogWalker.tags.map((tag, idx) => {
-                return <Tag key={idx}>{tag}</Tag>;
-              })}
+              {dogWalker.tags.map((tag, idx) =>
+                <Tag key={idx}>{tag}</Tag>
+              )}
             </div>
             <div className='review-container'>
-              <div className='title'>도그워커 리뷰</div>
-              <div className='rating'>
-                <FontAwesomeIcon icon={faStar} size='1x' />
-                <div>
-                  {averageRating} ({rating.length})
-                </div>
-              </div>
-              {reviews.map((review, idx) => (
-                <div className='review' key={idx}>
-                  <div>{review.nickname}</div>
-                  <div>서비스 이용 날짜: {review.date}</div>
-                  <div>{review.content}</div>
-                </div>
-              ))}
+              <ReviewContainer averageRating={averageRating} rating={rating} reviews={reviews} />
             </div>
           </div>
           <div className='right-container'>
@@ -242,13 +228,18 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
               <DateSelector requestOptions={requestOptions} setRequestOptions={setRequestOptions} />
               <div className='time-container'>
                 <TimeSelector requestOptions={requestOptions} setRequestOptions={setRequestOptions} />
-                <DurationSelector requestOptions={requestOptions} setRequestOptions={setRequestOptions} />
+                <DurationSelector
+                  requestOptions={requestOptions}
+                  setRequestOptions={setRequestOptions}
+                  chargeList={chargeList}
+                />
               </div>
               <LocationSelector requestOptions={requestOptions} setRequestOptions={setRequestOptions} locations={dogWalker.locations} />
               <TypeSelector
                 requestOptions={requestOptions}
                 setRequestOptions={setRequestOptions}
-                dogType={dogWalker.tags}
+                dogType={dogType}
+                chargeList={chargeList}
               />
               <RequestButton onClick={handleRequest}>예약 요청</RequestButton>
             </div>

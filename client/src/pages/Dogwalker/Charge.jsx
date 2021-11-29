@@ -81,7 +81,6 @@ function Charge ({ chargeList }) {
             })}
           </tr>
           <tr>
-            {/* String(minPrice).split(''); */}
             {chargeList.map((charge, idx) => {
               return idx / 3 < 3 && idx / 3 >= 2 ? <td key={idx}>{charge}</td> : null;
             })}

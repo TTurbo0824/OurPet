@@ -10,12 +10,12 @@ import TopNavigation from '../../components/TopNavigation';
 export const MyinfoWrapper = styled.div`
   .main {
     display: flex;
-    min-height: calc(100vh - 10.9rem);
+    min-height: calc(100vh - 13.45rem);
   }
 `;
 
 export const MyinfoView = styled.div`
-  margin: 4rem auto;
+  margin: 3rem auto;
   padding-top: 0.7rem;
   box-sizing: border-box;
   width: 19rem;

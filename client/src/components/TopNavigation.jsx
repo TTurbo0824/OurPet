@@ -23,9 +23,11 @@ const MyPageButton = styled.button`
   width: 4.2rem;
   height: 2rem;
   border: none;
-  border-bottom: solid 2px ${(props) => props.borderColor};
+  border-bottom: solid 3px ${(props) => props.borderColor};
   background-color: transparent;
-  color: ${Colors.darkGray};
+  /* color: ${Colors.darkGray}; */
+  color: ${(props) => props.textColor};
+  /* font-weight:  ${(props) => props.textColor === Colors.black ? 'bold' : 'normal'}; */
   margin: 0 .8rem;
   padding: 0;
   font-size: 1rem;
@@ -49,7 +51,8 @@ function TopNavigation () {
           return (
             <MyPageButton
               key={idx}
-              borderColor={idx === mypageEndpoint.indexOf(history.location.pathname) ? Colors.lightYellow : 'transparent'}
+              borderColor={idx === mypageEndpoint.indexOf(history.location.pathname) ? Colors.darkGray : 'transparent'}
+              textColor={idx === mypageEndpoint.indexOf(history.location.pathname) ? Colors.black : Colors.darkGray}
               onClick={() => handleClicked(idx)}
             >
               {el}

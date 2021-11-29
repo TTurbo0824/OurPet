@@ -12,7 +12,7 @@ import ReviewEdit from './ReviewEdit';
 export const MyHistoryWrapper = styled.div`
   .main {
     display: flex;
-    min-height: calc(100vh - 10.9rem);
+    min-height: calc(100vh - 13.45rem);
   }
   .container {
     margin: 1rem auto;
@@ -29,6 +29,9 @@ export const MyHistoryWrapper = styled.div`
     border-top: 1px solid ${Colors.lightGray};
     padding: 0.4rem 1rem;
     width: 40rem;
+  }
+  .card:first-of-type {
+    border-top: none;
   }
   .dogwalker-img {
     cursor: pointer;

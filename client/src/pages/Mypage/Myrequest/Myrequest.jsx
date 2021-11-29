@@ -7,8 +7,7 @@ import { Colors } from '../../../components/utils/_var';
 export const MyRequestWrapper = styled.div`
   .main {
     display: flex;
-    min-height: calc(100vh - 10.9rem);
-    justify-content: center;
+    min-height: calc(100vh - 13.45rem);
   }
   .container {
     margin: 1rem auto;
@@ -25,6 +24,9 @@ export const MyRequestWrapper = styled.div`
     border-top: 1px solid ${Colors.lightGray};
     padding: .4rem 1rem;
     width: 40rem;
+  }
+  .card:first-of-type {
+    border-top: none;
   }
   .dogwalker-img {
     cursor: pointer;
