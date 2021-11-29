@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import './date-picker.css';
 import { Colors } from '../../components/utils/_var';
-import { media } from '../../components/utils/_media';
+import { media } from '../../components/utils/_media-queries';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { ko } from 'date-fns/esm/locale';

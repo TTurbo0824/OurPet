@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { media } from '../../components/utils/_media';
+import { media } from '../../components/utils/_media-queries';
 import { Colors } from '../../components/utils/_var';
 
 const DogWalkerWrapper = styled.div`

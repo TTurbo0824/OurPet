@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Select from 'react-select';
 import Locations from '../../database/Locations';
 import { Colors } from '../../components/utils/_var';
-import { media } from '../../components/utils/_media';
+import { media } from '../../components/utils/_media-queries';
 
 const LocationWrapper = styled.div`
   width: 80%;

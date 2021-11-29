@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Colors } from '../../components/utils/_var';
-import { media } from '../../components/utils/_media';
+import { media } from '../../components/utils/_media-queries';
 import Dogwalker from './DogWalkerItem';
 import LocationDropDown from './LocationDropDown';
 import DateSelector from './DateSelector';
