@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Colors } from '../../components/utils/_var';
-import { media } from '../../components/utils/_media';
+import { media } from '../../components/utils/_media-queries';
 import Dogwalker from './DogWalkerItem';
 import LocationDropDown from './LocationDropDown';
 import DateSelector from './DateSelector';
@@ -11,7 +11,9 @@ const MainpageWrapper = styled.div`
   .main {
     display: flex;
     min-height: calc(100vh - 8.9rem);
-    padding-top: 1rem;
+    /* padding-top: 1rem; */
+    padding: 0 1.25rem; 
+    ${media.tablet`padding: 1rem 0;`}
   }
   .container {
     margin: 0 auto;
@@ -72,7 +74,9 @@ const MainpageWrapper = styled.div`
     justify-content: space-between;
   }
   .description {
-    margin-bottom: 0.5rem;
+    margin-bottom: .75rem;
+    font-size: .9rem;
+    ${media.tablet`font-size: .95rem;`}
   }
   .sorting-container {
     display: flex;
@@ -96,6 +100,13 @@ const MainpageWrapper = styled.div`
   }
 `;
 
+const Description = styled.div`
+  margin-bottom: .75rem;
+  margin-top: ${(props) => props.topMargin};
+  font-size: .9rem;
+  ${media.tablet`font-size: .95rem; margin-top: 0;`}
+`;
+
 const Sorting = styled.div`
   cursor: pointer;
   margin-left: .5rem;
@@ -113,6 +124,8 @@ const Tag = styled.div`
   border-radius: 20px;
   background-color: ${(props) => props.backgroundColor};
   color: ${(props) => props.textColor};
+  font-size: .9rem;
+  ${media.tablet`font-size: 1rem;`}
 `;
 
 const LoadingWrapper = styled.div`
@@ -324,7 +337,7 @@ function Mainpage () {
   };
 
   const resetSearch = () => {
-    window.location.replace('/');
+    window.location.replace('/search');
   };
 
   return (
@@ -333,15 +346,15 @@ function Mainpage () {
         <div className='container'>
           <div className='top-container'>
             <div className='location-container'>
-              <div className='description'>원하시는 장소를 선택하세요</div>
+              <Description topMargin='0'>원하시는 장소를 선택하세요</Description>
               <LocationDropDown setLocation={setLocation} />
             </div>
             <div className='date-container'>
-              <div className='description'>원하시는 날짜를 선택하세요</div>
+              <Description topMargin='.5rem'>원하시는 날짜를 선택하세요</Description>
               <DateSelector />
             </div>
             <div className='top-tag-container'>
-              <div className='description'>원하시는 조건을 선택하세요</div>
+              <Description topMargin='.5rem'>원하시는 조건을 선택하세요</Description>
               {allTagList.map((tag, idx) => {
                 return (
                   <Tag

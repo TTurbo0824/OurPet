@@ -117,8 +117,8 @@ function App () {
               )
             : null}
           <Switch>
-            <Route path='/landing' component={LandingPage} />
-            <Route exact path='/' component={Mainpage} />
+            <Route exact path='/' component={LandingPage} />
+            <Route path='/search' component={Mainpage} />
             <Route path='/mypage'>
               {isLogin
                 ? (

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { media } from '../../components/utils/_media';
+import { media } from '../../components/utils/_media-queries';
 import { Colors } from '../../components/utils/_var';
 
 const DogWalkerWrapper = styled.div`
@@ -14,7 +14,8 @@ const DogWalkerWrapper = styled.div`
       'img hl hl'
       'img tag tag'
       'img rating price';
-    grid-template-columns: 15rem 1fr 1fr;
+    grid-template-columns: 9.75rem 1fr 1fr;
+    ${media.tablet`grid-template-columns: 15rem 1fr 1fr;`}
     width: 90vw;
     max-width: 62rem;
     border: solid rgb(238, 238, 238) 0.1rem;
@@ -26,10 +27,12 @@ const DogWalkerWrapper = styled.div`
   }
   .dogwalker-img {
     grid-area: img;
-    width: 13.25rem;
-    height: 13.25rem;
+    width: 9rem;
+    height: 9rem;
+    ${media.tablet`width: 13.25rem; height: 13.25rem;`}
     border: 0.5px solid rgb(238, 238, 238);
     object-fit: cover;
+    align-self: center;
   }
   .dogwalker-location {
     margin-top: .8rem;
