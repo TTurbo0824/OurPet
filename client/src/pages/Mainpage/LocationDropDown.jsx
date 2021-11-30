@@ -5,7 +5,7 @@ import { Colors } from '../../components/utils/_var';
 import { media } from '../../components/utils/_media-queries';
 
 const LocationWrapper = styled.div`
-  width: 80%;
+  width: 100%;
   margin-bottom: 1rem;
   ${media.tablet`width: 21rem; margin-bottom: 3rem;`}
   ${media.laptop`width: 28rem;`}
@@ -43,18 +43,20 @@ function LocationDropDown ({ setLocation }) {
     }),
     option: (provided, state) => ({
       ...provided,
+      cursor: 'pointer',
       color: state.isSelected ? 'black' : Colors.darkGray
       // backgroundColor: state.isSelected ? 'black' : Colors.darkGray,
     }),
     control: (base) => ({
       ...base,
-      border: `1px solid ${Colors.mediumGray}`,
+      cursor: 'pointer',
+      border: `1px solid ${Colors.lightGray}`,
       boxShadow: 'none',
       '&:hover': {
-        border: `1px solid ${Colors.mediumGray}`
+        border: `1px solid ${Colors.lightGray}`
       }
     }),
-    input: (styles) => ({ ...styles, ...icon('hidden') }),
+    input: (styles) => ({ ...styles, ...icon('hidden'), height: '2.25rem' }),
     placeholder: (styles) => ({ ...styles, ...icon() }),
     singleValue: (styles) => ({ ...styles, ...icon() })
   };

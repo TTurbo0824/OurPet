@@ -12,14 +12,15 @@ const DateContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 100%;
   ${media.tablet`width: 21rem;`}
   ${media.laptop`width: 28rem;`}
   height: 2.35rem;
+  height: 3rem;
   padding: 0 0.7rem;
   font-size: 1.1rem;
   background-color: white;
-  border: 1px solid ${Colors.mediumGray};
+  border: 1px solid ${Colors.lightGray};
   border-radius: 4px;
   input {
     font-size: 1rem;
