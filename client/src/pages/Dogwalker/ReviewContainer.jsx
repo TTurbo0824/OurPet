@@ -4,6 +4,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { Colors } from '../../components/utils/_var';
 import pug from '../../images/pug.jpeg';
 import minipin from '../../images/minipin.jpeg';
+import corgi from '../../images/corgi.jpeg';
 import default_profile from '../../images/default_profile.jpeg';
 
 const ReviewWrapper = styled.div`
@@ -67,7 +68,7 @@ const ReviewWrapper = styled.div`
 `;
 
 function ReviewContainer ({ averageRating, rating, reviews }) {
-  const profileImage = [pug, minipin, default_profile];
+  const profileImage = [pug, minipin, corgi, default_profile];
 
   return (
     <ReviewWrapper>
@@ -82,7 +83,7 @@ function ReviewContainer ({ averageRating, rating, reviews }) {
         <div className='review' key={idx}>
           <div className='user-info'>
             <div className='profile-container'>
-              {idx < 2
+              {idx < 3
                 ? <img className='review-profile' alt='profile' src={profileImage[idx]} />
                 : <img className='review-profile' alt='profile' src={profileImage[2]} />}
             </div>
