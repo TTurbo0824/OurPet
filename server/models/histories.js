@@ -35,8 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     date: DataTypes.STRING,
     time: DataTypes.STRING,
     duration: DataTypes.INTEGER,
-    price: DataTypes.INTEGER,
-    status: DataTypes.STRING
+    price: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'histories'
