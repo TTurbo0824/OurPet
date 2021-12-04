@@ -1,8 +1,12 @@
-import { REQUEST_DOGWALKER, CANCEL_DOGWALKER } from '../action';
+import { RESET_REQUEST, GET_REQUEST, REQUEST_DOGWALKER, CANCEL_DOGWALKER } from '../action';
 import { initRequestState } from './initialState/initialState';
 
 function request (state = initRequestState, action) {
   switch (action.type) {
+    case RESET_REQUEST:
+      return { dogWalkerRequest: [] };
+    case GET_REQUEST:
+      return { ...state };
     case REQUEST_DOGWALKER:
       return {
         ...state,

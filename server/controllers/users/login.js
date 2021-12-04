@@ -16,7 +16,6 @@ module.exports = async (req, res) => {
       where: { email: email }
     });
 
-    console.log(member);
     if (!member) {
       return res.status(404).json({ message: 'Invalid user' });
     } else {

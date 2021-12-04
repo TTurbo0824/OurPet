@@ -1,8 +1,12 @@
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import TopNavigation from '../../../components/TopNavigation';
 import { Colors } from '../../../components/utils/_var';
+axios.defaults.withCredentials = true;
+require('dotenv').config();
 
 export const MyRequestWrapper = styled.div`
   .main {
@@ -76,8 +80,34 @@ export const MyRequestWrapper = styled.div`
 
 function MyRequest ({ handleMessage, handleNotice }) {
   const history = useHistory();
+  const token = useSelector((state) => state.user).token;
   const dogWalkerList = useSelector((state) => state.dogwalker).dogWalkers;
-  let requestList = useSelector((state) => state.request).dogWalkerRequest;
+  let allRequest = useSelector((state) => state.request).dogWalkerRequest;
+  const [isLoading, setIsLoading] = useState(false);
+  const [allRequests, setAllRequests] = useState(allRequest);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const result = await axios.get(`${process.env.REACT_APP_API_URL}/request`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        setAllRequests(result.data.data);
+        setIsLoading(false);
+      } catch (error) {
+        if (error.response.data.message === 'No requests are found') {
+          setIsLoading(false);
+        } else {
+          console.log(error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
 
   const walkerList = [];
 
@@ -85,11 +115,11 @@ function MyRequest ({ handleMessage, handleNotice }) {
     walkerList.push(el.name)
   ));
 
-  requestList = requestList.map((el) => {
-    return { ...el, name: walkerList[el.dogwalkerId - 1] };
-  });
-
-  console.log(requestList);
+  if (allRequest) {
+    allRequest = allRequest.map((el) => {
+      return { ...el, name: walkerList[el.dogwalkerId - 1] };
+    });
+  }
 
   const deleteClick = (id) => {
     console.log(id);
@@ -113,18 +143,20 @@ function MyRequest ({ handleMessage, handleNotice }) {
       <TopNavigation />
       <div className='main'>
         <div className='container'>
-          {requestList.map((el, idx) => {
-            return (
-              <div className='card' key={idx}>
-                <img className='dogwalker-img' src={el.img} alt={el.name} onClick={() => handleClick(el.dogwalkerId)} />
-                <div className='name'>{el.name}</div>
-                <div className='info'>{el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
-                <div className='type'>{el.type}</div>
-                <div className='status'>요청 처리 중</div>
-                <div className='cancel bnt' onClick={() => deleteClick(el.id)}>요청 취소</div>
-              </div>
-            );
-          })}
+          {allRequests.length === 0
+            ? <div>결과 없음</div>
+            : allRequests.map((el, idx) => {
+              return (
+                <div className='card' key={idx}>
+                  <img className='dogwalker-img' src={el.img} alt={el.name} onClick={() => handleClick(el.dogwalkerId)} />
+                  <div className='name'>{el.name}</div>
+                  <div className='info'>{el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
+                  <div className='type'>{el.type}</div>
+                  <div className='status'>요청 처리 중</div>
+                  <div className='cancel bnt' onClick={() => deleteClick(el.id)}>요청 취소</div>
+                </div>
+              );
+            })}
         </div>
       </div>
     </MyRequestWrapper>

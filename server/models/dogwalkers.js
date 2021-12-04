@@ -21,11 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   dogwalkers.init({
     name: DataTypes.STRING,
-    age: DataTypes.INTEGER,
-    location: DataTypes.TEXT,
-    tags: DataTypes.TEXT,
-    charges: DataTypes.TEXT,
-    certified: DataTypes.BOOLEAN
+    profile: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'dogwalkers'

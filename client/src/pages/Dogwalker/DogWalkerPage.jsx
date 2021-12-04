@@ -129,9 +129,10 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   const rating = useSelector((state) => state.rating).dogWalkers[dogWalkerId - 1].rating;
   const averageRating = (rating.reduce((acc, cur) => acc + cur) / rating.length).toFixed(1);
   const reviews = useSelector((state) => state.review).dogWalkers[dogWalkerId - 1].review;
-  const allRequest = useSelector((state) => state.request).dogWalkerRequest.length;
+  let allRequest = useSelector((state) => state.request).dogWalkerRequest;
 
   // console.log('🥺🥺🥺🥺🥺🥺🥺🥺🥺');
+  allRequest = allRequest ? allRequest.length : 0;
 
   const requestInitial = {
     id: allRequest + 1,
@@ -143,11 +144,13 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
     price: 0
   };
 
+  // console.log(requestInitial)
+
   const [requestOptions, setRequestOptions] = useState(requestInitial);
 
   dogWalker = dogWalker[0];
 
-  // console.log(requestOptions);
+  console.log(requestOptions);
 
   const dogType = dogWalker.tags.filter((type) => {
     if (type.length === 3) {
@@ -188,10 +191,12 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
         .then((res) => {
           if (res.status === 200) {
             dispatch(requestDogwalker(requestOptions));
+            handleNotice(true);
+            handleMessage('요청이 완료되었습니다.');
           }
         })
         .catch((err) => {
-          if (err.response.data.message === 'You\'re not logged in') {
+          if (err.response.status === 401) {
             modal();
           } else if (err.response.status === 409) {
             handleNotice(true);

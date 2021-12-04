@@ -1,13 +1,16 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { cancelRating, untrackRating } from '../../../redux/action';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { Colors } from '../../../components/utils/_var';
 import TopNavigation from '../../../components/TopNavigation';
 import Rating from './Rating';
 import Review from './Review';
 import ReviewEdit from './ReviewEdit';
+axios.defaults.withCredentials = true;
+require('dotenv').config();
 
 export const MyHistoryWrapper = styled.div`
   .main {
@@ -80,6 +83,7 @@ export const MyHistoryWrapper = styled.div`
 function MyHistory () {
   const dispatch = useDispatch();
   const history = useHistory();
+  const token = useSelector((state) => state.user).token;
   const historyList = useSelector((state) => state.history).dogWalkerHistory;
   const givenRating = useSelector((state) => state.rating).givenRating;
   const givenReview = useSelector((state) => state.review).givenReview;
@@ -92,7 +96,34 @@ function MyHistory () {
 
   const givenRatingIds = givenRating.map((el) => el.historyId) || [];
   const givenReviewIds = givenReview.map((el) => el.historyId);
+  const [isLoading, setIsLoading] = useState(false);
+  const [allHistory, setAllHistory] = useState(historyList);
+  // console.log(allHistory)
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const result = await axios.get(`${process.env.REACT_APP_API_URL}/history`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        setAllHistory(result.data.data);
+        setIsLoading(false);
+      } catch (error) {
+        if (error.response.data.message === 'No histories are found') {
+          setIsLoading(false);
+        } else {
+          console.log(error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(allHistory);
   // console.log(givenRatingIds);
   const handleRatingOpen = (dogwalkerId, index) => {
     console.log(dogwalkerId);
@@ -149,55 +180,56 @@ function MyHistory () {
       <TopNavigation />
       <div className='main'>
         <div className='container'>
-          {historyList.map((el, idx) => {
-            return (
-              <div className='card' key={idx}>
-                <img
-                  className='dogwalker-img'
-                  src={el.img}
-                  alt={el.name}
-                  onClick={() => handleClick(el.dogwalkerId)}
-                />
-                <div className='name'>{el.name}</div>
-                <div className='info'>
-                  {el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원
+          {allHistory.length === 0
+            ? <div>결과 없음</div>
+            : allHistory.map((el, idx) => {
+              return (
+                <div className='card' key={idx}>
+                  <img
+                    className='dogwalker-img'
+                    src={el.img}
+                    alt={el.name}
+                    onClick={() => handleClick(el.dogwalkerId)}
+                  />
+                  <div className='name'>{el.name}</div>
+                  <div className='info'>
+                    {el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원
+                  </div>
+                  <div className='type'>{el.type}</div>
+                  {givenRatingIds.includes(idx)
+                    ? (
+                      <div
+                        className='bnt rating'
+                        onClick={() => handleCancelRating(el.dogwalkerId, idx)}
+                      >
+                        평점 삭제
+                      </div>
+                      )
+                    : (
+                      <div className='bnt rating' onClick={() => handleRatingOpen(el.dogwalkerId, idx)}>
+                        평점 등록
+                      </div>
+                      )}
+                  {givenReviewIds.includes(idx)
+                    ? (
+                      <div
+                        className='bnt review'
+                        onClick={() => handleReviewEditOpen(el.dogwalkerId, idx)}
+                      >
+                        리뷰 확인
+                      </div>
+                      )
+                    : (
+                      <div
+                        className='bnt review'
+                        onClick={() => handleReviewOpen(el.dogwalkerId, idx, el.date)}
+                      >
+                        리뷰 등록
+                      </div>
+                      )}
                 </div>
-                <div className='type'>{el.type}</div>
-                {givenRatingIds.includes(idx)
-                  ? (
-                    <div
-                      className='bnt rating'
-                      onClick={() => handleCancelRating(el.dogwalkerId, idx)}
-                    >
-                      평점 삭제
-                    </div>
-                    )
-                  : (
-                    <div className='bnt rating' onClick={() => handleRatingOpen(el.dogwalkerId, idx)}>
-                      평점 등록
-                    </div>
-                    )}
-                {givenReviewIds.includes(idx)
-                  ? (
-                    <div
-                      className='bnt review'
-                      onClick={() => handleReviewEditOpen(el.dogwalkerId, idx)}
-                      // onClick={() => handleDeleteReview(el.dogwalkerId, idx)}
-                    >
-                      리뷰 확인
-                    </div>
-                    )
-                  : (
-                    <div
-                      className='bnt review'
-                      onClick={() => handleReviewOpen(el.dogwalkerId, idx, el.date)}
-                    >
-                      리뷰 등록
-                    </div>
-                    )}
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
         {openRating ? <Rating handleModal={handleRatingClose} historyInfo={historyInfo} /> : null}
         {openReview

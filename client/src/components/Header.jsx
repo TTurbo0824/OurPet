@@ -114,6 +114,10 @@ export const HeaderButton = styled.button`
 function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }) {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user).token;
+  const nickname = useSelector((state) => state.user).walkingDogUserInfo.nickname;
+  const isGuest = !!nickname.includes('guest');
+
+  // console.log(isGuest);
 
   const [navState, setNavState] = useState('active');
 
@@ -136,32 +140,40 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
   };
 
   const handleLogoutRequest = () => {
-    const token = isLogin;
-    // console.log(token);
+    if (isGuest) {
+      dispatch(userLogout());
+      localStorage.clear();
+      handleNotice(true);
+      handleMessage('게스트 모드를 종료합니다');
+      window.location.replace('/search');
+    } else {
+      const token = isLogin;
+      // console.log(token);
 
-    axios
-      .post(
-        process.env.REACT_APP_API_URL + '/logout',
-        { data: null },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true
-        }
-      )
-      .then(() => {
-        dispatch(userLogout());
-        localStorage.clear();
-        handleNotice(true);
-        handleMessage('로그아웃 성공!');
-      })
-      .catch((err) => {
-        if (err.response.data.message === "You're not logged in") {
-          modal();
-        } else console.log(err.response.data.message);
-      });
+      axios
+        .post(
+          process.env.REACT_APP_API_URL + '/logout',
+          { data: null },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            withCredentials: true
+          }
+        )
+        .then(() => {
+          dispatch(userLogout());
+          localStorage.clear();
+          handleNotice(true);
+          handleMessage('로그아웃 성공!');
+        })
+        .catch((err) => {
+          if (err.response.data.message === "You're not logged in") {
+            modal();
+          } else console.log(err.response.data.message);
+        });
+    }
   };
 
   const goToSearch = () => {
