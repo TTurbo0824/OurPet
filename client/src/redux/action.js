@@ -1,8 +1,11 @@
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
 export const EDIT_INFO = 'EDIT_INFO';
+export const RESET_REQUEST = 'RESET_REQUEST';
+export const GET_REQUEST = 'GET_REQUEST';
 export const REQUEST_DOGWALKER = 'REQUEST_DOGWALKER';
 export const CANCEL_DOGWALKER = 'CANCEL_DOGWALKER';
+export const RESET_HISTORY = 'RESET_HISTORY';
 export const GET_HISTORY = 'GET_HISTORY';
 export const GIVE_RATING = 'GIVE_RATING';
 export const TRACK_RATING = 'TRACK_RATING';
@@ -29,6 +32,14 @@ export const editInfo = (userData) => ({
   payload: userData
 });
 
+export const resetRequest = () => ({
+  type: RESET_REQUEST
+});
+
+export const getRequest = () => ({
+  type: GET_REQUEST
+});
+
 export const requestDogwalker = (request) => ({
   type: REQUEST_DOGWALKER,
   payload: request
@@ -37,6 +48,10 @@ export const requestDogwalker = (request) => ({
 export const cancelDogwalker = (id) => ({
   type: CANCEL_DOGWALKER,
   payload: { id }
+});
+
+export const resetHistory = () => ({
+  type: RESET_HISTORY
 });
 
 export const getHistory = () => ({
