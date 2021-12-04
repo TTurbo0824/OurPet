@@ -85,11 +85,11 @@ function MyRequest ({ handleMessage, handleNotice }) {
     walkerList.push(el.name)
   ));
 
-  requestList = requestList.map((el) => {
-    return { ...el, name: walkerList[el.dogwalkerId - 1] };
-  });
-
-  console.log(requestList);
+  if (requestList) {
+    requestList = requestList.map((el) => {
+      return { ...el, name: walkerList[el.dogwalkerId - 1] };
+    });
+  }
 
   const deleteClick = (id) => {
     console.log(id);
@@ -113,18 +113,20 @@ function MyRequest ({ handleMessage, handleNotice }) {
       <TopNavigation />
       <div className='main'>
         <div className='container'>
-          {requestList.map((el, idx) => {
-            return (
-              <div className='card' key={idx}>
-                <img className='dogwalker-img' src={el.img} alt={el.name} onClick={() => handleClick(el.dogwalkerId)} />
-                <div className='name'>{el.name}</div>
-                <div className='info'>{el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
-                <div className='type'>{el.type}</div>
-                <div className='status'>요청 처리 중</div>
-                <div className='cancel bnt' onClick={() => deleteClick(el.id)}>요청 취소</div>
-              </div>
-            );
-          })}
+          {requestList.length === 0
+            ? <div>결과 없음</div>
+            : requestList.map((el, idx) => {
+              return (
+                <div className='card' key={idx}>
+                  <img className='dogwalker-img' src={el.img} alt={el.name} onClick={() => handleClick(el.dogwalkerId)} />
+                  <div className='name'>{el.name}</div>
+                  <div className='info'>{el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
+                  <div className='type'>{el.type}</div>
+                  <div className='status'>요청 처리 중</div>
+                  <div className='cancel bnt' onClick={() => deleteClick(el.id)}>요청 취소</div>
+                </div>
+              );
+            })}
         </div>
       </div>
     </MyRequestWrapper>

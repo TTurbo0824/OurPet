@@ -149,55 +149,56 @@ function MyHistory () {
       <TopNavigation />
       <div className='main'>
         <div className='container'>
-          {historyList.map((el, idx) => {
-            return (
-              <div className='card' key={idx}>
-                <img
-                  className='dogwalker-img'
-                  src={el.img}
-                  alt={el.name}
-                  onClick={() => handleClick(el.dogwalkerId)}
-                />
-                <div className='name'>{el.name}</div>
-                <div className='info'>
-                  {el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원
+          {historyList.length === 0
+            ? <div>결과 없음</div>
+            : historyList.map((el, idx) => {
+              return (
+                <div className='card' key={idx}>
+                  <img
+                    className='dogwalker-img'
+                    src={el.img}
+                    alt={el.name}
+                    onClick={() => handleClick(el.dogwalkerId)}
+                  />
+                  <div className='name'>{el.name}</div>
+                  <div className='info'>
+                    {el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원
+                  </div>
+                  <div className='type'>{el.type}</div>
+                  {givenRatingIds.includes(idx)
+                    ? (
+                      <div
+                        className='bnt rating'
+                        onClick={() => handleCancelRating(el.dogwalkerId, idx)}
+                      >
+                        평점 삭제
+                      </div>
+                      )
+                    : (
+                      <div className='bnt rating' onClick={() => handleRatingOpen(el.dogwalkerId, idx)}>
+                        평점 등록
+                      </div>
+                      )}
+                  {givenReviewIds.includes(idx)
+                    ? (
+                      <div
+                        className='bnt review'
+                        onClick={() => handleReviewEditOpen(el.dogwalkerId, idx)}
+                      >
+                        리뷰 확인
+                      </div>
+                      )
+                    : (
+                      <div
+                        className='bnt review'
+                        onClick={() => handleReviewOpen(el.dogwalkerId, idx, el.date)}
+                      >
+                        리뷰 등록
+                      </div>
+                      )}
                 </div>
-                <div className='type'>{el.type}</div>
-                {givenRatingIds.includes(idx)
-                  ? (
-                    <div
-                      className='bnt rating'
-                      onClick={() => handleCancelRating(el.dogwalkerId, idx)}
-                    >
-                      평점 삭제
-                    </div>
-                    )
-                  : (
-                    <div className='bnt rating' onClick={() => handleRatingOpen(el.dogwalkerId, idx)}>
-                      평점 등록
-                    </div>
-                    )}
-                {givenReviewIds.includes(idx)
-                  ? (
-                    <div
-                      className='bnt review'
-                      onClick={() => handleReviewEditOpen(el.dogwalkerId, idx)}
-                      // onClick={() => handleDeleteReview(el.dogwalkerId, idx)}
-                    >
-                      리뷰 확인
-                    </div>
-                    )
-                  : (
-                    <div
-                      className='bnt review'
-                      onClick={() => handleReviewOpen(el.dogwalkerId, idx, el.date)}
-                    >
-                      리뷰 등록
-                    </div>
-                    )}
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
         {openRating ? <Rating handleModal={handleRatingClose} historyInfo={historyInfo} /> : null}
         {openReview
