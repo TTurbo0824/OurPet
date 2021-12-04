@@ -5,14 +5,15 @@ module.exports = async (req, res) => {
   try {
     // console.log(req.headers.authorization);
     // JUST FOR TESTING PURPOSES
-    const accessTokenData = { id: req.headers.authorization };
-    // const accessTokenData = isAuthorized(req);
+    // const accessTokenData = { id: req.headers.authorization };
+    const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
       const { dogwalkerId, type, location, date, duration, price, time } = req.body;
 
+      console.log(dogwalkerId, type, location, date, duration, price, time);
       const isNotNewRequest = await requests.findOne({
         where: {
           userId: accessTokenData.id,
