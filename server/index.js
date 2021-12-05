@@ -26,6 +26,7 @@ app.post('/signup', controllers.signup);
 app.post('/login', controllers.login);
 app.post('/logout', controllers.logout);
 app.get('/guest', controllers.guest);
+app.post('/guest', controllers.guestReset);
 app.get('/dogwalker', controllers.dogwalker);
 app.get('/user-info', controllers.myInfo);
 app.patch('/user-info', controllers.editMyInfo);
@@ -34,8 +35,10 @@ app.get('/request', controllers.myRequest);
 app.post('/request', controllers.request);
 app.delete('/request', controllers.cancelRequest);
 app.get('/history', controllers.myHistory);
+app.get('/rating', controllers.getRating);
 app.post('/rating', controllers.rating);
 app.delete('/rating', controllers.deleteRating);
+app.get('/review', controllers.getReview);
 app.post('/review', controllers.review);
 app.delete('/review', controllers.deleteReview);
 
