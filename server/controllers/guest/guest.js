@@ -1,4 +1,4 @@
-const { users } = require('../../models');
+const { users, requests, histories } = require('../../models');
 const { generateGuestAccessToken, generateRefreshToken } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
       kakao: false
     };
 
-    await users.create(payload);
+    users.create(payload);
 
     const accessToken = generateGuestAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
