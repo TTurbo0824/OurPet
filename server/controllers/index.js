@@ -4,6 +4,7 @@ module.exports = {
   logout: require('./users/logout'),
   guest: require('./guest/guest'),
   guestReset: require('./guest/guest-reset'),
+  mainpage: require('./mainpage/mainpage'),
   dogwalker: require('./dogwalkers/dogwalker'),
   myInfo: require('./mypage/myinfo'),
   editMyInfo: require('./mypage/edit-my-info'),

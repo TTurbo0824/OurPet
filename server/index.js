@@ -27,6 +27,7 @@ app.post('/login', controllers.login);
 app.post('/logout', controllers.logout);
 app.get('/guest', controllers.guest);
 app.post('/guest', controllers.guestReset);
+app.get('/mainpage', controllers.mainpage);
 app.get('/dogwalker', controllers.dogwalker);
 app.get('/user-info', controllers.myInfo);
 app.patch('/user-info', controllers.editMyInfo);
