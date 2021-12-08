@@ -11,8 +11,7 @@ module.exports = async (req, res) => {
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
-      const { id } = req.body;
-
+      const { id, content } = req.body;
       const userReview = await reviews.findAll({
         where: {
           id: id
@@ -22,10 +21,11 @@ module.exports = async (req, res) => {
       if (userReview.length === 0) {
         return res.status(404).json({ message: 'Review not found' });
       } else {
-        await reviews.destroy({
-          where: {
-            id: id
-          }
+        await reviews.update({
+          content: content
+        },
+        {
+          where: { id: id }
         });
 
         return res.status(200).json({ message: 'ok' });

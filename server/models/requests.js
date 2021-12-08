@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   requests.init({
+    requestId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
     dogwalkerId: DataTypes.INTEGER,
     type: DataTypes.STRING,

@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     } else {
       const { dogwalkerId, type, location, date, duration, price, time } = req.body;
 
-      console.log(dogwalkerId, type, location, date, duration, price, time);
+      // console.log(dogwalkerId, type, location, date, duration, price, time);
       const isNotNewRequest = await requests.findOne({
         where: {
           userId: accessTokenData.id,
@@ -27,7 +27,14 @@ module.exports = async (req, res) => {
         return res.status(409).json({ message: 'You cannot make the duplicate request' });
       }
 
+      const allRequests = await requests.findAll({
+        where: {
+          userId: accessTokenData.id
+        }
+      });
+
       await requests.create({
+        requestId: allRequests.length + 1,
         userId: accessTokenData.id,
         dogwalkerId: dogwalkerId,
         type: type,

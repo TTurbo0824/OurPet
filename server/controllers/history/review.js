@@ -5,13 +5,13 @@ module.exports = async (req, res) => {
   try {
     // JUST FOR TESTING PURPOSES
     // console.log(req.headers.authorization);
-    const accessTokenData = { id: req.headers.authorization };
-    // const accessTokenData = isAuthorized(req);
+    // const accessTokenData = { id: req.headers.authorization };
+    const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
-      const { historyId, review } = req.body;
+      const { historyId, historyIndex, content } = req.body;
       const userReview = await reviews.findAll({
         where: {
           historyId: historyId
@@ -19,11 +19,12 @@ module.exports = async (req, res) => {
       });
 
       if (userReview.length > 0) {
-        return res.status(409).json({ message: 'already wrote the review' });
+        return res.status(409).json({ message: 'Duplicate review' });
       } else {
         await reviews.create({
           historyId: historyId,
-          review: review
+          historyIndex: historyIndex,
+          content: content
         });
 
         return res.status(200).json({ message: 'ok' });

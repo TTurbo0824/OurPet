@@ -2,7 +2,9 @@ module.exports = {
   signup: require('./users/signup'),
   login: require('./users/login'),
   logout: require('./users/logout'),
-  guest: require('./users/guest'),
+  guest: require('./guest/guest'),
+  guestReset: require('./guest/guest-reset'),
+  mainpage: require('./mainpage/mainpage'),
   dogwalker: require('./dogwalkers/dogwalker'),
   myInfo: require('./mypage/myinfo'),
   editMyInfo: require('./mypage/edit-my-info'),
@@ -11,8 +13,11 @@ module.exports = {
   request: require('./request/request'),
   cancelRequest: require('./request/cancel-request'),
   myHistory: require('./history/myhistory'),
+  getRating: require('./history/get-ratings'),
   rating: require('./history/rating'),
   deleteRating: require('./history/delete-rating'),
+  getReview: require('./history/get-reviews'),
   review: require('./history/review'),
+  editReview: require('./history/edit-review'),
   deleteReview: require('./history/delete-review')
 };

@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   ratings.init({
     historyId: DataTypes.INTEGER,
+    historyIndex: DataTypes.INTEGER,
     rating: DataTypes.INTEGER
   }, {
     sequelize,
