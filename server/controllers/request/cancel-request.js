@@ -5,8 +5,8 @@ module.exports = async (req, res) => {
   try {
     // console.log(req.headers.authorization);
     // JUST FOR TESTING PURPOSES
-    const accessTokenData = { id: req.headers.authorization };
-    // const accessTokenData = isAuthorized(req);
+    // const accessTokenData = { id: req.headers.authorization };
+    const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
