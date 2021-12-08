@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
           where: {
             userId: accessTokenData.id
           },
-          attributes: ['historyId', 'dogwalkerId']
+          attributes: ['id', 'historyId', 'dogwalkerId']
         });
 
         allRatings = Sequelize.getValues(allRatings);
@@ -46,17 +46,18 @@ module.exports = async (req, res) => {
 
         allRatings = allRatings.map((el) => {
           return {
+            id: el.id,
             historyId: el.historyId,
             dogwalkerId: el.dogwalkerId,
             index: el.ratings[0].historyIndex,
-            rating: el.ratings[0].rating,
+            rating: el.ratings[0].rating
           };
         });
 
         let allReviews = await histories.findAll({
           include: [{
             model: reviews,
-            attributes: ['historyIndex', 'content']
+            attributes: ['id', 'historyIndex', 'content']
           }],
           where: {
             userId: accessTokenData.id
@@ -68,10 +69,11 @@ module.exports = async (req, res) => {
         allReviews = allReviews.filter((el) => el.reviews.length > 0);
         allReviews = allReviews.map((el) => {
           return {
+            id: el.reviews[0].id,
             historyId: el.historyId,
             dogwalkerId: el.dogwalkerId,
             index: el.reviews[0].historyIndex,
-            content: el.reviews[0].content,
+            content: el.reviews[0].content
           };
         });
         res.status(200).json({ data: { allHistories: historyList, ratings: allRatings, reviews: allReviews }, message: 'ok' });
