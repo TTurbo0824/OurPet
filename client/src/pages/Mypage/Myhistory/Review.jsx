@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { postReview, trackReview } from '../../../redux/action';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Alertbox, Backdrop } from '../../../components/UserComponents';
 import CloseButton from '../../../components/CloseButton';
+import axios from 'axios';
 
 export const ReviewView = styled.div`
   box-sizing: border-box;
@@ -45,23 +44,18 @@ const ReviewButton = styled.button`
   }
 `;
 
-function Review ({ serviceDate, handleModal, dogwalkerId, historyId }) {
-  const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user).walkingDogUserInfo;
-  const review = useSelector((state) => state.review).dogWalkers;
-  const indexNum = review[dogwalkerId - 1].review.length;
-  const { nickname } = userInfo;
+function Review ({ modal, token, historyInfo, handleModal }) {
   const [errorMsg, setErrorMsg] = useState('');
   const [walkerReview, setWalkerReview] = useState(null);
-
+  const { historyId, historyIndex } = historyInfo;
   const handleInput = (e) => {
     setWalkerReview(e.target.value);
   };
 
   const reviewInfo = {
-    dogwalkerId: dogwalkerId,
+    content: walkerReview,
     historyId: historyId,
-    index: indexNum
+    historyIndex: historyIndex
   };
 
   const handleReview = () => {
@@ -69,13 +63,25 @@ function Review ({ serviceDate, handleModal, dogwalkerId, historyId }) {
     // if (!walkerReview || walkerReview.length < 10) {
       setErrorMsg('리뷰를 10자 이상 작성해 주세요');
     } else {
-      dispatch(postReview(dogwalkerId, nickname, walkerReview, serviceDate));
-      dispatch(trackReview(reviewInfo));
-      handleModal();
+      axios
+        .post(`${process.env.REACT_APP_API_URL}/review`, reviewInfo, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        })
+        .then(() => {
+          handleModal();
+        })
+        .catch((error) => {
+          if (error.response.status === 410) {
+            modal();
+          } else console.log(error.response.data.message);
+        });
+      // window.location.reload();
     }
   };
-
-  // console.log(dogwalkerId, nickname, walkerReview, serviceDate);
 
   return (
     <Backdrop>
