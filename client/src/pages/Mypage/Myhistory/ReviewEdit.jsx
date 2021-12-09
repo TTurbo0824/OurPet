@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { editReview, deleteReview, untrackReview } from '../../../redux/action';
+import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Alertbox, Backdrop } from '../../../components/UserComponents';
 import CloseButton from '../../../components/CloseButton';
+axios.defaults.withCredentials = true;
 
 export const ReviewView = styled.div`
   box-sizing: border-box;
@@ -45,29 +45,11 @@ const ReviewButton = styled.button`
   }
 `;
 
-function ReviewEdit ({ handleModal, dogwalkerId, historyId }) {
-  const dispatch = useDispatch();
-  const review = useSelector((state) => state.review).dogWalkers;
-  const givenReview = useSelector((state) => state.review).givenReview;
-
+function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, targetReview }) {
+  const { id, content } = targetReview;
+  const [walkerReview, setWalkerReview] = useState(content);
   const [errorMsg, setErrorMsg] = useState('');
-
-  let currentReview;
-  let reviewContent;
-
-  givenReview.forEach((el) => {
-    if (el.historyId === historyId) currentReview = el;
-  });
-
-  review[dogwalkerId - 1].review.forEach((review, idx) => {
-    if (idx === currentReview.index) {
-      reviewContent = review.content;
-    }
-  }
-  );
-
-  const [walkerReview, setWalkerReview] = useState(reviewContent);
-
+  console.log(targetReview);
   const handleInput = (e) => {
     setWalkerReview(e.target.value);
   };
@@ -77,22 +59,54 @@ function ReviewEdit ({ handleModal, dogwalkerId, historyId }) {
       // if (!walkerReview || walkerReview.length < 10) {
       setErrorMsg('리뷰를 10자 이상 작성해 주세요');
     } else {
-      dispatch(editReview(dogwalkerId, currentReview.index, walkerReview));
-      handleModal();
+      axios
+        .patch(`${process.env.REACT_APP_API_URL}/review`, { id: id, content: walkerReview }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            handleModal();
+            handleNotice(true);
+            handleMessage('리뷰가 수정되었습니다.');
+            // dispatch(cancelDogwalker(Number(id)));
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 410) {
+            modal();
+          } else console.log(error.response.data.message);
+        });
+      window.location.reload();
     }
   };
 
   const handleDeleteReview = () => {
-    let index;
-    givenReview.forEach((el) => {
-      if (el.historyId === historyId) index = el.index;
-    });
-    dispatch(deleteReview(dogwalkerId, index));
-    dispatch(untrackReview(historyId));
+    axios
+      .delete(process.env.REACT_APP_API_URL + '/review', {
+        data: { id: id },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          handleNotice(true);
+          handleMessage('리뷰가 삭제되었습니다.');
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 410) {
+          modal();
+        } else console.log(error.response.data.message);
+      });
     handleModal();
   };
-
-  // console.log(dogwalkerId, nickname, walkerReview, serviceDate);
 
   return (
     <Backdrop>
