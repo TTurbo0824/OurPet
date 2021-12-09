@@ -187,33 +187,37 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
     } else {
       if (myInfo.nickname === '') setMyInfo({ ...myInfo, nickname: userInfo.nickname });
       setErrorMsg('');
-      dispatch(editInfo(myInfo));
+      // dispatch(editInfo(myInfo.nickname));
 
-      // axios
-      //   .patch(process.env.REACT_APP_API_URL + '/user-info', myInfo, {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //       'Content-Type': 'application/json'
-      //     }
-      //   })
-      //   .then((res) => {
-      //     if (res.status === 200) {
-      //       handleNotice(true);
-      //       handleMessage('회원정보가 수정되었습니다.');
-      //       if (myInfo.nickname === '') {
-      //         myInfo.nickname = nickname;
-      //       } else {
-      //         myInfo.nickname = myInfo.nickname + `#${id}`;
-      //       }
-      //       if (myInfo.password === '') {
-      //         myInfo.password = '';
-      //       }
-      //       dispatch(editInfo(myInfo));
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.log(err.response);
-      //   });
+      axios
+        .patch(process.env.REACT_APP_API_URL + '/user-info', myInfo, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            handleNotice(true);
+            handleMessage('회원정보가 수정되었습니다.');
+            if (myInfo.nickname === '') {
+              myInfo.nickname = nickname;
+            } else {
+              myInfo.nickname = myInfo.nickname;
+            }
+            if (myInfo.password === '') {
+              myInfo.password = '';
+            }
+            dispatch(editInfo(myInfo.nickname));
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            modal();
+          } else {
+          console.log('error: ', error.response.data.message);
+        }
+        });
     }
   };
 
