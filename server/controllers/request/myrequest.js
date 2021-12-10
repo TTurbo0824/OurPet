@@ -25,10 +25,23 @@ module.exports = async (req, res) => {
 
       if (allRequests) {
         allRequests = Sequelize.getValues(allRequests);
-        allRequests.map((history) => {
-          history.name = allDogwalkers[history.dogwalkerId - 1].name;
-          history.img = allDogwalkers[history.dogwalkerId - 1].profile;
-          return history;
+        allRequests = allRequests.map((history) => {
+          const requestDate = new Date(history.date);
+          const now = Date.now();
+          if (now - requestDate > 0) { history.status = 'expired'; }
+          return {
+            id: history.id,
+            dogwalkerId: history.dogwalkerId,
+            name: allDogwalkers[history.dogwalkerId - 1].name,
+            img: allDogwalkers[history.dogwalkerId - 1].profile,
+            date: history.date,
+            type: history.type,
+            duration: history.duration,
+            time: history.time,
+            location: history.location,
+            price: history.price,
+            status: history.status
+          };
         });
         res.status(200).json({ data: allRequests, message: 'ok' });
       } else {
