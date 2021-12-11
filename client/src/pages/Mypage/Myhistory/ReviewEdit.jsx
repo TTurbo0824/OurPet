@@ -106,6 +106,7 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
         } else console.log(error.response.data.message);
       });
     handleModal();
+    window.location.reload();
   };
 
   return (

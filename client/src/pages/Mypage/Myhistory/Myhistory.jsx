@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { cancelRating, untrackRating } from '../../../redux/action';
+import { cancelRating, untrackRating, trackRating } from '../../../redux/action';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -80,24 +80,25 @@ export const MyHistoryWrapper = styled.div`
 //  3. 리뷰 등록 모달 생성
 //
 
-function MyHistory () {
+function MyHistory ({ modal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const token = useSelector((state) => state.user).token;
-  const historyList = useSelector((state) => state.history).dogWalkerHistory;
-  const givenRating = useSelector((state) => state.rating).givenRating;
-  const givenReview = useSelector((state) => state.review).givenReview;
+
   const [openRating, setOpenRating] = useState(false);
   const [openReview, setOpenReview] = useState(false);
   const [openReviewEdit, setOpenReviewEdit] = useState(false);
-  const [historyInfo, setHistoryInfo] = useState({ dogwalkerId: null, historyId: null });
-  const [serviceDate, setServiceDate] = useState(null);
-  const review = useSelector((state) => state.review).dogWalkers;
+  const [historyInfo, setHistoryInfo] = useState({ historyId: null, historyIndex: null });
 
-  const givenRatingIds = givenRating.map((el) => el.historyId) || [];
-  const givenReviewIds = givenReview.map((el) => el.historyId);
+  const [serviceDate, setServiceDate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [allHistory, setAllHistory] = useState(historyList);
+  const [allHistory, setAllHistory] = useState([]);
+  const [givenRating, setGivenRating] = useState([]);
+  const [givenReview, setGivenReview] = useState([]);
+  const [targetReview, setTargetReview] = useState({
+    id: null,
+    content: null
+  });
   // console.log(allHistory)
 
   useEffect(() => {
@@ -110,24 +111,37 @@ function MyHistory () {
             'Content-Type': 'application/json'
           }
         });
-        setAllHistory(result.data.data);
+        setAllHistory(result.data.data.allHistories);
+        setGivenRating(result.data.data.ratings);
+        setGivenReview(result.data.data.reviews);
         setIsLoading(false);
       } catch (error) {
-        if (error.response.data.message === 'No histories are found') {
+        if (error.response.status === 401) modal();
+        else if (error.response.data.message === 'No histories are found') {
           setIsLoading(false);
         } else {
-          console.log(error);
+          console.log('error: ', error.response.data.message);
         }
       }
     };
     fetchData();
   }, []);
 
-  console.log(allHistory);
+  // const givenRating = useSelector((state) => state.rating).givenRating;
+  // const givenReview = useSelector((state) => state.review).givenReview;
+  // const review = useSelector((state) => state.review).dogWalkers;
+
+  const givenRatingIds = givenRating.map((el) => el.historyId) || [];
+  const givenReviewIds = givenReview.map((el) => el.historyId);
+
+  // console.log(givenReview);
   // console.log(givenRatingIds);
-  const handleRatingOpen = (dogwalkerId, index) => {
-    console.log(dogwalkerId);
-    setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: index });
+  // console.log(givenRating)
+  const handleRatingOpen = (id, idx) => {
+    // console.log(dogwalkerId);
+    // setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: index });
+    setHistoryInfo({ historyId: id, historyIndex: idx + 1 });
+
     setOpenRating(true);
   };
 
@@ -135,33 +149,69 @@ function MyHistory () {
     setOpenRating(false);
   };
 
-  const handleReviewOpen = (dogwalkerId, historyId, date) => {
-    setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: historyId });
+  const handleReviewOpen = (id, idx, date) => {
+    setHistoryInfo({ historyId: id, historyIndex: idx + 1 });
+
+    // setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: historyId });
     setServiceDate(date);
     setOpenReview(true);
   };
-
+  // console.log(historyInfo);
   const handleReviewClose = () => {
     setOpenReview(false);
   };
 
   const handleReviewEditOpen = (dogwalkerId, historyId) => {
-    setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: historyId });
+    // setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: historyId });
+
+    // console.log(review[dogwalkerId - 1]);
+    givenReview.forEach((el) => {
+      if (el.historyId === historyId + 1) {
+        setTargetReview({
+          id: el.id,
+          content: el.content
+        });
+        // console.log(el.content, el.id)
+      }
+    });
     setOpenReviewEdit(true);
-    console.log(review[dogwalkerId - 1]);
   };
 
+  // console.log(targetReview);
   const handleReviewEditClose = () => {
     setOpenReviewEdit(false);
   };
 
-  const handleCancelRating = (dogwalkerId, idx) => {
-    let index;
-    givenRating.forEach((el) => {
-      if (el.historyId === idx) index = el.index;
-    });
-    dispatch(cancelRating(dogwalkerId, index));
-    dispatch(untrackRating(idx));
+  const handleCancelRating = (el) => {
+    console.log(el.historyId)
+    axios
+      .delete(`${process.env.REACT_APP_API_URL}/rating`, {
+        data: { historyId: el.historyId },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          handleNotice(true);
+          handleMessage('평점이 삭제되었습니다.');
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 410) {
+          modal();
+        } else console.log(error.response.data.message);
+      });
+      window.location.reload();
+
+    // let index;
+    // givenRating.forEach((el) => {
+    //   if (el.historyId === idx) index = el.index;
+    // });
+    // dispatch(cancelRating(dogwalkerId, index));
+    // dispatch(untrackRating(idx));
   };
 
   const handleClick = (id) => {
@@ -196,21 +246,22 @@ function MyHistory () {
                     {el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원
                   </div>
                   <div className='type'>{el.type}</div>
-                  {givenRatingIds.includes(idx)
+                  {givenRatingIds.includes(idx + 1)
                     ? (
                       <div
                         className='bnt rating'
-                        onClick={() => handleCancelRating(el.dogwalkerId, idx)}
+                        // onClick={() => handleCancelRating(el.dogwalkerId, idx)}
+                        onClick={() => handleCancelRating(el)}
                       >
                         평점 삭제
                       </div>
                       )
                     : (
-                      <div className='bnt rating' onClick={() => handleRatingOpen(el.dogwalkerId, idx)}>
+                      <div className='bnt rating' onClick={() => handleRatingOpen(el.id, idx)}>
                         평점 등록
                       </div>
                       )}
-                  {givenReviewIds.includes(idx)
+                  {givenReviewIds.includes(idx + 1)
                     ? (
                       <div
                         className='bnt review'
@@ -222,7 +273,7 @@ function MyHistory () {
                     : (
                       <div
                         className='bnt review'
-                        onClick={() => handleReviewOpen(el.dogwalkerId, idx, el.date)}
+                        onClick={() => handleReviewOpen(el.id, idx, el.date)}
                       >
                         리뷰 등록
                       </div>
@@ -231,23 +282,38 @@ function MyHistory () {
               );
             })}
         </div>
-        {openRating ? <Rating handleModal={handleRatingClose} historyInfo={historyInfo} /> : null}
+        {openRating
+          ?  <Rating
+              handleModal={handleRatingClose}
+              handleMessage={handleMessage}
+              handleNotice={handleNotice}
+              historyInfo={historyInfo}
+              token={token}
+              modal={modal}
+            />
+          : null}
         {openReview
           ? (
             <Review
+              modal={modal}
               handleModal={handleReviewClose}
-              dogwalkerId={historyInfo.dogwalkerId}
-              historyId={historyInfo.historyId}
+              // dogwalkerId={historyInfo.dogwalkerId}
+              // historyId={historyInfo.historyId}
+              historyInfo={historyInfo}
               serviceDate={serviceDate}
+              token={token}
             />
             )
           : null}
         {openReviewEdit
           ? (
             <ReviewEdit
+              modal={modal}
+              handleMessage={handleMessage}
+              handleNotice={handleNotice}
               handleModal={handleReviewEditClose}
-              dogwalkerId={historyInfo.dogwalkerId}
-              historyId={historyInfo.historyId}
+              targetReview={targetReview}
+              token={token}
             />
             )
           : null}

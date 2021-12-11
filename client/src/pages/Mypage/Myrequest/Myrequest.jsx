@@ -78,13 +78,13 @@ export const MyRequestWrapper = styled.div`
   }
 `;
 
-function MyRequest ({ handleMessage, handleNotice }) {
+function MyRequest ({ modal, handleMessage, handleNotice }) {
   const history = useHistory();
   const token = useSelector((state) => state.user).token;
   const dogWalkerList = useSelector((state) => state.dogwalker).dogWalkers;
   let allRequest = useSelector((state) => state.request).dogWalkerRequest;
   const [isLoading, setIsLoading] = useState(false);
-  const [allRequests, setAllRequests] = useState(allRequest);
+  const [allRequests, setAllRequests] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,10 +99,13 @@ function MyRequest ({ handleMessage, handleNotice }) {
         setAllRequests(result.data.data);
         setIsLoading(false);
       } catch (error) {
-        if (error.response.data.message === 'No requests are found') {
+        if (error.response.status === 401) {
+          modal();
+        }
+        else if (error.response.status === 404) {
           setIsLoading(false);
         } else {
-          console.log(error);
+          console.log('error: ', error.response.data.message);
         }
       }
     };
@@ -152,7 +155,7 @@ function MyRequest ({ handleMessage, handleNotice }) {
                   <div className='name'>{el.name}</div>
                   <div className='info'>{el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
                   <div className='type'>{el.type}</div>
-                  <div className='status'>요청 처리 중</div>
+                  <div className='status'>{el.status === 'pending' ? '요청 처리 중' : '요청 만료'}</div>
                   <div className='cancel bnt' onClick={() => deleteClick(el.id)}>요청 취소</div>
                 </div>
               );
