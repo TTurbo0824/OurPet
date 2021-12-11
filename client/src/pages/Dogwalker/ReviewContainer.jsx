@@ -85,7 +85,7 @@ function ReviewContainer ({ averageRating, rating, reviews }) {
             <div className='profile-container'>
               {idx < 3
                 ? <img className='review-profile' alt='profile' src={profileImage[idx]} />
-                : <img className='review-profile' alt='profile' src={profileImage[2]} />}
+                : <img className='review-profile' alt='profile' src={profileImage[3]} />}
             </div>
             <div className='nickname'>{review.nickname}</div>
             <div className='date'>서비스 이용 날짜: {review.date}</div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../components/utils/_var';
 import { media } from '../../components/utils/_media-queries';
@@ -130,10 +131,15 @@ const Tag = styled.div`
 
 const LoadingWrapper = styled.div`
   margin: 0 auto;
-  .loading {
+  /* .loading {
     width: 3rem;
     margin-top: -.5rem;
     margin-bottom: 1.2rem;
+  } */
+  .loading {
+    width: 6.5rem;
+    /* margin-top: .5rem; */
+    margin-bottom: 1rem;
   }
 `;
 
@@ -156,8 +162,8 @@ function Mainpage () {
   const [sortbyPrice, setSortbyPrice] = useState('none');
   const [isScrollCnt, setIsScrollCnt] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-
-  const loadingTime = (Math.random() + 1) * 1000;
+  const [ratingData, setRatingData] = useState([]);
+  const loadingTime = (Math.random() + 1) * 800;
 
   const dogwalkerCount = 5;
   window.onscroll = () => {
@@ -194,6 +200,30 @@ function Mainpage () {
       setSortbyPrice({});
     };
   }, [location]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // setIsLoading(true);
+      try {
+        const result = await axios.get(`${process.env.REACT_APP_API_URL}/mainpage`, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        // setRatingData(result.data.data[0].ratings);
+        // setReviewData(result.data.data[0].reviews);
+        // setIsLoading(false);
+        setRatingData(result.data.data.allRating)
+      } catch (error) {
+        if (error) {
+          console.log('error: ', error.response.data.message);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
+  // console.log(ratingData);
 
   const allTagList = [
     '소형견',
@@ -278,7 +308,7 @@ function Mainpage () {
     if (sortby === '평점순') {
       setSortbyPrice('none');
       if (sortbyRating !== 'des') {
-        rating.sort((a, b) => {
+        ratingData.sort((a, b) => {
           if (getAverageRating(b.rating) === getAverageRating(a.rating)) {
             return b.rating.length - a.rating.length;
           }
@@ -286,7 +316,7 @@ function Mainpage () {
         });
         setSortbyRating('des');
       } else {
-        rating.sort((a, b) => {
+        ratingData.sort((a, b) => {
           if (getAverageRating(b.rating) === getAverageRating(a.rating)) {
             return b.rating.length - a.rating.length;
           }
@@ -297,7 +327,7 @@ function Mainpage () {
 
       const ratingList = [];
 
-      rating.forEach((el) => {
+      ratingData.forEach((el) => {
         ratingList.push(el.id);
       });
 
@@ -384,7 +414,7 @@ function Mainpage () {
                   <div>검색 결과가 없습니다</div>
                   )
                 : (
-                    walkerResult.map((dogWalker, idx) => {
+                  ratingData.length !== 0 && walkerResult.map((dogWalker, idx) => {
                       if ((idx + 1) <= (isScrollCnt * dogwalkerCount)) {
                         return (
                           <Dogwalker
@@ -392,7 +422,7 @@ function Mainpage () {
                               handleClick(dogWalker);
                             }}
                             dogWalker={dogWalker}
-                            rating={rating}
+                            rating={ratingData}
                             minPrice={getMinValue(dogWalker.charges)}
                             key={idx}
                             tags={dogWalker.tags}

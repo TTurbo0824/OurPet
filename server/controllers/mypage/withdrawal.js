@@ -5,6 +5,7 @@ const { users } = require('../../models');
 module.exports = async (req, res) => {
   try {
     const accessTokenData = isAuthorized(req);
+    // const accessTokenData = { id: req.headers.authorization };
 
     if (!accessTokenData) {
       return res.status(401).send({ message: 'You\'re not logged in.' });

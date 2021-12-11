@@ -79,7 +79,7 @@ function Review ({ modal, token, historyInfo, handleModal }) {
             modal();
           } else console.log(error.response.data.message);
         });
-      // window.location.reload();
+      window.location.reload();
     }
   };
 

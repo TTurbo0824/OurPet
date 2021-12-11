@@ -6,7 +6,7 @@ function request (state = initRequestState, action) {
     case RESET_REQUEST:
       return { dogWalkerRequest: [] };
     case GET_REQUEST:
-      return { ...state };
+      return state;
     case REQUEST_DOGWALKER:
       return {
         ...state,

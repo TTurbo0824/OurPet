@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { userLogin, resetHistory, resetRequest, getHistory, getRequest } from '../redux/action';
 import logo from '../images/logo.png';
@@ -59,6 +59,14 @@ export const SignupSpan = styled.span`
 
 function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
+  dispatch(getRequest());
+  dispatch(getHistory());
+
+  const defaultHistory = useSelector((state) => state.history).dogWalkerHistory;
+  const defaultRequest = useSelector((state) => state.request).dogWalkerRequest;
+
+  // console.log(defaultHistory);
+
   const [loginInfo, setLoginInfo] = useState({
     email: '',
     password: ''
@@ -76,10 +84,8 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   };
 
   const handleLoginRequest = () => {
-    // FOR TESTING PURPOSE
+    // FOR TESTING PURPOSES
     // dispatch(userLogin('token', { email: '123', nickname: 'testuser' }));
-    // dispatch(getRequest());
-    // dispatch(getHistory());
 
     if (loginInfo.email === '' || loginInfo.password === '') {
       setErrorMsg('모든 항목을 입력해 주세요');
@@ -90,8 +96,6 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
           withCredentials: true
         })
         .then((res) => {
-          localStorage.setItem('accessToken', res.data.accessToken);
-          localStorage.setItem('accessTokenTime', String(new Date().getTime()));
           handleModal();
           handleNotice(true);
           handleMessage('로그인 성공!');
@@ -129,14 +133,17 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   };
 
   const guestLoginRequest = () => {
+    // FOR TESTING PURPOSES
+    // dispatch(userLogin('token', { email: '123', nickname: 'guest' }));
+    // dispatch(getRequest());
+    // dispatch(getHistory());
+
     axios
       .get(`${process.env.REACT_APP_API_URL}/guest`, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       })
       .then((res) => {
-        localStorage.setItem('accessToken', res.data.accessToken);
-        localStorage.setItem('accessTokenTime', new Date().getTime());
         handleModal();
         handleNotice(true);
         handleMessage('30분간 체험이 가능합니다.');
@@ -144,7 +151,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
       })
       .then((token) => {
         axios
-          .get(process.env.REACT_APP_API_URL + '/user-info', {
+          .get(`${process.env.REACT_APP_API_URL}/user-info`, {
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json'
@@ -152,8 +159,17 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
           })
           .then((res) => {
             dispatch(userLogin(token, res.data.data));
-            dispatch(getRequest());
-            dispatch(getHistory());
+            // dispatch(getRequest());
+            // dispatch(getHistory());
+          })
+          .then(() => {
+            axios
+              .post(`${process.env.REACT_APP_API_URL}/guest`, {}, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+                }
+              });
           });
       })
       .catch((error) => {

@@ -1,14 +1,18 @@
-const { users, requests, histories } = require('../../models');
+const { users } = require('../../models');
 const { generateGuestAccessToken, generateRefreshToken } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
   try {
     const allMembers = await users.findAll({
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'ASC']]
     });
 
-    const guestID = allMembers[0].dataValues.id + 1;
+    const guestID = allMembers[allMembers.length - 1].dataValues.id + 1;
     const guestNickname = `guest#${guestID}`;
+
+    let exTime = process.env.GUEST_TIME;
+    exTime = Number(exTime.slice(0, exTime.length - 1));
+    exTime *= 60 * 1000;
 
     setTimeout(() => {
       console.log('🗑️🗑️🗑️🗑️🗑️🗑️🗑️🗑️🗑️🗑️');
@@ -17,19 +21,17 @@ module.exports = async (req, res) => {
         where: {
           id: guestID,
           nickname: guestNickname,
-          createdAt: new Date(Date.now() - process.env.GUEST_TIME)
+          createdAt: new Date(Date.now() - exTime)
         }
       });
-    }, process.env.GUEST_TIME);
+    }, exTime);
 
     const payload = {
       id: guestID,
       nickname: guestNickname,
       email: 'guest@walkingdog.com',
       salt: null,
-      password: null,
-      birthYear: null,
-      kakao: false
+      password: null
     };
 
     users.create(payload);

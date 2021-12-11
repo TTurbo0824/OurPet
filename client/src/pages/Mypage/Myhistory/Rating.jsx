@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { giveRating, trackRating } from '../../../redux/action';
+import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Backdrop, Alertbox } from '../../../components/UserComponents';
@@ -53,11 +54,11 @@ const RatingButton = styled.button`
 //  1. 별점 Select box 생성
 //
 
-function Rating ({ handleModal, historyInfo }) {
+function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token, modal }) {
   const dispatch = useDispatch();
-  const ratings = useSelector((state) => state.rating).dogWalkers;
-  const { dogwalkerId, historyId } = historyInfo;
-  const indexNum = ratings[dogwalkerId - 1].rating.length;
+  // const ratings = useSelector((state) => state.rating).dogWalkers;
+  const { historyId, historyIndex } = historyInfo;
+  // const indexNum = ratings[dogwalkerId - 1].rating.length;
   const [walkerRate, setWalkerRate] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -129,16 +130,46 @@ function Rating ({ handleModal, historyInfo }) {
     setWalkerRate(e.value);
   };
 
+  // const ratingInfo = {
+  //   dogwalkerId: dogwalkerId,
+  //   historyId: historyId,
+  //   index: indexNum
+  // };
+
   const ratingInfo = {
-    dogwalkerId: dogwalkerId,
     historyId: historyId,
-    index: indexNum
-  };
+    historyIndex: historyIndex,
+    rating: walkerRate
+  }
 
   const handleRating = () => {
+    console.log(historyInfo)
+
     if (walkerRate) {
-      dispatch(giveRating(dogwalkerId, walkerRate));
-      dispatch(trackRating(ratingInfo));
+      axios
+      .post(`${process.env.REACT_APP_API_URL}/rating`, ratingInfo, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          handleNotice(true);
+          handleMessage('평점이 등록되었습니다.');
+          handleModal();
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 410) {
+          modal();
+        } else console.log(error.response.data.message);
+      });
+    window.location.reload();
+
+      // dispatch(giveRating(dogwalkerId, walkerRate));
+      // dispatch(trackRating(ratingInfo));
       handleModal();
     } else {
       setErrorMsg('평점을 선택해 주세요');

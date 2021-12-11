@@ -105,8 +105,26 @@ function Notification ({ message, handleNotice, handleMessage }) {
   };
 
   const cancelRequest = (id) => {
-    dispatch(cancelDogwalker(Number(id)));
-    handleNotice(false);
+    axios
+      .delete(process.env.REACT_APP_API_URL + '/request', {
+        data: { serviceId: Number(id) },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          handleNotice(true);
+          handleMessage('요청이 삭제되었습니다.');
+          dispatch(cancelDogwalker(Number(id)));
+        }
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+      });
+    window.location.reload();
   };
 
   return (

@@ -33,12 +33,12 @@ module.exports = async (req, res) => {
         let allRatings = await histories.findAll({
           include: [{
             model: ratings,
-            attributes: ['historyIndex', 'rating']
+            attributes: ['id', 'historyIndex', 'rating']
           }],
           where: {
             userId: accessTokenData.id
           },
-          attributes: ['id', 'historyId', 'dogwalkerId']
+          attributes: ['historyId', 'dogwalkerId']
         });
 
         allRatings = Sequelize.getValues(allRatings);
@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
 
         allRatings = allRatings.map((el) => {
           return {
-            id: el.id,
+            id: el.ratings[0].id,
             historyId: el.historyId,
             dogwalkerId: el.dogwalkerId,
             index: el.ratings[0].historyIndex,

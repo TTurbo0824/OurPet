@@ -20,8 +20,8 @@ function user (state = initialUserState, action) {
       return {
         ...state,
         walkingDogUserInfo: {
-          ...state.userInfo,
-          nickname: action.payload.nickname
+          ...state.walkingDogUserInfo,
+          nickname: action.payload
         }
       };
     default:

@@ -6,7 +6,7 @@ module.exports = {
     return jwt.sign(data, process.env.ACCESS_SECRET, { expiresIn: '1h' });
   },
   generateGuestAccessToken: (data) => {
-    return jwt.sign(data, process.env.ACCESS_SECRET, { expiresIn: '10s' });
+    return jwt.sign(data, process.env.ACCESS_SECRET, { expiresIn: process.env.GUEST_TIME });
   },
   generateRefreshToken: (data) => {
     return jwt.sign(data, process.env.REFRESH_SECRET, { expiresIn: '7d' });
