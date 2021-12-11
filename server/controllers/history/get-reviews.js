@@ -8,7 +8,6 @@ module.exports = async (req, res) => {
     // JUST FOR TESTING PURPOSES
     // console.log(req.headers.authorization);
     // const accessTokenData = { id: req.headers.authorization };
-    
     const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
@@ -28,16 +27,18 @@ module.exports = async (req, res) => {
       allHistories = Sequelize.getValues(allHistories);
       allHistories = allHistories.filter((el) => el.reviews.length > 0);
 
-      allHistories.map((el) => {
-        el.index = el.reviews[0].historyIndex;
-        delete el.reviews;
-        return el;
-      });
-
       if (allHistories.length === 0) {
         res.status(404).json({ message: 'No given reviews are found' });
+      } else {
+        allHistories = allHistories.map((el) => {
+          return {
+            historyId: el.historyId,
+            dogwalkerId: el.dogwalkerId,
+            index: el.reviews[0].historyIndex
+          };
+        });
+        res.status(200).json({ data: allHistories, message: 'ok' });
       }
-      res.status(200).json({ data: allHistories, message: 'ok' });
     }
   } catch (error) {
     res.status(400).json({ message: 'error' });

@@ -5,13 +5,13 @@ module.exports = async (req, res) => {
   try {
     // JUST FOR TESTING PURPOSES
     // console.log(req.headers.authorization);
-    const accessTokenData = { id: req.headers.authorization };
-    // const accessTokenData = isAuthorized(req);
+    // const accessTokenData = { id: req.headers.authorization };
+    const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
-      const { historyId, rating } = req.body;
+      const { historyId, historyIndex, rating } = req.body;
 
       const userRating = await ratings.findAll({
         where: {
@@ -25,6 +25,7 @@ module.exports = async (req, res) => {
       } else {
         await ratings.create({
           historyId: historyId,
+          historyIndex: historyIndex,
           rating: rating
         });
 
