@@ -6,7 +6,7 @@ function history (state = initHistoryState, action) {
     case RESET_HISTORY:
       return { dogWalkerHistory: [] };
     case GET_HISTORY:
-      return { ...state };
+      return state;
     default:
       return state;
   }

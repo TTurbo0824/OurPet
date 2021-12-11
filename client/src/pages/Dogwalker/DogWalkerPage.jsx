@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { requestDogwalker } from '../../redux/action';
 import { useLocation } from 'react-router-dom';
@@ -127,11 +127,43 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   const dogWalkerId = Number(location.pathname.split('id=')[1]);
   let dogWalker = dogWalkerList.filter((dogwalker) => dogwalker.id === dogWalkerId);
   const rating = useSelector((state) => state.rating).dogWalkers[dogWalkerId - 1].rating;
-  const averageRating = (rating.reduce((acc, cur) => acc + cur) / rating.length).toFixed(1);
   const reviews = useSelector((state) => state.review).dogWalkers[dogWalkerId - 1].review;
   let allRequest = useSelector((state) => state.request).dogWalkerRequest;
+  const [isLoading, setIsLoading] = useState(false);
+  const [ratingData, setRatingData] = useState([]);
+  const [reviewData, setReviewData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const result = await axios.get(`${process.env.REACT_APP_API_URL}/dogwalker?id=${dogWalkerId}`, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        setRatingData(result.data.data[0].ratings);
+        setReviewData(result.data.data[0].reviews);
+        setIsLoading(false);
+      } catch (error) {
+        if (error.response.data.message === 'No requests are found') {
+          setIsLoading(false);
+        } else {
+          console.log('error: ', error.response.data.message);
+        }
+      }
+    };
+    fetchData();
+  }, []);
 
   // console.log('🥺🥺🥺🥺🥺🥺🥺🥺🥺');
+  const allRating = [...rating];
+  allRating.push(...ratingData);
+  const averageRating = (allRating.reduce((acc, cur) => acc + cur) / allRating.length).toFixed(1);
+
+  const allReview = [...reviews];
+  allReview.push(...reviewData);
+
   allRequest = allRequest ? allRequest.length : 0;
 
   const requestInitial = {
@@ -144,13 +176,13 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
     price: 0
   };
 
-  // console.log(requestInitial)
+  // console.log(requestInitial);
 
   const [requestOptions, setRequestOptions] = useState(requestInitial);
 
   dogWalker = dogWalker[0];
 
-  console.log(requestOptions);
+  // console.log(requestOptions);
 
   const dogType = dogWalker.tags.filter((type) => {
     if (type.length === 3) {
@@ -225,7 +257,7 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
               )}
             </div>
             <div className='review-container'>
-              <ReviewContainer averageRating={averageRating} rating={rating} reviews={reviews} />
+              <ReviewContainer averageRating={averageRating} rating={allRating} reviews={allReview} />
             </div>
           </div>
           <div className='right-container'>

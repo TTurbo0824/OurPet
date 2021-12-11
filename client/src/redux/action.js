@@ -27,9 +27,9 @@ export const userLogout = () => ({
   type: LOG_OUT
 });
 
-export const editInfo = (userData) => ({
+export const editInfo = (nickname) => ({
   type: EDIT_INFO,
-  payload: userData
+  payload: nickname
 });
 
 export const resetRequest = () => ({

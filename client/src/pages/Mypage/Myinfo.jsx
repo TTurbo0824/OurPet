@@ -174,7 +174,9 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
 
   const handleEditRequest = () => {
     // console.log(myInfo);
-    if (checkPassword === 'no') {
+    if (isGuest) {
+      setErrorMsg('체험하기 중에는 이용할 수 없습니다');
+    } else if (checkPassword === 'no') {
       setErrorMsg('올바른 비밀번호가 아닙니다');
     } else if (!checkRetypePassword) {
       setErrorMsg('비밀번호가 일치하지 않습니다');
@@ -222,6 +224,8 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleWithdrawalRequest = () => {
+    if (isGuest) setErrorMsg('체험하기 중에는 이용할 수 없습니다');
+    else {
     axios
       .get(process.env.REACT_APP_API_URL + '/user-info', {
         headers: {
@@ -237,7 +241,7 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
         if (err.response.data.message === 'You\'re not logged in') {
           modal();
         } else console.log(err.response.data.message);
-      });
+      });}
   };
 
   return (
