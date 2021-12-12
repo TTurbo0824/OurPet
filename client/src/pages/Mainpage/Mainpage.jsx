@@ -213,7 +213,7 @@ function Mainpage () {
         // setRatingData(result.data.data[0].ratings);
         // setReviewData(result.data.data[0].reviews);
         // setIsLoading(false);
-        setRatingData(result.data.data.allRating)
+        setRatingData(result.data.data.allRating);
       } catch (error) {
         if (error) {
           console.log('error: ', error.response.data.message);
@@ -414,7 +414,7 @@ function Mainpage () {
                   <div>검색 결과가 없습니다</div>
                   )
                 : (
-                  ratingData.length !== 0 && walkerResult.map((dogWalker, idx) => {
+                    ratingData.length !== 0 && walkerResult.map((dogWalker, idx) => {
                       if ((idx + 1) <= (isScrollCnt * dogwalkerCount)) {
                         return (
                           <Dogwalker

@@ -183,7 +183,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleCancelRating = (el) => {
-    console.log(el.historyId)
+    console.log(el.historyId);
     axios
       .delete(`${process.env.REACT_APP_API_URL}/rating`, {
         data: { historyId: el.historyId },
@@ -204,7 +204,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
           modal();
         } else console.log(error.response.data.message);
       });
-      window.location.reload();
+    window.location.reload();
 
     // let index;
     // givenRating.forEach((el) => {
@@ -283,7 +283,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
             })}
         </div>
         {openRating
-          ?  <Rating
+          ? <Rating
               handleModal={handleRatingClose}
               handleMessage={handleMessage}
               handleNotice={handleNotice}

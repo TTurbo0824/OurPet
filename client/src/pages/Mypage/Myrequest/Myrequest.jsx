@@ -101,8 +101,7 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
       } catch (error) {
         if (error.response.status === 401) {
           modal();
-        }
-        else if (error.response.status === 404) {
+        } else if (error.response.status === 404) {
           setIsLoading(false);
         } else {
           console.log('error: ', error.response.data.message);
