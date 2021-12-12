@@ -36,6 +36,7 @@ app.get('/request', controllers.myRequest);
 app.post('/request', controllers.request);
 app.delete('/request', controllers.cancelRequest);
 app.get('/history', controllers.myHistory);
+app.delete('/history', controllers.deleteHistory);
 app.get('/rating', controllers.getRating);
 app.post('/rating', controllers.rating);
 app.delete('/rating', controllers.deleteRating);

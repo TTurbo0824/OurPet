@@ -13,6 +13,7 @@ module.exports = {
   request: require('./request/request'),
   cancelRequest: require('./request/cancel-request'),
   myHistory: require('./history/myhistory'),
+  deleteHistory: require('./history/delete-history'),
   getRating: require('./history/get-ratings'),
   rating: require('./history/rating'),
   deleteRating: require('./history/delete-rating'),
