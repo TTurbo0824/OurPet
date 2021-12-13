@@ -41,7 +41,6 @@ module.exports = async (req, res) => {
             requestTime = Number(request.time.split(' ')[1].slice(0, -1));
           }
 
-          console.log(requestTime);
           const dateTime = `${request.date} ${requestTime}`;
           const requestDate = moment(dateTime, 'YYYY.MM.DD H');
           if (requestDate.from(target).includes('ago')) {
