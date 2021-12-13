@@ -99,6 +99,9 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
     id: null,
     content: null
   });
+  const [IdList, setIdList] = useState([]);
+  const [CheckList, setCheckList] = useState([]);
+
   // console.log(allHistory)
 
   useEffect(() => {
@@ -126,6 +129,31 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const ids = [];
+    if (allHistory.length !== 0) {
+      allHistory.map((history, i) => {
+        ids[i] = history.id;
+      });
+      setIdList(ids);
+    }
+  }, [allHistory]);
+
+  const onChangeAll = (e) => {
+    // 체크할 시 CheckList에 id 값 전체 넣기, 체크 해제할 시 CheckList에 빈 배열 넣기
+    setCheckList(e.target.checked ? IdList : []);
+  };
+
+  const onChangeEach = (e, id) => {
+    // 체크할 시 CheckList에 id값 넣기
+    if (e.target.checked) {
+      setCheckList([...CheckList, id]);
+      // 체크 해제할 시 CheckList에서 해당 id값이 아닌 값만 배열에 넣기
+    } else {
+      setCheckList(CheckList.filter((checkedId) => checkedId !== id));
+    }
+  };
 
   // const givenRating = useSelector((state) => state.rating).givenRating;
   // const givenReview = useSelector((state) => state.review).givenReview;
@@ -225,59 +253,97 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
     return num;
   };
 
+  const handleHistoryDelete = () => {
+    // console.log(CheckList)
+    if (CheckList.length > 0) {
+      axios
+        .delete(process.env.REACT_APP_API_URL + '/history', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          data: {
+            serviceId: CheckList
+          }
+        })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch(console.log);
+    } else {
+      handleNotice(true);
+      handleMessage('항목을 선택해주세요.');
+    }
+  };
+
   return (
     <MyHistoryWrapper>
       <TopNavigation />
       <div className='main'>
         <div className='container'>
+          <div className='button-container'>
+            <button onClick={handleHistoryDelete}>이용 내역 삭제</button>
+          </div>
+          <input
+            type='checkbox'
+            className='select-all'
+            onChange={onChangeAll}
+            checked={!allHistory.length ? false : CheckList.length === IdList.length}
+          /> <span>전체 삭제</span>
           {allHistory.length === 0
             ? <div>결과 없음</div>
             : allHistory.map((el, idx) => {
               return (
-                <div className='card' key={idx}>
-                  <img
-                    className='dogwalker-img'
-                    src={el.img}
-                    alt={el.name}
-                    onClick={() => handleClick(el.dogwalkerId)}
+                <div className='card-container' key={idx}>
+                  <input
+                    type='checkbox'
+                    className='select-one'
+                    onChange={(e) => onChangeEach(e, el.id)}
+                    checked={CheckList.includes(el.id)}
                   />
-                  <div className='name'>{el.name}</div>
-                  <div className='info'>
-                    {el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원
-                  </div>
-                  <div className='type'>{el.type}</div>
-                  {givenRatingIds.includes(idx + 1)
-                    ? (
-                      <div
-                        className='bnt rating'
+                  <div className='card'>
+                    <img
+                      className='dogwalker-img'
+                      src={el.img}
+                      alt={el.name}
+                      onClick={() => handleClick(el.dogwalkerId)}
+                    />
+                    <div className='name'>{el.name}</div>
+                    <div className='info'>{el.date} {el.time} {el.location}</div>
+                    <div className='type'>{el.type} {el.duration}분 / {addComma(el.price)}원</div>
+                    {givenRatingIds.includes(idx + 1)
+                      ? (
+                        <div
+                          className='bnt rating'
                         // onClick={() => handleCancelRating(el.dogwalkerId, idx)}
-                        onClick={() => handleCancelRating(el)}
-                      >
-                        평점 삭제
-                      </div>
-                      )
-                    : (
-                      <div className='bnt rating' onClick={() => handleRatingOpen(el.id, idx)}>
-                        평점 등록
-                      </div>
-                      )}
-                  {givenReviewIds.includes(idx + 1)
-                    ? (
-                      <div
-                        className='bnt review'
-                        onClick={() => handleReviewEditOpen(el.dogwalkerId, idx)}
-                      >
-                        리뷰 확인
-                      </div>
-                      )
-                    : (
-                      <div
-                        className='bnt review'
-                        onClick={() => handleReviewOpen(el.id, idx, el.date)}
-                      >
-                        리뷰 등록
-                      </div>
-                      )}
+                          onClick={() => handleCancelRating(el)}
+                        >
+                          평점 삭제
+                        </div>
+                        )
+                      : (
+                        <div className='bnt rating' onClick={() => handleRatingOpen(el.id, idx)}>
+                          평점 등록
+                        </div>
+                        )}
+                    {givenReviewIds.includes(idx + 1)
+                      ? (
+                        <div
+                          className='bnt review'
+                          onClick={() => handleReviewEditOpen(el.dogwalkerId, idx)}
+                        >
+                          리뷰 확인
+                        </div>
+                        )
+                      : (
+                        <div
+                          className='bnt review'
+                          onClick={() => handleReviewOpen(el.id, idx, el.date)}
+                        >
+                          리뷰 등록
+                        </div>
+                        )}
+                  </div>
                 </div>
               );
             })}
