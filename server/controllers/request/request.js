@@ -1,5 +1,6 @@
 const { requests } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
+const moment = require('moment');
 
 module.exports = async (req, res) => {
   try {
@@ -33,6 +34,26 @@ module.exports = async (req, res) => {
         }
       });
 
+      const now = new Date();
+      const target = moment(now);
+      let requestTime = 0;
+
+      if (time === '오전 12시') {
+        requestTime = 0;
+      } else if (time === '오후 12시') {
+        requestTime = 12;
+      } else if (time[1] === '후') {
+        requestTime = Number(time.split(' ')[1].slice(0, -1)) + 12;
+      } else {
+        requestTime = Number(time.split(' ')[1].slice(0, -1));
+      }
+
+      const dateTime = `${date} ${requestTime}`;
+      const requestDate = moment(dateTime, 'YYYY.MM.DD H');
+      if (requestDate.from(target).includes('ago')) {
+        return res.status(403).json({ message: 'Past date/time' });
+      }
+
       await requests.create({
         requestId: allRequests.length + 1,
         userId: accessTokenData.id,
@@ -45,10 +66,10 @@ module.exports = async (req, res) => {
         time: time,
         status: 'pending'
       });
-
       return res.status(200).json({ message: 'ok' });
     }
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: 'error' });
   }
 };
