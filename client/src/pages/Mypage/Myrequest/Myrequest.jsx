@@ -14,23 +14,70 @@ export const MyRequestWrapper = styled.div`
     min-height: calc(100vh - 13.45rem);
   }
   .container {
-    margin: 1rem auto;
+    margin: 1rem auto auto;
+  }
+  .field-container {
+    display: grid;
+    padding-bottom: .1rem;
+    border-bottom: 1px solid ${Colors.lightGray};
+    grid-template-areas:
+      'alls expired select';
+    grid-template-columns: 1fr 1fr 4rem;
+  }
+  .select-all {
+    align-self: center;
+  }
+  .select-all, .select-one {
+    cursor: pointer;
+  }
+  .all {
+    display: flex;
+    grid-area: alls;
+  }
+  .description {
+    margin-left: .3rem;
+    font-size: .83rem;
+    color: ${Colors.darkGray};
+    align-self: center;
+    padding-bottom: .15rem;
+  }
+  .delete-bnt {
+    cursor: pointer;
+    display: flex;
+    margin-right: 0;
+    margin-left: auto;
+  }
+  .separator {
+    margin-left: .64rem;
+    font-size: .65rem;
+    line-height: 1.15rem;
+    color: ${Colors.mediumLightGray};
+  }
+  .expired {
+    grid-area: expired;
+  }
+  .select {
+    grid-area: select;
+    margin-right: .4rem;
   }
   .card {
     display: grid;
     grid-template-areas:
-      'img title status cancel'
-      'img info status cancel'
-      'img type status cancel';
-    grid-template-columns: 7.25rem 50% 15% 15%;
-    margin: 0 auto;
-    /* text-align: center; */
-    border-top: 1px solid ${Colors.lightGray};
-    padding: .4rem 1rem;
+      'check img title status cancel'
+      'check img info status cancel'
+      'check img type status cancel';
+    grid-template-columns: 1.5rem 7.25rem 50% 15% 15%;
+    margin: .3rem auto;
     width: 40rem;
+    padding-bottom: .4rem;
+    border-bottom: 1px solid ${Colors.lightGray};
   }
   .card:first-of-type {
     border-top: none;
+  }
+  .select-one {
+    grid-area: check;
+    background-color: lime;
   }
   .dogwalker-img {
     cursor: pointer;
@@ -85,6 +132,8 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
   let allRequest = useSelector((state) => state.request).dogWalkerRequest;
   const [isLoading, setIsLoading] = useState(false);
   const [allRequests, setAllRequests] = useState([]);
+  const [IdList, setIdList] = useState([]);
+  const [CheckList, setCheckList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,6 +160,32 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const ids = [];
+    if (allRequests.length !== 0) {
+      allRequests.map((request, i) => {
+        ids[i] = request.id;
+      });
+      setIdList(ids);
+    }
+  }, [allRequests]);
+
+  const onChangeAll = (e) => {
+    // 체크할 시 CheckList에 id 값 전체 넣기, 체크 해제할 시 CheckList에 빈 배열 넣기
+    setCheckList(e.target.checked ? IdList : []);
+  };
+
+  const onChangeEach = (e, id) => {
+    // 체크할 시 CheckList에 id값 넣기
+    if (e.target.checked) {
+      setCheckList([...CheckList, id]);
+      // 체크 해제할 시 CheckList에서 해당 id값이 아닌 값만 배열에 넣기
+    } else {
+      setCheckList(CheckList.filter((checkedId) => checkedId !== id));
+    }
+  };
+
+  // console.log(CheckList);
   const walkerList = [];
 
   dogWalkerList.map((el) => (
@@ -140,20 +215,96 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
     return num;
   };
 
+  const handleRequestDelete = () => {
+    if (CheckList.length > 0) {
+      axios
+        .delete(process.env.REACT_APP_API_URL + '/request', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          data: {
+            serviceId: CheckList
+          }
+        })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch(console.log);
+    } else {
+      handleNotice(true);
+      handleMessage('요청을 선택해주세요.');
+    }
+  };
+
+  const handleExpiredDelete = () => {
+    const expiredRequest = [];
+
+    allRequests.forEach((el) => {
+      if (el.status === 'expired') {
+        expiredRequest.push(el.id);
+      }
+    });
+    console.log(expiredRequest);
+
+    // if (CheckList.length > 0) {
+    //   axios
+    //     .delete(process.env.REACT_APP_API_URL + '/request', {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //         'Content-Type': 'application/json'
+    //       },
+    //       data: {
+    //         serviceId: CheckList
+    //       }
+    //     })
+    //     .then(() => {
+    //       window.location.reload();
+    //     })
+    //     .catch(console.log);
+    // } else {
+    //   handleNotice(true);
+    //   handleMessage('만료된 요청이 없습니다.');
+    // }
+  };
+
   return (
     <MyRequestWrapper>
       <TopNavigation />
       <div className='main'>
         <div className='container'>
+          <div className='field-container'>
+            <label className='all'>
+              <input
+                type='checkbox'
+                className='select-all'
+                onChange={onChangeAll}
+                checked={!allRequests.length ? false : CheckList.length === IdList.length}
+              />
+              <div className='description' style={{ cursor: 'pointer' }}>전체선택</div>
+            </label>
+            <div className='delete-bnt description expired' onClick={handleExpiredDelete}>
+              만료내역삭제
+              <span className='separator'>|</span>
+            </div>
+            <div className='delete-bnt description select' onClick={handleRequestDelete}>선택삭제</div>
+          </div>
+
           {allRequests.length === 0
             ? <div>결과 없음</div>
             : allRequests.map((el, idx) => {
               return (
                 <div className='card' key={idx}>
+                  <input
+                    type='checkbox'
+                    className='select-one'
+                    onChange={(e) => onChangeEach(e, el.id)}
+                    checked={CheckList.includes(el.id)}
+                  />
                   <img className='dogwalker-img' src={el.img} alt={el.name} onClick={() => handleClick(el.dogwalkerId)} />
                   <div className='name'>{el.name}</div>
-                  <div className='info'>{el.date} <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
-                  <div className='type'>{el.type}</div>
+                  <div className='info'>{el.date} {el.time} {el.location}</div>
+                  <div className='type'>{el.type}  <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
                   <div className='status'>{el.status === 'pending' ? '요청 처리 중' : '요청 만료'}</div>
                   <div className='cancel bnt' onClick={() => deleteClick(el.id)}>요청 취소</div>
                 </div>
