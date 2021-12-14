@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { cancelDogwalker } from '../redux/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -78,6 +79,7 @@ export const CloseIcon = styled.div`
 function Notification ({ message, handleNotice, handleMessage }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user).token;
+  const [deleteIds, setDeleteIds] = useState([]);
 
   const withdrawalRequest = () => {
     // handleNotice(true);
@@ -105,9 +107,14 @@ function Notification ({ message, handleNotice, handleMessage }) {
   };
 
   const cancelRequest = (id) => {
+    let ids = id.split(',');
+    ids = ids.map((el) => Number(el));
+    setDeleteIds(ids);
+    // console.log(ids);
+    // dispatch(cancelDogwalker(ids));
     axios
       .delete(process.env.REACT_APP_API_URL + '/request', {
-        data: { serviceId: Number(id) },
+        data: { serviceId: ids },
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -118,26 +125,33 @@ function Notification ({ message, handleNotice, handleMessage }) {
         if (res.status === 200) {
           handleNotice(true);
           handleMessage('요청이 삭제되었습니다.');
-          dispatch(cancelDogwalker(Number(id)));
         }
       })
       .catch((err) => {
         console.log(err.response.data.message);
       });
-    window.location.reload();
   };
 
   return (
     <NoticeBackdrop>
       <NoticeView>
         <CloseIcon>
-          <FontAwesomeIcon
-            icon={faTimes}
-            color={Colors.gray}
-            onClick={() => {
-              handleNotice(false);
-            }}
-          />
+          {message.includes('삭제되었습니다')
+            ? <FontAwesomeIcon
+                icon={faTimes}
+                color={Colors.gray}
+                onClick={() => {
+                  handleNotice(false);
+                  dispatch(cancelDogwalker(deleteIds));
+                }}
+              />
+            : <FontAwesomeIcon
+                icon={faTimes}
+                color={Colors.gray}
+                onClick={() => {
+                  handleNotice(false);
+                }}
+              />}
         </CloseIcon>
         <Message
           topMargin={
@@ -183,7 +197,15 @@ function Notification ({ message, handleNotice, handleMessage }) {
                 ? (
                   <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>취소하기</NoticeButton>
                   )
-                : null}
+                : message.includes('요청이 완료되었습니다.')
+                  ? (
+                    <NoticeButton onClick={() => {
+                      window.location.replace('/myrequest');
+                    }}
+                    >내역 확인하기
+                    </NoticeButton>
+                    )
+                  : null}
       </NoticeView>
     </NoticeBackdrop>
   );

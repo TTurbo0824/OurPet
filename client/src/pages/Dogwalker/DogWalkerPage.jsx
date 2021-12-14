@@ -167,7 +167,7 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   allRequest = allRequest ? allRequest.length : 0;
 
   const requestInitial = {
-    id: allRequest + 1,
+    id: 0,
     dogwalkerId: dogWalkerId,
     type: '',
     location: '',
@@ -205,35 +205,42 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
     if (requestOptions.type === '' || requestOptions.location === '' || requestOptions.date === '' || requestOptions.duration === 0) {
       handleNotice(true);
       handleMessage('모든 항목을 입력해주세요.');
-    }
-    if (!token) {
-      // handleNotice(true);
-      // handleMessage('로그인이 필요한 서비스입니다.');
+    } else if (!token) {
+      handleNotice(true);
+      handleMessage('로그인이 필요한 서비스입니다.');
     } else {
       console.log('clicked');
       axios.post(
         process.env.REACT_APP_API_URL + '/request', requestOptions, {
           headers: {
             Authorization: `Bearer ${token}`,
-            // JUST FOR TESTING PURPOSES
-            // Authorization: '1',
             'Content-Type': 'application/json'
           }
         })
         .then((res) => {
           if (res.status === 200) {
-            dispatch(requestDogwalker(requestOptions));
-            handleNotice(true);
-            handleMessage('요청이 완료되었습니다.');
+            setRequestOptions({ ...requestOptions, id: res.data.data.id });
           }
+        })
+        .then(() => {
+          dispatch(requestDogwalker(requestOptions));
+          handleNotice(true);
+          handleMessage('요청이 완료되었습니다.');
         })
         .catch((err) => {
           if (err.response.status === 401) {
             modal();
+          } else if (err.response.status === 403) {
+            handleNotice(true);
+            handleMessage('예약 가능 시간이 지났습니다.');
           } else if (err.response.status === 409) {
             handleNotice(true);
             handleMessage('중복된 요청은 하실 수 없습니다.');
-          } else console.log(err.response);
+          } else {
+            console.log(err.response);
+            handleNotice(true);
+            handleMessage('오류가 발생했습니다.');
+          }
         });
     }
   };

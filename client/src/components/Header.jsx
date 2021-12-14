@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { userLogout } from '../redux/action';
+import { userLogout, getRequest, getHistory } from '../redux/action';
 import axios from 'axios';
 import { Colors } from '../components/utils/_var';
 import { media } from '../components/utils/_media-queries';
@@ -164,6 +164,8 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
         )
         .then(() => {
           dispatch(userLogout());
+          dispatch(getRequest([]));
+          dispatch(getHistory([]));
           localStorage.clear();
           handleNotice(true);
           handleMessage('로그아웃 성공!');
