@@ -2,6 +2,7 @@ module.exports = {
   signup: require('./users/signup'),
   login: require('./users/login'),
   logout: require('./users/logout'),
+  myData: require('./users/my-data'),
   guest: require('./guest/guest'),
   guestReset: require('./guest/guest-reset'),
   mainpage: require('./mainpage/mainpage'),

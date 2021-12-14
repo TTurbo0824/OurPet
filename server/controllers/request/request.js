@@ -54,7 +54,20 @@ module.exports = async (req, res) => {
         return res.status(403).json({ message: 'Past date/time' });
       }
 
-      await requests.create({
+      const temp = await requests.findAll({
+        order: [['createdAt', 'DESC']]
+      });
+
+      let tempId = 1;
+
+      if (temp.length !== 0) {
+        tempId = temp[0].dataValues.id + 1
+      }
+
+      // console.log(tempId);
+
+      let payload = {
+        id: tempId,
         requestId: allRequests.length + 1,
         userId: accessTokenData.id,
         dogwalkerId: dogwalkerId,
@@ -65,8 +78,11 @@ module.exports = async (req, res) => {
         price: price,
         time: time,
         status: 'pending'
-      });
-      return res.status(200).json({ message: 'ok' });
+      }
+
+      requests.create(payload);
+
+      return res.status(200).json({ message: 'ok', data: { id: tempId } });
     }
   } catch (error) {
     console.log(error);
