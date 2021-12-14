@@ -4,7 +4,7 @@ import { initHistoryState } from './initialState/initialState';
 function history (state = initHistoryState, action) {
   switch (action.type) {
     case RESET_HISTORY:
-      return { dogWalkerHistory: [] };
+      return { dogWalkerHistory: initHistoryState.dogWalkerHistory };
     case GET_HISTORY:
       return { dogWalkerHistory: action.payload };
     case DELETE_HISTORY:
