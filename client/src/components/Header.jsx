@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { userLogout, getRequest, getHistory } from '../redux/action';
+import { userLogout, getRequest, getHistory, getRating, getReview } from '../redux/action';
 import axios from 'axios';
 import { Colors } from '../components/utils/_var';
 import { media } from '../components/utils/_media-queries';
@@ -142,6 +142,8 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
   const handleLogoutRequest = () => {
     if (isGuest) {
       dispatch(userLogout());
+      dispatch(getRequest([]));
+      dispatch(getHistory([]));
       localStorage.clear();
       handleNotice(true);
       handleMessage('게스트 모드를 종료합니다');
@@ -166,6 +168,8 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
           dispatch(userLogout());
           dispatch(getRequest([]));
           dispatch(getHistory([]));
+          dispatch(getRating([]));
+          dispatch(getReview([]));
           localStorage.clear();
           handleNotice(true);
           handleMessage('로그아웃 성공!');

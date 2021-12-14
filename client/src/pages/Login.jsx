@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { userLogin, resetHistory, resetRequest, getHistory, getRequest } from '../redux/action';
+import { userLogin, getHistory, getRequest, resetHistory, resetRequest, getRating, getReview } from '../redux/action';
 import logo from '../images/logo.png';
 import { Colors } from '../components/utils/_var';
 import { Alertbox, Backdrop, InputField } from '../components/UserComponents';
@@ -76,7 +76,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const handleInputValue = (key) => (e) => {
     setLoginInfo({ ...loginInfo, [key]: e.target.value });
   };
-  console.log(loginInfo.email);
+  // console.log(loginInfo.email);
   const enter = (e) => {
     if (e.key === 'Enter') {
       handleLoginRequest();
@@ -92,6 +92,8 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
     } else {
       dispatch(getRequest([]));
       dispatch(getHistory([]));
+      dispatch(getRating([]));
+      dispatch(getReview([]));
       axios
         .post(`${process.env.REACT_APP_API_URL}/login`, loginInfo, {
           headers: { 'Content-Type': 'application/json' },
@@ -130,6 +132,8 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
                   if (res.status === 200) {
                     dispatch(getRequest(res.data.data.allRequests));
                     dispatch(getHistory(res.data.data.allHistories));
+                    dispatch(getRating(res.data.data.ratings));
+                    dispatch(getReview(res.data.data.reviews));
                   }
                 });
             });
@@ -154,8 +158,11 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const guestLoginRequest = () => {
     // FOR TESTING PURPOSES
     // dispatch(userLogin('token', { email: '123', nickname: 'guest' }));
-    // dispatch(getRequest());
-    // dispatch(getHistory());
+
+    dispatch(resetRequest());
+    dispatch(resetHistory());
+    dispatch(getRating([]));
+    dispatch(getReview([]));
 
     axios
       .get(`${process.env.REACT_APP_API_URL}/guest`, {
