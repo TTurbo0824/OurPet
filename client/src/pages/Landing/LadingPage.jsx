@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import pug from '../../images/pug.jpeg';
@@ -17,11 +18,34 @@ const LandingWrapper = styled.div`
     padding: 0 2rem;
   }
   .landing-container {
-    background-color: lavender;
+    /* background-color: lavender; */
     width: 100vw;
     min-height: 35rem;
     padding: 1rem;
     margin-bottom: 1rem;
+  }
+  .intro1 {
+    font-size: 2.75rem;
+    text-align: center;
+    color: ${Colors.black};
+    /* width: rem; */
+    margin: 1.5rem auto;
+    white-space: pre-line;
+  }
+  .intro-bnt {
+    cursor: pointer;
+    display: flex;
+    margin: 3rem auto auto;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 1rem 1.5rem;
+    background-color: ${Colors.lightYellow};
+    color: white;
+    border: none;
+    border-radius: 8px;
+    &:hover {
+      background-color: ${Colors.yellow};
+    }
   }
   .title {
     text-align: center;
@@ -39,7 +63,6 @@ const LandingWrapper = styled.div`
   }
   .price-container {
     display: flex;
-
   }
   .price-card {
     /* border: 1px solid black; */
@@ -49,7 +72,6 @@ const LandingWrapper = styled.div`
     border-radius: 3px;
     box-shadow: 1px 1px 5px 2px ${Colors.lightGray};
   }
-
   .review-card {
     /* border: 1px solid black; */
     width: 16.5rem;
@@ -83,6 +105,8 @@ const LandingWrapper = styled.div`
 `;
 
 function LandingPage () {
+  const history = useHistory();
+
   const reviews = useSelector((state) => state.review).dogWalkers[0].review;
   let selectedReview = [...reviews];
   selectedReview = selectedReview.slice(0, 3);
@@ -90,15 +114,23 @@ function LandingPage () {
   const charges = [{ duration: '30분 산책', price: '₩12,000', img: charge01 }, { duration: '60분 산책', price: '₩15,000', img: charge02 }];
   const profileImage = [pug, minipin, corgi, default_profile];
 
+  const handleClicked = () => {
+    history.push({
+      pathname: '/search'
+    });
+  };
+
   return (
     <LandingWrapper>
       <div className='main'>
         <div className='landing-container'>
-          grand introduction
-          <button>내 주변 도그워커 찾기</button>
+          <div className='intro1'>
+            즐거운 산책 시간, {'\n'} 워킹도그에게 맡겨보세요!
+          </div>
+          <button className='intro-bnt' onClick={handleClicked}>내 주변 도그워커 찾기</button>
         </div>
         <div className='landing-container'>
-          우리 아이 산책, 워킹도그에게 맡겨보세요
+          우리 아이 산책 더 이상 미루지 마세요
           <div className='price-container'>
             {charges.map((el, idx) => (
               <div key={idx}>

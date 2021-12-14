@@ -140,33 +140,33 @@ function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token,
     historyId: historyId,
     historyIndex: historyIndex,
     rating: walkerRate
-  }
+  };
 
   const handleRating = () => {
-    console.log(historyInfo)
+    console.log(historyInfo);
 
     if (walkerRate) {
       axios
-      .post(`${process.env.REACT_APP_API_URL}/rating`, ratingInfo, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        withCredentials: true
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          handleNotice(true);
-          handleMessage('평점이 등록되었습니다.');
-          handleModal();
-        }
-      })
-      .catch((error) => {
-        if (error.response.status === 410) {
-          modal();
-        } else console.log(error.response.data.message);
-      });
-    window.location.reload();
+        .post(`${process.env.REACT_APP_API_URL}/rating`, ratingInfo, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            handleNotice(true);
+            handleMessage('평점이 등록되었습니다.');
+            handleModal();
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 410) {
+            modal();
+          } else console.log(error.response.data.message);
+        });
+      window.location.reload();
 
       // dispatch(giveRating(dogwalkerId, walkerRate));
       // dispatch(trackRating(ratingInfo));

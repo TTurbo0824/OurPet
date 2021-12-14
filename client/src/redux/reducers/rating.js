@@ -1,8 +1,13 @@
-import { GIVE_RATING, CANCEL_RATING, TRACK_RATING, UNTRACK_RATING } from '../action';
+import { GET_RATING, GIVE_RATING, CANCEL_RATING, TRACK_RATING, UNTRACK_RATING } from '../action';
 import { initRatingState } from './initialState/initRatingState';
 
 function rating (state = initRatingState, action) {
   switch (action.type) {
+    case GET_RATING:
+      return {
+        ...state,
+        givenRating: action.payload
+      };
     case GIVE_RATING:
       return {
         ...state,

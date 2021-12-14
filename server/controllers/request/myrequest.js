@@ -2,6 +2,7 @@ const { requests, dogwalkers } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 const Sequelize = require('sequelize');
 require('sequelize-values')(Sequelize);
+// const moment = require('moment');
 
 module.exports = async (req, res) => {
   try {
@@ -25,22 +26,39 @@ module.exports = async (req, res) => {
 
       if (allRequests) {
         allRequests = Sequelize.getValues(allRequests);
-        allRequests = allRequests.map((history) => {
-          const requestDate = new Date(history.date);
-          const now = Date.now();
-          if (now - requestDate > 0) { history.status = 'expired'; }
+        allRequests = allRequests.map((request) => {
+          // const now = new Date();
+          // const target = moment(now);
+          // let requestTime = 0;
+
+          // if (request.time === '오전 12시') {
+          //   requestTime = 0;
+          // } else if (request.time === '오후 12시') {
+          //   requestTime = 12;
+          // } else if (request.time[1] === '후') {
+          //   requestTime = Number(request.time.split(' ')[1].slice(0, -1)) + 12;
+          // } else {
+          //   requestTime = Number(request.time.split(' ')[1].slice(0, -1));
+          // }
+
+          // const dateTime = `${request.date} ${requestTime}`;
+          // const requestDate = moment(dateTime, 'YYYY.MM.DD H');
+          // if (requestDate.from(target).includes('ago')) {
+          //   request.status = 'expired';
+          // }
+
           return {
-            id: history.id,
-            dogwalkerId: history.dogwalkerId,
-            name: allDogwalkers[history.dogwalkerId - 1].name,
-            img: allDogwalkers[history.dogwalkerId - 1].profile,
-            date: history.date,
-            type: history.type,
-            duration: history.duration,
-            time: history.time,
-            location: history.location,
-            price: history.price,
-            status: history.status
+            id: request.id,
+            dogwalkerId: request.dogwalkerId,
+            name: allDogwalkers[request.dogwalkerId - 1].name,
+            img: allDogwalkers[request.dogwalkerId - 1].profile,
+            date: request.date,
+            type: request.type,
+            duration: request.duration,
+            time: request.time,
+            location: request.location,
+            price: request.price,
+            status: request.status
           };
         });
         res.status(200).json({ data: allRequests, message: 'ok' });

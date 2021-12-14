@@ -217,8 +217,8 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
           if (error.response.status === 401) {
             modal();
           } else {
-          console.log('error: ', error.response.data.message);
-        }
+            console.log('error: ', error.response.data.message);
+          }
         });
     }
   };
@@ -226,22 +226,23 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
   const handleWithdrawalRequest = () => {
     if (isGuest) setErrorMsg('체험하기 중에는 이용할 수 없습니다');
     else {
-    axios
-      .get(process.env.REACT_APP_API_URL + '/user-info', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(() => {
-        handleNotice(true);
-        handleMessage('정말 탈퇴하시겠습니까?');
-      })
-      .catch((err) => {
-        if (err.response.data.message === 'You\'re not logged in') {
-          modal();
-        } else console.log(err.response.data.message);
-      });}
+      axios
+        .get(process.env.REACT_APP_API_URL + '/user-info', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(() => {
+          handleNotice(true);
+          handleMessage('정말 탈퇴하시겠습니까?');
+        })
+        .catch((err) => {
+          if (err.response.data.message === 'You\'re not logged in') {
+            modal();
+          } else console.log(err.response.data.message);
+        });
+    }
   };
 
   return (

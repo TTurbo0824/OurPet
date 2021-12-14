@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
 app.post('/signup', controllers.signup);
 app.post('/login', controllers.login);
 app.post('/logout', controllers.logout);
+app.get('/my-data', controllers.myData);
 app.get('/guest', controllers.guest);
 app.post('/guest', controllers.guestReset);
 app.get('/mainpage', controllers.mainpage);
@@ -36,6 +37,7 @@ app.get('/request', controllers.myRequest);
 app.post('/request', controllers.request);
 app.delete('/request', controllers.cancelRequest);
 app.get('/history', controllers.myHistory);
+app.delete('/history', controllers.deleteHistory);
 app.get('/rating', controllers.getRating);
 app.post('/rating', controllers.rating);
 app.delete('/rating', controllers.deleteRating);
