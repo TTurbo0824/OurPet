@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { cancelRating, untrackRating, trackRating } from '../../../redux/action';
+import { deleteHistory, untrackRating } from '../../../redux/action';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -84,17 +84,15 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const token = useSelector((state) => state.user).token;
-
   const [openRating, setOpenRating] = useState(false);
   const [openReview, setOpenReview] = useState(false);
   const [openReviewEdit, setOpenReviewEdit] = useState(false);
   const [historyInfo, setHistoryInfo] = useState({ historyId: null, historyIndex: null });
-
   const [serviceDate, setServiceDate] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [allHistory, setAllHistory] = useState([]);
-  const [givenRating, setGivenRating] = useState([]);
-  const [givenReview, setGivenReview] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [allHistory, setAllHistory] = useState([]);
+  // const [givenRating, setGivenRating] = useState([]);
+  // const [givenReview, setGivenReview] = useState([]);
   const [targetReview, setTargetReview] = useState({
     id: null,
     content: null
@@ -102,43 +100,45 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const [IdList, setIdList] = useState([]);
   const [CheckList, setCheckList] = useState([]);
 
-  // console.log(allHistory)
+  const allHistories = useSelector((state) => state.history).dogWalkerHistory;
+  console.log(allHistories);
+  // console.log(allHistory);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const result = await axios.get(`${process.env.REACT_APP_API_URL}/history`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        setAllHistory(result.data.data.allHistories);
-        setGivenRating(result.data.data.ratings);
-        setGivenReview(result.data.data.reviews);
-        setIsLoading(false);
-      } catch (error) {
-        if (error.response.status === 401) modal();
-        else if (error.response.data.message === 'No histories are found') {
-          setIsLoading(false);
-        } else {
-          console.log('error: ', error.response.data.message);
-        }
-      }
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const result = await axios.get(`${process.env.REACT_APP_API_URL}/history`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           'Content-Type': 'application/json'
+  //         }
+  //       });
+  //       setAllHistory(result.data.data.allHistories);
+  //       setGivenRating(result.data.data.ratings);
+  //       setGivenReview(result.data.data.reviews);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       if (error.response.status === 401) modal();
+  //       else if (error.response.data.message === 'No histories are found') {
+  //         setIsLoading(false);
+  //       } else {
+  //         console.log('error: ', error.response.data.message);
+  //       }
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     const ids = [];
-    if (allHistory.length !== 0) {
-      allHistory.map((history, i) => {
+    if (allHistories.length !== 0) {
+      allHistories.map((history, i) => {
         ids[i] = history.id;
       });
       setIdList(ids);
     }
-  }, [allHistory]);
+  }, [allHistories]);
 
   const onChangeAll = (e) => {
     // 체크할 시 CheckList에 id 값 전체 넣기, 체크 해제할 시 CheckList에 빈 배열 넣기
@@ -155,21 +155,25 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
     }
   };
 
-  // const givenRating = useSelector((state) => state.rating).givenRating;
-  // const givenReview = useSelector((state) => state.review).givenReview;
+  const givenRatings = useSelector((state) => state.rating).givenRating;
+  const givenRatingIds = givenRatings.map((el) => el.id) || [];
+
+  const givenReviews = useSelector((state) => state.review).givenReview;
+  const givenReviewIds = givenReviews.map((el) => el.id) || [];
+
+  // console.log(givenRatingIds);
   // const review = useSelector((state) => state.review).dogWalkers;
 
-  const givenRatingIds = givenRating.map((el) => el.historyId) || [];
-  const givenReviewIds = givenReview.map((el) => el.historyId);
+  // const givenRatingIds = givenRating.map((el) => el.historyId) || [];
+  // const givenReviewIds = givenReview.map((el) => el.historyId);
 
   // console.log(givenReview);
   // console.log(givenRatingIds);
-  // console.log(givenRating)
-  const handleRatingOpen = (id, idx) => {
+  // console.log(givenRating);
+  const handleRatingOpen = (id) => {
     // console.log(dogwalkerId);
     // setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: index });
-    setHistoryInfo({ historyId: id, historyIndex: idx + 1 });
-
+    setHistoryInfo({ ...historyInfo, historyId: id });
     setOpenRating(true);
   };
 
@@ -177,29 +181,23 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
     setOpenRating(false);
   };
 
-  const handleReviewOpen = (id, idx, date) => {
-    setHistoryInfo({ historyId: id, historyIndex: idx + 1 });
-
-    // setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: historyId });
+  const handleReviewOpen = (id, date) => {
+    setHistoryInfo({ ...historyInfo, historyId: id });
     setServiceDate(date);
     setOpenReview(true);
   };
-  // console.log(historyInfo);
+
   const handleReviewClose = () => {
     setOpenReview(false);
   };
 
-  const handleReviewEditOpen = (dogwalkerId, historyId) => {
-    // setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: historyId });
-
-    // console.log(review[dogwalkerId - 1]);
-    givenReview.forEach((el) => {
-      if (el.historyId === historyId + 1) {
+  const handleReviewEditOpen = (id) => {
+    givenReviews.forEach((el) => {
+      if (el.id === id) {
         setTargetReview({
           id: el.id,
           content: el.content
         });
-        // console.log(el.content, el.id)
       }
     });
     setOpenReviewEdit(true);
@@ -211,10 +209,17 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleCancelRating = (el) => {
+    console.log(el.id);
+    // dispatch(untrackRating(el.id));
+    // givenRating.forEach((el) => {
+    //   if (el.historyId === idx) index = el.index;
+    // });
+    // dispatch(cancelRating(dogwalkerId, index));
+    // dispatch(untrackRating(idx));
     // console.log(el.historyId);
     axios
       .delete(`${process.env.REACT_APP_API_URL}/rating`, {
-        data: { historyId: el.historyId },
+        data: { historyId: el.id },
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -225,6 +230,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
         if (res.status === 200) {
           handleNotice(true);
           handleMessage('평점이 삭제되었습니다.');
+          dispatch(untrackRating(el.id));
         }
       })
       .catch((error) => {
@@ -232,14 +238,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
           modal();
         } else console.log(error.response.data.message);
       });
-    window.location.reload();
-
-    // let index;
-    // givenRating.forEach((el) => {
-    //   if (el.historyId === idx) index = el.index;
-    // });
-    // dispatch(cancelRating(dogwalkerId, index));
-    // dispatch(untrackRating(idx));
+    // window.location.reload();
   };
 
   const handleClick = (id) => {
@@ -254,7 +253,8 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleHistoryDelete = () => {
-    // console.log(CheckList)
+    // console.log(CheckList);
+    // dispatch(deleteHistory(CheckList));
     if (CheckList.length > 0) {
       axios
         .delete(process.env.REACT_APP_API_URL + '/history', {
@@ -270,10 +270,8 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
           if (res.status === 200) {
             handleNotice(true);
             handleMessage('내역이 삭제되었습니다.');
+            dispatch(deleteHistory(CheckList));
           }
-        })
-        .then(() => {
-          window.location.reload();
         })
         .catch((error) => {
           if (error.response.status === 410) {
@@ -292,17 +290,19 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
       <div className='main'>
         <div className='container'>
           <div className='button-container'>
-            <button onClick={handleHistoryDelete}>이용 내역 삭제</button>
+            <button onClick={handleHistoryDelete}>이용내역삭제</button>
           </div>
-          <input
-            type='checkbox'
-            className='select-all'
-            onChange={onChangeAll}
-            checked={!allHistory.length ? false : CheckList.length === IdList.length}
-          /> <span>전체 삭제</span>
-          {allHistory.length === 0
+          <label className='all'>
+            <input
+              type='checkbox'
+              className='select-all'
+              onChange={onChangeAll}
+              checked={!allHistories.length ? false : CheckList.length === IdList.length}
+            /> <span>전체 선택</span>
+          </label>
+          {allHistories.length === 0
             ? <div>결과 없음</div>
-            : allHistory.map((el, idx) => {
+            : allHistories.map((el, idx) => {
               return (
                 <div className='card-container' key={idx}>
                   <input
@@ -321,26 +321,25 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
                     <div className='name'>{el.name}</div>
                     <div className='info'>{el.date} {el.time} {el.location}</div>
                     <div className='type'>{el.type} {el.duration}분 / {addComma(el.price)}원</div>
-                    {givenRatingIds.includes(idx + 1)
+                    {givenRatingIds.includes(el.id)
                       ? (
                         <div
                           className='bnt rating'
-                        // onClick={() => handleCancelRating(el.dogwalkerId, idx)}
                           onClick={() => handleCancelRating(el)}
                         >
                           평점 삭제
                         </div>
                         )
                       : (
-                        <div className='bnt rating' onClick={() => handleRatingOpen(el.id, idx)}>
+                        <div className='bnt rating' onClick={() => handleRatingOpen(el.id)}>
                           평점 등록
                         </div>
                         )}
-                    {givenReviewIds.includes(idx + 1)
+                    {givenReviewIds.includes(el.id)
                       ? (
                         <div
                           className='bnt review'
-                          onClick={() => handleReviewEditOpen(el.dogwalkerId, idx)}
+                          onClick={() => handleReviewEditOpen(el.id)}
                         >
                           리뷰 확인
                         </div>
@@ -348,7 +347,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
                       : (
                         <div
                           className='bnt review'
-                          onClick={() => handleReviewOpen(el.id, idx, el.date)}
+                          onClick={() => handleReviewOpen(el.id, el.date)}
                         >
                           리뷰 등록
                         </div>
@@ -373,8 +372,8 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
             <Review
               modal={modal}
               handleModal={handleReviewClose}
-              // dogwalkerId={historyInfo.dogwalkerId}
-              // historyId={historyInfo.historyId}
+              handleMessage={handleMessage}
+              handleNotice={handleNotice}
               historyInfo={historyInfo}
               serviceDate={serviceDate}
               token={token}

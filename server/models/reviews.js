@@ -19,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   reviews.init({
     historyId: DataTypes.INTEGER,
-    historyIndex: DataTypes.INTEGER,
     content: DataTypes.TEXT
   }, {
     sequelize,

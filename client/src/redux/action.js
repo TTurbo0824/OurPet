@@ -7,6 +7,7 @@ export const REQUEST_DOGWALKER = 'REQUEST_DOGWALKER';
 export const CANCEL_DOGWALKER = 'CANCEL_DOGWALKER';
 export const RESET_HISTORY = 'RESET_HISTORY';
 export const GET_HISTORY = 'GET_HISTORY';
+export const DELETE_HISTORY = 'DELETE_HISTORY';
 export const GET_RATING = 'GET_RATING';
 export const GIVE_RATING = 'GIVE_RATING';
 export const TRACK_RATING = 'TRACK_RATING';
@@ -62,6 +63,11 @@ export const getHistory = (history) => ({
   payload: history
 });
 
+export const deleteHistory = (ids) => ({
+  type: DELETE_HISTORY,
+  payload: ids
+});
+
 export const getRating = (rating) => ({
   type: GET_RATING,
   payload: rating
@@ -112,7 +118,7 @@ export const deleteReview = (id, idx) => ({
   payload: { id, idx }
 });
 
-export const editReview = (id, idx, content) => ({
+export const editReview = (id, content) => ({
   type: EDIT_REVIEW,
-  payload: { id, idx, content }
+  payload: { id, content }
 });

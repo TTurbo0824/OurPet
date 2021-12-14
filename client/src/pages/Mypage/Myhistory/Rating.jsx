@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { giveRating, trackRating } from '../../../redux/action';
+import { useDispatch } from 'react-redux';
+import { trackRating } from '../../../redux/action';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
@@ -56,11 +56,10 @@ const RatingButton = styled.button`
 
 function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token, modal }) {
   const dispatch = useDispatch();
-  // const ratings = useSelector((state) => state.rating).dogWalkers;
-  const { historyId, historyIndex } = historyInfo;
-  // const indexNum = ratings[dogwalkerId - 1].rating.length;
+  const { historyId } = historyInfo;
   const [walkerRate, setWalkerRate] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
+  // console.log(historyId);
 
   const options = [
     {
@@ -130,21 +129,12 @@ function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token,
     setWalkerRate(e.value);
   };
 
-  // const ratingInfo = {
-  //   dogwalkerId: dogwalkerId,
-  //   historyId: historyId,
-  //   index: indexNum
-  // };
-
   const ratingInfo = {
-    historyId: historyId,
-    historyIndex: historyIndex,
+    id: historyId,
     rating: walkerRate
   };
 
   const handleRating = () => {
-    console.log(historyInfo);
-
     if (walkerRate) {
       axios
         .post(`${process.env.REACT_APP_API_URL}/rating`, ratingInfo, {
@@ -156,9 +146,10 @@ function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token,
         })
         .then((res) => {
           if (res.status === 200) {
+            handleModal();
             handleNotice(true);
             handleMessage('평점이 등록되었습니다.');
-            handleModal();
+            dispatch(trackRating(ratingInfo));
           }
         })
         .catch((error) => {
@@ -166,11 +157,6 @@ function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token,
             modal();
           } else console.log(error.response.data.message);
         });
-      window.location.reload();
-
-      // dispatch(giveRating(dogwalkerId, walkerRate));
-      // dispatch(trackRating(ratingInfo));
-      handleModal();
     } else {
       setErrorMsg('평점을 선택해 주세요');
     }

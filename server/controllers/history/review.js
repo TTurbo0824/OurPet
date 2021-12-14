@@ -11,10 +11,10 @@ module.exports = async (req, res) => {
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
-      const { historyId, historyIndex, content } = req.body;
+      const { id, content } = req.body;
       const userReview = await reviews.findAll({
         where: {
-          historyId: historyId
+          historyId: id
         }
       });
 
@@ -22,8 +22,7 @@ module.exports = async (req, res) => {
         return res.status(409).json({ message: 'Duplicate review' });
       } else {
         await reviews.create({
-          historyId: historyId,
-          historyIndex: historyIndex,
+          historyId: id,
           content: content
         });
 

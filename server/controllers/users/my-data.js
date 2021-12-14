@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
             price: request.price,
             status: request.status
           };
-        })
+        });
       }
 
       let historyList = await histories.findAll({
@@ -47,25 +47,10 @@ module.exports = async (req, res) => {
           userId: accessTokenData.id
         }
       });
-      /**
-       * id: 1,
-      dogwalkerId: 1,
-      name: '안*영',
-      img: 'https://images.theconversation.com/files/319375/original/file-20200309-118956-1cqvm6j.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=900.0&fit=crop',
-      location: '서대문구',
-      date: getDate(-6),
-      type: '소형견',
-      time: '오후 2시',
-      duration: 60,
-      price: 20000
-       */
 
       if (historyList) {
         historyList = Sequelize.getValues(historyList);
         historyList = historyList.map((history) => {
-          history.name = allDogwalkers[history.dogwalkerId - 1].name;
-          history.img = allDogwalkers[history.dogwalkerId - 1].profile;
-          
           return {
             id: history.id,
             dogwalkerId: history.dogwalkerId,
@@ -73,6 +58,7 @@ module.exports = async (req, res) => {
             img: allDogwalkers[history.dogwalkerId - 1].profile,
             date: history.date,
             type: history.type,
+            location: history.location,
             time: history.time,
             duration: history.duration,
             price: history.price
@@ -82,12 +68,12 @@ module.exports = async (req, res) => {
         let allRatings = await histories.findAll({
           include: [{
             model: ratings,
-            attributes: ['id', 'historyIndex', 'rating']
+            attributes: ['rating']
           }],
           where: {
             userId: accessTokenData.id
           },
-          attributes: ['historyId', 'dogwalkerId']
+          attributes: ['id', 'historyId', 'dogwalkerId']
         });
 
         allRatings = Sequelize.getValues(allRatings);
@@ -95,10 +81,7 @@ module.exports = async (req, res) => {
 
         allRatings = allRatings.map((el) => {
           return {
-            id: el.ratings[0].id,
-            historyId: el.historyId,
-            dogwalkerId: el.dogwalkerId,
-            index: el.ratings[0].historyIndex,
+            id: el.id,
             rating: el.ratings[0].rating
           };
         });
@@ -106,22 +89,19 @@ module.exports = async (req, res) => {
         let allReviews = await histories.findAll({
           include: [{
             model: reviews,
-            attributes: ['id', 'historyIndex', 'content']
+            attributes: ['id', 'content']
           }],
           where: {
             userId: accessTokenData.id
           },
-          attributes: ['historyId', 'dogwalkerId']
+          attributes: ['id', 'historyId', 'dogwalkerId']
         });
 
         allReviews = Sequelize.getValues(allReviews);
         allReviews = allReviews.filter((el) => el.reviews.length > 0);
         allReviews = allReviews.map((el) => {
           return {
-            id: el.reviews[0].id,
-            historyId: el.historyId,
-            dogwalkerId: el.dogwalkerId,
-            index: el.reviews[0].historyIndex,
+            id: el.id,
             content: el.reviews[0].content
           };
         });

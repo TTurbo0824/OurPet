@@ -30,19 +30,10 @@ function review (state = initReviewState, action) {
     case EDIT_REVIEW:
       return {
         ...state,
-        dogWalkers: state.dogWalkers.map((el) =>
-          el.id === action.payload.id
-            ? {
-                ...el,
-                review: el.review.map((review, idx) => {
-                  if (idx === action.payload.idx) {
-                    review.content = action.payload.content;
-                  }
-                  return review;
-                })
-              }
-            : el
-        )
+        givenReview: state.givenReview.map((el) => {
+          if (el.id === action.payload.id) el.content = action.payload.content;
+          return el;
+        })
       };
     case DELETE_REVIEW:
       return {
@@ -61,7 +52,7 @@ function review (state = initReviewState, action) {
     case UNTRACK_REVIEW:
       return {
         ...state,
-        givenReview: state.givenReview.filter((el) => el.historyId !== action.payload.id)
+        givenReview: state.givenReview.filter((el) => el.id !== action.payload.id)
       };
     default:
       return state;

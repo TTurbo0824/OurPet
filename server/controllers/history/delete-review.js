@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
 
       const userReview = await reviews.findAll({
         where: {
-          id: id
+          historyId: id
         }
       });
 
@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       } else {
         await reviews.destroy({
           where: {
-            id: id
+            historyId: id
           }
         });
 
