@@ -7,14 +7,35 @@ import TopNavigation from '../../../components/TopNavigation';
 import { Colors } from '../../../components/utils/_var';
 axios.defaults.withCredentials = true;
 require('dotenv').config();
+const moment = require('moment');
 
 export const MyRequestWrapper = styled.div`
   .main {
     display: flex;
     min-height: calc(100vh - 13.45rem);
   }
+  .no-items {
+    text-align: center;
+    margin: 2.5rem auto 2rem;
+    white-space: pre-line;
+  }
+  .search-bnt {
+    display: flex;
+    margin: auto;
+    padding: .75rem 1.25rem;
+    cursor: pointer;
+    background-color: ${Colors.lightYellow};
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: .9rem;
+    &:hover {
+      background-color: ${Colors.yellow};
+    }
+  }
   .container {
-    margin: 1rem auto auto;
+    margin: 1rem auto;
+    /* background-color: lime; */
   }
   .field-container {
     display: grid;
@@ -22,7 +43,8 @@ export const MyRequestWrapper = styled.div`
     border-bottom: 1px solid ${Colors.lightGray};
     grid-template-areas:
       'alls expired select';
-    grid-template-columns: 1fr 1fr 4rem;
+    grid-template-columns: 1fr 1fr 5.6rem;
+    width: 40rem;
   }
   .select-all {
     align-self: center;
@@ -66,18 +88,18 @@ export const MyRequestWrapper = styled.div`
       'check img title status cancel'
       'check img info status cancel'
       'check img type status cancel';
-    grid-template-columns: 1.5rem 7.25rem 50% 15% 15%;
+    grid-template-columns: 1.5rem 7.25rem 48% 15% 15%;
     margin: .3rem auto;
-    width: 40rem;
     padding-bottom: .4rem;
     border-bottom: 1px solid ${Colors.lightGray};
+    width: 40rem;
+    /* background-color: lime; */
   }
   .card:first-of-type {
     border-top: none;
   }
   .select-one {
     grid-area: check;
-    background-color: lime;
   }
   .dogwalker-img {
     cursor: pointer;
@@ -129,46 +151,40 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
   const history = useHistory();
   const token = useSelector((state) => state.user).token;
   const dogWalkerList = useSelector((state) => state.dogwalker).dogWalkers;
-  let allRequest = useSelector((state) => state.request).dogWalkerRequest;
-  const [isLoading, setIsLoading] = useState(false);
-  const [allRequests, setAllRequests] = useState([]);
+  const allRequest = useSelector((state) => state.request).dogWalkerRequest;
   const [IdList, setIdList] = useState([]);
   const [CheckList, setCheckList] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const result = await axios.get(`${process.env.REACT_APP_API_URL}/request`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        setAllRequests(result.data.data);
-        setIsLoading(false);
-      } catch (error) {
-        if (error.response.status === 401) {
-          modal();
-        } else if (error.response.status === 404) {
-          setIsLoading(false);
-        } else {
-          console.log('error: ', error.response.data.message);
-        }
-      }
-    };
-    fetchData();
-  }, []);
+  const isExpired = (date, time) => {
+    const now = new Date();
+    const target = moment(now);
+    let requestTime = 0;
+
+    if (time === '오전 12시') {
+      requestTime = 0;
+    } else if (time === '오후 12시') {
+      requestTime = 12;
+    } else if (time[1] === '후') {
+      requestTime = Number(time.split(' ')[1].slice(0, -1)) + 12;
+    } else {
+      requestTime = Number(time.split(' ')[1].slice(0, -1));
+    }
+
+    const dateTime = `${date} ${requestTime}`;
+    const requestDate = moment(dateTime, 'YYYY.MM.DD H');
+
+    return requestDate.from(target).includes('ago') ? '요청 만료' : '요청 처리 중';
+  };
 
   useEffect(() => {
     const ids = [];
-    if (allRequests.length !== 0) {
-      allRequests.map((request, i) => {
+    if (allRequest.length !== 0) {
+      allRequest.map((request, i) => {
         ids[i] = request.id;
       });
       setIdList(ids);
     }
-  }, [allRequests]);
+  }, [allRequest]);
 
   const onChangeAll = (e) => {
     // 체크할 시 CheckList에 id 값 전체 넣기, 체크 해제할 시 CheckList에 빈 배열 넣기
@@ -192,16 +208,29 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
     walkerList.push(el.name)
   ));
 
-  if (allRequest) {
-    allRequest = allRequest.map((el) => {
-      return { ...el, name: walkerList[el.dogwalkerId - 1] };
-    });
-  }
+  // console.log(allRequest);
 
   const deleteClick = (id) => {
-    console.log(id);
-    handleNotice(true);
-    handleMessage(`정말 요청을 취소하시겠습니까?!${id}`);
+    if (allRequest.length === 0) {
+      handleNotice(true);
+      handleMessage('취소할 요청이 없습니다.');
+    } else {
+      handleNotice(true);
+      handleMessage(`정말 요청을 취소하시겠습니까?!${id}`);
+    }
+  };
+
+  const deleteSelected = (id) => {
+    if (allRequest.length === 0) {
+      handleNotice(true);
+      handleMessage('취소할 요청이 없습니다.');
+    } else if (CheckList.length === 0) {
+      handleNotice(true);
+      handleMessage('취소할 요청을 선택해주세요.');
+    } else {
+      handleNotice(true);
+      handleMessage(`정말 요청을 취소하시겠습니까?!${id}`);
+    }
   };
 
   const handleClick = (id) => {
@@ -215,57 +244,54 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
     return num;
   };
 
-  const handleRequestDelete = () => {
-    if (CheckList.length > 0) {
-      axios
-        .delete(process.env.REACT_APP_API_URL + '/request', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          data: {
-            serviceId: CheckList
-          }
-        })
-        .then(() => {
-          window.location.reload();
-        })
-        .catch(console.log);
-    } else {
+  const handleExpiredDelete = () => {
+    if (allRequest.length === 0) {
       handleNotice(true);
-      handleMessage('요청을 선택해주세요.');
+      handleMessage('삭제할 요청이 없습니다.');
+    } else {
+      const expiredRequest = [];
+
+      allRequest.forEach((el) => {
+        if (isExpired(el.date, el.time) === '요청 만료') {
+          expiredRequest.push(el.id);
+        }
+      });
+      console.log(expiredRequest);
+
+      if (expiredRequest.length === 0) {
+        handleNotice(true);
+        handleMessage('만료된 요청이 없습니다.');
+      } else {
+        // axios
+        //   .delete(process.env.REACT_APP_API_URL + '/request', {
+        //     headers: {
+        //       Authorization: `Bearer ${token}`,
+        //       'Content-Type': 'application/json'
+        //     },
+        //     data: {
+        //       serviceId: expiredRequest
+        //     }
+        //   })
+        //   .then((res) => {
+        //     if (res.status === 200) {
+        //       handleNotice(true);
+        //       handleMessage('요청이 취소되었습니다.');
+        //     }
+        //   })
+        //   .catch((error) => {
+        //     if (error.response.status === 410) {
+        //       modal();
+        //     } else console.log(error.response.data.message);
+        //   });
+        // window.location.reload();
+      }
     }
   };
 
-  const handleExpiredDelete = () => {
-    const expiredRequest = [];
-
-    allRequests.forEach((el) => {
-      if (el.status === 'expired') {
-        expiredRequest.push(el.id);
-      }
+  const handleSearchClicked = () => {
+    history.push({
+      pathname: '/search'
     });
-    console.log(expiredRequest);
-
-    // if (CheckList.length > 0) {
-    //   axios
-    //     .delete(process.env.REACT_APP_API_URL + '/request', {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         'Content-Type': 'application/json'
-    //       },
-    //       data: {
-    //         serviceId: CheckList
-    //       }
-    //     })
-    //     .then(() => {
-    //       window.location.reload();
-    //     })
-    //     .catch(console.log);
-    // } else {
-    //   handleNotice(true);
-    //   handleMessage('만료된 요청이 없습니다.');
-    // }
   };
 
   return (
@@ -279,7 +305,7 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
                 type='checkbox'
                 className='select-all'
                 onChange={onChangeAll}
-                checked={!allRequests.length ? false : CheckList.length === IdList.length}
+                checked={!allRequest.length ? false : CheckList.length === IdList.length}
               />
               <div className='description' style={{ cursor: 'pointer' }}>전체선택</div>
             </label>
@@ -287,12 +313,14 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
               만료내역삭제
               <span className='separator'>|</span>
             </div>
-            <div className='delete-bnt description select' onClick={handleRequestDelete}>선택삭제</div>
+            <div className='delete-bnt description select' onClick={() => deleteSelected(CheckList)}>선택요청취소</div>
           </div>
-
-          {allRequests.length === 0
-            ? <div>결과 없음</div>
-            : allRequests.map((el, idx) => {
+          {allRequest.length === 0
+            ? <div>
+              <div className='no-items'>아직 요청 내역이 없습니다. {'\n'} 내 주변 도크워커를 찾아보세요!</div>
+              <button className='search-bnt' onClick={handleSearchClicked}>도그워커 찾기</button>
+              </div>
+            : allRequest.map((el, idx) => {
               return (
                 <div className='card' key={idx}>
                   <input
@@ -305,7 +333,8 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
                   <div className='name'>{el.name}</div>
                   <div className='info'>{el.date} {el.time} {el.location}</div>
                   <div className='type'>{el.type}  <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
-                  <div className='status'>{el.status === 'pending' ? '요청 처리 중' : '요청 만료'}</div>
+                  {/* <div className='status'>{el.status === 'pending' ? '요청 처리 중' : '요청 만료'}</div> */}
+                  <div className='status'>{isExpired(el.date, el.time)}</div>
                   <div className='cancel bnt' onClick={() => deleteClick(el.id)}>요청 취소</div>
                 </div>
               );
