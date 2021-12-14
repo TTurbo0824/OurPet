@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { trackReview } from '../../../redux/action';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Alertbox, Backdrop } from '../../../components/UserComponents';
@@ -44,18 +46,19 @@ const ReviewButton = styled.button`
   }
 `;
 
-function Review ({ modal, token, historyInfo, handleModal }) {
+function Review ({ modal, token, historyInfo, handleModal, handleMessage, handleNotice }) {
+  const dispatch = useDispatch();
   const [errorMsg, setErrorMsg] = useState('');
   const [walkerReview, setWalkerReview] = useState(null);
-  const { historyId, historyIndex } = historyInfo;
+  const { historyId } = historyInfo;
   const handleInput = (e) => {
     setWalkerReview(e.target.value);
   };
 
   const reviewInfo = {
     content: walkerReview,
-    historyId: historyId,
-    historyIndex: historyIndex
+    id: historyId
+    // historyIndex: historyIndex
   };
 
   const handleReview = () => {
@@ -63,6 +66,7 @@ function Review ({ modal, token, historyInfo, handleModal }) {
     // if (!walkerReview || walkerReview.length < 10) {
       setErrorMsg('리뷰를 10자 이상 작성해 주세요');
     } else {
+      // dispatch(trackReview(reviewInfo));
       axios
         .post(`${process.env.REACT_APP_API_URL}/review`, reviewInfo, {
           headers: {
@@ -71,15 +75,19 @@ function Review ({ modal, token, historyInfo, handleModal }) {
           },
           withCredentials: true
         })
-        .then(() => {
-          handleModal();
+        .then((res) => {
+          if (res.status === 200) {
+            handleModal();
+            handleNotice(true);
+            handleMessage('리뷰가 등록되었습니다.');
+            dispatch(trackReview(reviewInfo));
+          }
         })
         .catch((error) => {
           if (error.response.status === 410) {
             modal();
           } else console.log(error.response.data.message);
         });
-      window.location.reload();
     }
   };
 

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { editReview, untrackReview } from '../../../redux/action';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
@@ -46,10 +48,11 @@ const ReviewButton = styled.button`
 `;
 
 function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, targetReview }) {
+  const dispatch = useDispatch();
   const { id, content } = targetReview;
   const [walkerReview, setWalkerReview] = useState(content);
   const [errorMsg, setErrorMsg] = useState('');
-  console.log(targetReview);
+  // console.log(targetReview);
   const handleInput = (e) => {
     setWalkerReview(e.target.value);
   };
@@ -58,21 +61,23 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
     if (!walkerReview || walkerReview.length < 5) {
       // if (!walkerReview || walkerReview.length < 10) {
       setErrorMsg('리뷰를 10자 이상 작성해 주세요');
+    } else if (walkerReview === content) {
+      setErrorMsg('수정 사항을 입력해주세요.');
     } else {
+      // dispatch(editReview(id, walkerReview));
       axios
         .patch(`${process.env.REACT_APP_API_URL}/review`, { id: id, content: walkerReview }, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
-          },
-          withCredentials: true
+          }
         })
         .then((res) => {
           if (res.status === 200) {
             handleModal();
             handleNotice(true);
             handleMessage('리뷰가 수정되었습니다.');
-            // dispatch(cancelDogwalker(Number(id)));
+            dispatch(editReview(id, walkerReview));
           }
         })
         .catch((error) => {
@@ -80,24 +85,26 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
             modal();
           } else console.log(error.response.data.message);
         });
-      window.location.reload();
     }
   };
 
   const handleDeleteReview = () => {
+    console.log(id);
+    // dispatch(untrackReview(id));
     axios
       .delete(process.env.REACT_APP_API_URL + '/review', {
         data: { id: id },
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
-        },
-        withCredentials: true
+        }
       })
       .then((res) => {
         if (res.status === 200) {
+          handleModal();
           handleNotice(true);
           handleMessage('리뷰가 삭제되었습니다.');
+          dispatch(untrackReview(id));
         }
       })
       .catch((error) => {
@@ -105,8 +112,6 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
           modal();
         } else console.log(error.response.data.message);
       });
-    handleModal();
-    window.location.reload();
   };
 
   return (
@@ -116,7 +121,7 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
         <div className='description'>서비스는 어떠셨나요?</div>
         <ReviewInput onChange={handleInput} value={walkerReview} />
         <ReviewButton onClick={handleEditReview}>수정</ReviewButton>
-        <ReviewButton onClick={() => handleDeleteReview()}>삭제</ReviewButton>
+        <ReviewButton onClick={handleDeleteReview}>삭제</ReviewButton>
         <Alertbox>{errorMsg}</Alertbox>
       </ReviewView>
     </Backdrop>
