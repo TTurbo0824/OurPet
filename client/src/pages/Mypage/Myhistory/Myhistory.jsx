@@ -211,7 +211,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleCancelRating = (el) => {
-    console.log(el.historyId);
+    // console.log(el.historyId);
     axios
       .delete(`${process.env.REACT_APP_API_URL}/rating`, {
         data: { historyId: el.historyId },
@@ -266,10 +266,20 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
             serviceId: CheckList
           }
         })
+        .then((res) => {
+          if (res.status === 200) {
+            handleNotice(true);
+            handleMessage('내역이 삭제되었습니다.');
+          }
+        })
         .then(() => {
           window.location.reload();
         })
-        .catch(console.log);
+        .catch((error) => {
+          if (error.response.status === 410) {
+            modal();
+          } else console.log(error.response.data.message);
+        });
     } else {
       handleNotice(true);
       handleMessage('항목을 선택해주세요.');
