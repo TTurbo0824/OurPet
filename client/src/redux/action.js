@@ -7,10 +7,12 @@ export const REQUEST_DOGWALKER = 'REQUEST_DOGWALKER';
 export const CANCEL_DOGWALKER = 'CANCEL_DOGWALKER';
 export const RESET_HISTORY = 'RESET_HISTORY';
 export const GET_HISTORY = 'GET_HISTORY';
+export const GET_RATING = 'GET_RATING';
 export const GIVE_RATING = 'GIVE_RATING';
 export const TRACK_RATING = 'TRACK_RATING';
 export const UNTRACK_RATING = 'UNTRACK_RATING';
 export const CANCEL_RATING = 'CANCEL_RATING';
+export const GET_REVIEW = 'GET_REVIEW';
 export const POST_REVIEW = 'POST_REVIEW';
 export const TRACK_REVIEW = 'TRACK_REVIEW';
 export const DELETE_REVIEW = 'DELETE_REVIEW';
@@ -36,8 +38,9 @@ export const resetRequest = () => ({
   type: RESET_REQUEST
 });
 
-export const getRequest = () => ({
-  type: GET_REQUEST
+export const getRequest = (request) => ({
+  type: GET_REQUEST,
+  payload: request
 });
 
 export const requestDogwalker = (request) => ({
@@ -45,17 +48,23 @@ export const requestDogwalker = (request) => ({
   payload: request
 });
 
-export const cancelDogwalker = (id) => ({
+export const cancelDogwalker = (ids) => ({
   type: CANCEL_DOGWALKER,
-  payload: { id }
+  payload: ids
 });
 
 export const resetHistory = () => ({
   type: RESET_HISTORY
 });
 
-export const getHistory = () => ({
-  type: GET_HISTORY
+export const getHistory = (history) => ({
+  type: GET_HISTORY,
+  payload: history
+});
+
+export const getRating = (rating) => ({
+  type: GET_RATING,
+  payload: rating
 });
 
 export const giveRating = (id, rating) => ({
@@ -76,6 +85,11 @@ export const untrackRating = (id) => ({
 export const cancelRating = (id, idx) => ({
   type: CANCEL_RATING,
   payload: { id, idx }
+});
+
+export const getReview = (review) => ({
+  type: GET_REVIEW,
+  payload: review
 });
 
 export const postReview = (id, nickname, content, date) => ({

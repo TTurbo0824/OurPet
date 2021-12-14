@@ -6,7 +6,7 @@ function request (state = initRequestState, action) {
     case RESET_REQUEST:
       return { dogWalkerRequest: [] };
     case GET_REQUEST:
-      return state;
+      return { dogWalkerRequest: action.payload };
     case REQUEST_DOGWALKER:
       return {
         ...state,
@@ -27,7 +27,7 @@ function request (state = initRequestState, action) {
     case CANCEL_DOGWALKER:
       return {
         ...state,
-        dogWalkerRequest: state.dogWalkerRequest.filter((el) => el.id !== action.payload.id)
+        dogWalkerRequest: state.dogWalkerRequest.filter((el) => !action.payload.includes(el.id))
       };
     default:
       return state;

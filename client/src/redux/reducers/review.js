@@ -1,8 +1,13 @@
-import { POST_REVIEW, DELETE_REVIEW, EDIT_REVIEW, TRACK_REVIEW, UNTRACK_REVIEW } from '../action';
+import { GET_REVIEW, POST_REVIEW, DELETE_REVIEW, EDIT_REVIEW, TRACK_REVIEW, UNTRACK_REVIEW } from '../action';
 import { initReviewState } from './initialState/initReviewState';
 
 function review (state = initReviewState, action) {
   switch (action.type) {
+    case GET_REVIEW:
+      return {
+        ...state,
+        givenReview: action.payload
+      };
     case POST_REVIEW:
       return {
         ...state,
