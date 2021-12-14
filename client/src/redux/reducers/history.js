@@ -1,4 +1,4 @@
-import { RESET_HISTORY, GET_HISTORY } from '../action';
+import { RESET_HISTORY, GET_HISTORY, DELETE_HISTORY } from '../action';
 import { initHistoryState } from './initialState/initialState';
 
 function history (state = initHistoryState, action) {
@@ -7,6 +7,11 @@ function history (state = initHistoryState, action) {
       return { dogWalkerHistory: [] };
     case GET_HISTORY:
       return { dogWalkerHistory: action.payload };
+    case DELETE_HISTORY:
+      return {
+        ...state,
+        dogWalkerHistory: state.dogWalkerHistory.filter((el) => !action.payload.includes(el.id))
+      };
     default:
       return state;
   }
