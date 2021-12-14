@@ -20,14 +20,13 @@ module.exports = async (req, res) => {
       });
 
       if (userRating.length === 0) {
-        return res.status(409).json({ message: 'rating is already deleted' });
+        return res.status(409).json({ message: 'Rating is already deleted' });
       } else {
         await ratings.destroy({
           where: {
             historyId: historyId
           }
         });
-
         return res.status(200).json({ message: 'ok' });
       }
     }

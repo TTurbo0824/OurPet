@@ -11,20 +11,20 @@ module.exports = async (req, res) => {
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
-      const { historyId, historyIndex, rating } = req.body;
+      const { id, historyIndex, rating } = req.body;
 
       const userRating = await ratings.findAll({
         where: {
-          historyId: historyId
+          historyId: id
         }
       });
       console.log(userRating);
 
       if (userRating.length > 0) {
-        return res.status(409).json({ message: 'already gave the rating' });
+        return res.status(409).json({ message: 'Already gave the rating' });
       } else {
         await ratings.create({
-          historyId: historyId,
+          historyId: id,
           historyIndex: historyIndex,
           rating: rating
         });
@@ -33,6 +33,7 @@ module.exports = async (req, res) => {
       }
     }
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: 'error' });
   }
 };

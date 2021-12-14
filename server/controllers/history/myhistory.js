@@ -7,8 +7,8 @@ module.exports = async (req, res) => {
   try {
     // JUST FOR TESTING PURPOSES
     // console.log(req.headers.authorization);
-    const accessTokenData = { id: req.headers.authorization };
-    // const accessTokenData = isAuthorized(req);
+    // const accessTokenData = { id: req.headers.authorization };
+    const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
         let allRatings = await histories.findAll({
           include: [{
             model: ratings,
-            attributes: ['id', 'historyIndex', 'rating']
+            attributes: ['id', 'rating']
           }],
           where: {
             userId: accessTokenData.id
@@ -46,10 +46,9 @@ module.exports = async (req, res) => {
 
         allRatings = allRatings.map((el) => {
           return {
-            id: el.ratings[0].id,
-            historyId: el.historyId,
+            id: el.id,
+            // historyId: el.historyId,
             dogwalkerId: el.dogwalkerId,
-            index: el.ratings[0].historyIndex,
             rating: el.ratings[0].rating
           };
         });
@@ -57,7 +56,7 @@ module.exports = async (req, res) => {
         let allReviews = await histories.findAll({
           include: [{
             model: reviews,
-            attributes: ['id', 'historyIndex', 'content']
+            attributes: ['id', 'content']
           }],
           where: {
             userId: accessTokenData.id
@@ -72,7 +71,6 @@ module.exports = async (req, res) => {
             id: el.reviews[0].id,
             historyId: el.historyId,
             dogwalkerId: el.dogwalkerId,
-            index: el.reviews[0].historyIndex,
             content: el.reviews[0].content
           };
         });
@@ -82,48 +80,7 @@ module.exports = async (req, res) => {
       }
     }
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: 'error' });
   }
 };
-
-// const { histories, dogwalkers } = require('../../models');
-// const { isAuthorized } = require('../tokenFunctions');
-// const Sequelize = require('sequelize');
-// require('sequelize-values')(Sequelize);
-
-// module.exports = async (req, res) => {
-//   try {
-//     // JUST FOR TESTING PURPOSES
-//     // console.log(req.headers.authorization);
-//     // const accessTokenData = { id: req.headers.authorization };
-//     const accessTokenData = isAuthorized(req);
-
-//     if (!accessTokenData) {
-//       return res.status(401).json({ message: 'You\'re not logged in' });
-//     } else {
-//       let allDogwalkers = await dogwalkers.findAll();
-//       allDogwalkers = Sequelize.getValues(allDogwalkers);
-
-//       let allHistories = await histories.findAll({
-//         where: {
-//           userId: accessTokenData.id
-//         }
-//       });
-
-//       if (allHistories) {
-//         allHistories = Sequelize.getValues(allHistories);
-//         allHistories.map((history) => {
-//           history.name = allDogwalkers[history.dogwalkerId - 1].name;
-//           history.img = allDogwalkers[history.dogwalkerId - 1].profile;
-//           return history;
-//         });
-
-//         res.status(200).json({ data: allHistories, message: 'ok' });
-//       } else {
-//         res.status(404).json({ message: 'No histories are found' });
-//       }
-//     }
-//   } catch (error) {
-//     res.status(400).json({ message: 'error' });
-//   }
-// };

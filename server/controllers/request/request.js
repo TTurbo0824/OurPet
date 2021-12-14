@@ -61,12 +61,12 @@ module.exports = async (req, res) => {
       let tempId = 1;
 
       if (temp.length !== 0) {
-        tempId = temp[0].dataValues.id + 1
+        tempId = temp[0].dataValues.id + 1;
       }
 
       // console.log(tempId);
 
-      let payload = {
+      const payload = {
         id: tempId,
         requestId: allRequests.length + 1,
         userId: accessTokenData.id,
@@ -78,7 +78,7 @@ module.exports = async (req, res) => {
         price: price,
         time: time,
         status: 'pending'
-      }
+      };
 
       requests.create(payload);
 

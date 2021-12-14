@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
       const { id, content } = req.body;
       const userReview = await reviews.findAll({
         where: {
-          id: id
+          historyId: id
         }
       });
 
@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
           content: content
         },
         {
-          where: { id: id }
+          where: { historyId: id }
         });
 
         return res.status(200).json({ message: 'ok' });
