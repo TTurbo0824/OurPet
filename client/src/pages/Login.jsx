@@ -59,11 +59,11 @@ export const SignupSpan = styled.span`
 
 function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
-  dispatch(getRequest());
-  dispatch(getHistory());
+  // dispatch(resetRequest());
+  // dispatch(getHistory());
 
-  const defaultHistory = useSelector((state) => state.history).dogWalkerHistory;
-  const defaultRequest = useSelector((state) => state.request).dogWalkerRequest;
+  // const defaultHistory = useSelector((state) => state.history).dogWalkerHistory;
+  // const defaultRequest = useSelector((state) => state.request).dogWalkerRequest;
 
   // console.log(defaultHistory);
 
@@ -76,7 +76,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const handleInputValue = (key) => (e) => {
     setLoginInfo({ ...loginInfo, [key]: e.target.value });
   };
-
+  console.log(loginInfo.email);
   const enter = (e) => {
     if (e.key === 'Enter') {
       handleLoginRequest();
@@ -90,16 +90,20 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
     if (loginInfo.email === '' || loginInfo.password === '') {
       setErrorMsg('모든 항목을 입력해 주세요');
     } else {
+      dispatch(getRequest([]));
+      dispatch(getHistory([]));
       axios
         .post(`${process.env.REACT_APP_API_URL}/login`, loginInfo, {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true
         })
         .then((res) => {
-          handleModal();
-          handleNotice(true);
-          handleMessage('로그인 성공!');
-          return res.data.accessToken;
+          if (res.status === 200) {
+            handleModal();
+            handleNotice(true);
+            handleMessage('로그인 성공!');
+            return res.data.accessToken;
+          }
         })
         .then((token) => {
           axios
@@ -110,9 +114,24 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
               }
             })
             .then((res) => {
-              dispatch(userLogin(token, res.data.data));
-              dispatch(resetRequest());
-              dispatch(resetHistory());
+              if (res.status === 200) {
+                dispatch(userLogin(token, res.data.data));
+              }
+            })
+            .then(() => {
+              axios
+                .get(process.env.REACT_APP_API_URL + '/my-data', {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                  }
+                })
+                .then((res) => {
+                  if (res.status === 200) {
+                    dispatch(getRequest(res.data.data.allRequests));
+                    dispatch(getHistory(res.data.data.allHistories));
+                  }
+                });
             });
         })
         .catch((error) => {
