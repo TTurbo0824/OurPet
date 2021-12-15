@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { trackRating } from '../../../redux/action';
+import { giveRating } from '../../../redux/action';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
@@ -149,7 +149,7 @@ function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token,
             handleModal();
             handleNotice(true);
             handleMessage('평점이 등록되었습니다.');
-            dispatch(trackRating(ratingInfo));
+            dispatch(giveRating(ratingInfo));
           }
         })
         .catch((error) => {

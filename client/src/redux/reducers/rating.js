@@ -1,4 +1,4 @@
-import { GET_RATING, GIVE_RATING, CANCEL_RATING, TRACK_RATING, UNTRACK_RATING } from '../action';
+import { GET_RATING, GIVE_RATING, REMOVE_RATING } from '../action';
 import { initRatingState } from './initialState/initRatingState';
 
 function rating (state = initRatingState, action) {
@@ -11,27 +11,9 @@ function rating (state = initRatingState, action) {
     case GIVE_RATING:
       return {
         ...state,
-        dogWalkers: state.dogWalkers.map((el) =>
-          el.id === action.payload.id
-            ? { ...el, rating: [...el.rating, action.payload.rating] }
-            : el
-        )
-      };
-    case CANCEL_RATING:
-      return {
-        ...state,
-        dogWalkers: state.dogWalkers.map((el) =>
-          el.id === action.payload.id
-            ? { ...el, rating: el.rating.filter((_, idx) => idx !== action.payload.idx) }
-            : el
-        )
-      };
-    case TRACK_RATING:
-      return {
-        ...state,
         givenRating: [...state.givenRating, action.payload]
       };
-    case UNTRACK_RATING:
+    case REMOVE_RATING:
       return {
         ...state,
         givenRating: state.givenRating.filter((el) => el.id !== action.payload.id)

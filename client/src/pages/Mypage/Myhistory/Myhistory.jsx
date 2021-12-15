@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { deleteHistory, untrackRating } from '../../../redux/action';
+import { deleteHistory, removeRating } from '../../../redux/action';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -89,10 +89,6 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const [openReviewEdit, setOpenReviewEdit] = useState(false);
   const [historyInfo, setHistoryInfo] = useState({ historyId: null, historyIndex: null });
   const [serviceDate, setServiceDate] = useState(null);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [allHistory, setAllHistory] = useState([]);
-  // const [givenRating, setGivenRating] = useState([]);
-  // const [givenReview, setGivenReview] = useState([]);
   const [targetReview, setTargetReview] = useState({
     id: null,
     content: null
@@ -101,34 +97,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const [CheckList, setCheckList] = useState([]);
 
   const allHistories = useSelector((state) => state.history).dogWalkerHistory;
-  console.log(allHistories);
-  // console.log(allHistory);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const result = await axios.get(`${process.env.REACT_APP_API_URL}/history`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           'Content-Type': 'application/json'
-  //         }
-  //       });
-  //       setAllHistory(result.data.data.allHistories);
-  //       setGivenRating(result.data.data.ratings);
-  //       setGivenReview(result.data.data.reviews);
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       if (error.response.status === 401) modal();
-  //       else if (error.response.data.message === 'No histories are found') {
-  //         setIsLoading(false);
-  //       } else {
-  //         console.log('error: ', error.response.data.message);
-  //       }
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  // console.log(allHistories);
 
   useEffect(() => {
     const ids = [];
@@ -156,23 +125,12 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const givenRatings = useSelector((state) => state.rating).givenRating;
-  const givenRatingIds = givenRatings.map((el) => el.id) || [];
-
   const givenReviews = useSelector((state) => state.review).givenReview;
+  const givenRatingIds = givenRatings.map((el) => el.id) || [];
   const givenReviewIds = givenReviews.map((el) => el.id) || [];
 
-  // console.log(givenRatingIds);
-  // const review = useSelector((state) => state.review).dogWalkers;
-
-  // const givenRatingIds = givenRating.map((el) => el.historyId) || [];
-  // const givenReviewIds = givenReview.map((el) => el.historyId);
-
-  // console.log(givenReview);
-  // console.log(givenRatingIds);
-  // console.log(givenRating);
   const handleRatingOpen = (id) => {
     // console.log(dogwalkerId);
-    // setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: index });
     setHistoryInfo({ ...historyInfo, historyId: id });
     setOpenRating(true);
   };
@@ -209,14 +167,9 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleCancelRating = (el) => {
-    console.log(el.id);
-    // dispatch(untrackRating(el.id));
-    // givenRating.forEach((el) => {
-    //   if (el.historyId === idx) index = el.index;
-    // });
-    // dispatch(cancelRating(dogwalkerId, index));
-    // dispatch(untrackRating(idx));
-    // console.log(el.historyId);
+    // console.log(el.id);
+    // dispatch(removeRating(el.id));
+
     axios
       .delete(`${process.env.REACT_APP_API_URL}/rating`, {
         data: { historyId: el.id },
@@ -230,7 +183,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
         if (res.status === 200) {
           handleNotice(true);
           handleMessage('평점이 삭제되었습니다.');
-          dispatch(untrackRating(el.id));
+          dispatch(removeRating(el.id));
         }
       })
       .catch((error) => {
@@ -255,6 +208,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const handleHistoryDelete = () => {
     // console.log(CheckList);
     // dispatch(deleteHistory(CheckList));
+
     if (CheckList.length > 0) {
       axios
         .delete(process.env.REACT_APP_API_URL + '/history', {

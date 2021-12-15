@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { trackReview } from '../../../redux/action';
+import { postReview } from '../../../redux/action';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Alertbox, Backdrop } from '../../../components/UserComponents';
@@ -66,7 +66,7 @@ function Review ({ modal, token, historyInfo, handleModal, handleMessage, handle
     // if (!walkerReview || walkerReview.length < 10) {
       setErrorMsg('리뷰를 10자 이상 작성해 주세요');
     } else {
-      // dispatch(trackReview(reviewInfo));
+      // dispatch(postReview(reviewInfo));
       axios
         .post(`${process.env.REACT_APP_API_URL}/review`, reviewInfo, {
           headers: {
@@ -80,7 +80,7 @@ function Review ({ modal, token, historyInfo, handleModal, handleMessage, handle
             handleModal();
             handleNotice(true);
             handleMessage('리뷰가 등록되었습니다.');
-            dispatch(trackReview(reviewInfo));
+            dispatch(postReview(reviewInfo));
           }
         })
         .catch((error) => {
