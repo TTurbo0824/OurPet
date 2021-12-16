@@ -230,13 +230,13 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
           handleNotice(true);
           handleMessage('요청이 완료되었습니다.');
         })
-        .catch((err) => {
-          if (err.response.status === 401) {
+        .catch((error) => {
+          if (error.response.status === 401) {
             modal();
-          } else if (err.response.status === 403) {
+          } else if (error.response.status === 403) {
             handleNotice(true);
             handleMessage('예약 가능 시간이 지났습니다.');
-          } else if (err.response.status === 409) {
+          } else if (error.response.status === 409) {
             handleNotice(true);
             handleMessage('중복된 요청은 하실 수 없습니다.');
           } else {
