@@ -1,10 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { deleteHistory, untrackRating } from '../../../redux/action';
+import { deleteHistory, removeRating } from '../../../redux/action';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { Colors } from '../../../components/utils/_var';
+// import { Colors } from '../../../components/utils/_var';
+import { MyPageTable } from '../../../components/MyPageTable';
 import TopNavigation from '../../../components/TopNavigation';
 import Rating from './Rating';
 import Review from './Review';
@@ -20,21 +21,16 @@ export const MyHistoryWrapper = styled.div`
   .container {
     margin: 1rem auto;
   }
-  .card {
-    display: grid;
+  .field-container  {
     grid-template-areas:
-      'img title rating review'
-      'img info rating review'
-      'img type rating review';
-    grid-template-columns: 7.25rem 50% 15% 15%;
-    margin: 0 auto;
-    /* text-align: center; */
-    border-top: 1px solid ${Colors.lightGray};
-    padding: 0.4rem 1rem;
-    width: 40rem;
+      'alls select';
+    grid-template-columns: 1fr 1fr;
   }
-  .card:first-of-type {
-    border-top: none;
+  .card {
+    grid-template-areas:
+      'check img title rating review'
+      'check img info rating review'
+      'check img type rating review';
   }
   .dogwalker-img {
     cursor: pointer;
@@ -44,31 +40,11 @@ export const MyHistoryWrapper = styled.div`
     border: 0.5px solid rgb(238, 238, 238);
     object-fit: cover;
   }
-  .name {
-    grid-area: title;
-  }
-  .info {
-    grid-area: info;
-  }
-  .type {
-    grid-area: type;
-  }
-  .name, .info, .type {
-    font-size: .9rem;
-  }
   .rating {
     grid-area: rating;
   }
   .review {
     grid-area: review;
-  }
-  .bnt {
-    cursor: pointer;
-    align-self: center;
-    justify-self: center;
-    padding: .4rem .7rem;
-    font-size: .85rem;
-    border: 1px solid ${Colors.mediumLightGray};
   }
 `;
 
@@ -81,6 +57,9 @@ export const MyHistoryWrapper = styled.div`
 //
 
 function MyHistory ({ modal, handleMessage, handleNotice }) {
+  // document.querySelectorAll('input[type=checkbox]').forEach( el => {console.log(el.checked)} );
+  // document.querySelectorAll('input[type=checkbox]').forEach( el => el.checked = false );
+
   const dispatch = useDispatch();
   const history = useHistory();
   const token = useSelector((state) => state.user).token;
@@ -89,10 +68,6 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const [openReviewEdit, setOpenReviewEdit] = useState(false);
   const [historyInfo, setHistoryInfo] = useState({ historyId: null, historyIndex: null });
   const [serviceDate, setServiceDate] = useState(null);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [allHistory, setAllHistory] = useState([]);
-  // const [givenRating, setGivenRating] = useState([]);
-  // const [givenReview, setGivenReview] = useState([]);
   const [targetReview, setTargetReview] = useState({
     id: null,
     content: null
@@ -101,34 +76,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const [CheckList, setCheckList] = useState([]);
 
   const allHistories = useSelector((state) => state.history).dogWalkerHistory;
-  console.log(allHistories);
-  // console.log(allHistory);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const result = await axios.get(`${process.env.REACT_APP_API_URL}/history`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           'Content-Type': 'application/json'
-  //         }
-  //       });
-  //       setAllHistory(result.data.data.allHistories);
-  //       setGivenRating(result.data.data.ratings);
-  //       setGivenReview(result.data.data.reviews);
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       if (error.response.status === 401) modal();
-  //       else if (error.response.data.message === 'No histories are found') {
-  //         setIsLoading(false);
-  //       } else {
-  //         console.log('error: ', error.response.data.message);
-  //       }
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  // console.log(allHistories);
 
   useEffect(() => {
     const ids = [];
@@ -156,23 +104,12 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const givenRatings = useSelector((state) => state.rating).givenRating;
-  const givenRatingIds = givenRatings.map((el) => el.id) || [];
-
   const givenReviews = useSelector((state) => state.review).givenReview;
+  const givenRatingIds = givenRatings.map((el) => el.id) || [];
   const givenReviewIds = givenReviews.map((el) => el.id) || [];
 
-  // console.log(givenRatingIds);
-  // const review = useSelector((state) => state.review).dogWalkers;
-
-  // const givenRatingIds = givenRating.map((el) => el.historyId) || [];
-  // const givenReviewIds = givenReview.map((el) => el.historyId);
-
-  // console.log(givenReview);
-  // console.log(givenRatingIds);
-  // console.log(givenRating);
   const handleRatingOpen = (id) => {
     // console.log(dogwalkerId);
-    // setHistoryInfo({ dogwalkerId: dogwalkerId, historyId: index });
     setHistoryInfo({ ...historyInfo, historyId: id });
     setOpenRating(true);
   };
@@ -209,14 +146,9 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleCancelRating = (el) => {
-    console.log(el.id);
-    // dispatch(untrackRating(el.id));
-    // givenRating.forEach((el) => {
-    //   if (el.historyId === idx) index = el.index;
-    // });
-    // dispatch(cancelRating(dogwalkerId, index));
-    // dispatch(untrackRating(idx));
-    // console.log(el.historyId);
+    // console.log(el.id);
+    // dispatch(removeRating(el.id));
+
     axios
       .delete(`${process.env.REACT_APP_API_URL}/rating`, {
         data: { historyId: el.id },
@@ -230,13 +162,13 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
         if (res.status === 200) {
           handleNotice(true);
           handleMessage('평점이 삭제되었습니다.');
-          dispatch(untrackRating(el.id));
+          dispatch(removeRating(el.id));
         }
       })
       .catch((error) => {
-        if (error.response.status === 410) {
+        if (error.response.status === 401) {
           modal();
-        } else console.log(error.response.data.message);
+        } else console.log('error: ', error.response.data.message);
       });
     // window.location.reload();
   };
@@ -255,7 +187,10 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const handleHistoryDelete = () => {
     // console.log(CheckList);
     // dispatch(deleteHistory(CheckList));
-    if (CheckList.length > 0) {
+    if (allHistories.length === 0) {
+      handleNotice(true);
+      handleMessage('삭제할 내역이 없습니다.');
+    } else if (CheckList.length > 0) {
       axios
         .delete(process.env.REACT_APP_API_URL + '/history', {
           headers: {
@@ -274,9 +209,9 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
           }
         })
         .catch((error) => {
-          if (error.response.status === 410) {
+          if (error.response.status === 401) {
             modal();
-          } else console.log(error.response.data.message);
+          } else console.log('error: ', error.response.data.message);
         });
     } else {
       handleNotice(true);
@@ -284,34 +219,45 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
     }
   };
 
+  const handleSearchClicked = () => {
+    history.push({
+      pathname: '/search'
+    });
+  };
+
   return (
     <MyHistoryWrapper>
       <TopNavigation />
       <div className='main'>
         <div className='container'>
-          <div className='button-container'>
-            <button onClick={handleHistoryDelete}>이용내역삭제</button>
-          </div>
-          <label className='all'>
-            <input
-              type='checkbox'
-              className='select-all'
-              onChange={onChangeAll}
-              checked={!allHistories.length ? false : CheckList.length === IdList.length}
-            /> <span>전체 선택</span>
-          </label>
-          {allHistories.length === 0
-            ? <div>결과 없음</div>
-            : allHistories.map((el, idx) => {
-              return (
-                <div className='card-container' key={idx}>
-                  <input
-                    type='checkbox'
-                    className='select-one'
-                    onChange={(e) => onChangeEach(e, el.id)}
-                    checked={CheckList.includes(el.id)}
-                  />
-                  <div className='card'>
+          <MyPageTable>
+            <div className='field-container '>
+              <label className='all'>
+                <input
+                  type='checkbox'
+                  className='select-all'
+                  onChange={onChangeAll}
+                  checked={CheckList.length !== 0 ? CheckList.length === IdList.length : false}
+                  disabled={!allHistories.length ? 'disable' : null}
+                />
+                <span className='description'>전체선택</span>
+              </label>
+              <div className='delete-bnt description select' onClick={handleHistoryDelete}>선택내역삭제</div>
+            </div>
+            {allHistories.length === 0
+              ? <div>
+                <div className='no-items'>이용 내역이 없습니다. {'\n'} 내 주변 도크워커를 찾아보세요!</div>
+                <button className='search-bnt' onClick={handleSearchClicked}>도그워커 찾기</button>
+                </div>
+              : allHistories.map((el, idx) => {
+                return (
+                  <div className='card' key={idx}>
+                    <input
+                      type='checkbox'
+                      className='select-one'
+                      onChange={(e) => onChangeEach(e, el.id)}
+                      checked={CheckList.includes(el.id)}
+                    />
                     <img
                       className='dogwalker-img'
                       src={el.img}
@@ -352,10 +298,11 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
                           리뷰 등록
                         </div>
                         )}
+
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+          </MyPageTable>
         </div>
         {openRating
           ? <Rating

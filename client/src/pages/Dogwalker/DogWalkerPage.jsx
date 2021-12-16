@@ -149,6 +149,8 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
         if (error.response.data.message === 'No requests are found') {
           setIsLoading(false);
         } else {
+          handleNotice(true);
+          handleMessage('오류가 발생하였습니다.');
           console.log('error: ', error.response.data.message);
         }
       }
@@ -169,14 +171,14 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   const requestInitial = {
     id: 0,
     dogwalkerId: dogWalkerId,
+    name: dogWalker[0].name,
+    img: dogWalker[0].img,
     type: '',
     location: '',
     date: '',
     duration: 0,
     price: 0
   };
-
-  // console.log(requestInitial);
 
   const [requestOptions, setRequestOptions] = useState(requestInitial);
 
@@ -201,7 +203,8 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   const handleRequest = () => {
     // JUST FOR TESTING PURPOSES
     // dispatch(requestDogwalker(requestOptions));
-    console.log(requestOptions);
+    // console.log(requestOptions);
+
     if (requestOptions.type === '' || requestOptions.location === '' || requestOptions.date === '' || requestOptions.duration === 0) {
       handleNotice(true);
       handleMessage('모든 항목을 입력해주세요.');
@@ -209,7 +212,7 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
       handleNotice(true);
       handleMessage('로그인이 필요한 서비스입니다.');
     } else {
-      console.log('clicked');
+      // console.log('clicked');
       axios.post(
         process.env.REACT_APP_API_URL + '/request', requestOptions, {
           headers: {
@@ -237,9 +240,9 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
             handleNotice(true);
             handleMessage('중복된 요청은 하실 수 없습니다.');
           } else {
-            console.log(err.response);
+            console.log('error: ', error.response.data.message);
             handleNotice(true);
-            handleMessage('오류가 발생했습니다.');
+            handleMessage('오류가 발생하였습니다.');
           }
         });
     }

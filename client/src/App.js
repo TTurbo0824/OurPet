@@ -163,6 +163,7 @@ function App () {
                 message={message}
                 handleNotice={handleNotice}
                 handleMessage={handleMessage}
+                modal={handleModalOpen}
               />
               )
             : null}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { editReview, untrackReview } from '../../../redux/action';
+import { editReview, deleteReview } from '../../../redux/action';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
@@ -90,7 +90,7 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
 
   const handleDeleteReview = () => {
     console.log(id);
-    // dispatch(untrackReview(id));
+    // dispatch(deleteReview(id));
     axios
       .delete(process.env.REACT_APP_API_URL + '/review', {
         data: { id: id },
@@ -104,7 +104,7 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
           handleModal();
           handleNotice(true);
           handleMessage('리뷰가 삭제되었습니다.');
-          dispatch(untrackReview(id));
+          dispatch(deleteReview(id));
         }
       })
       .catch((error) => {

@@ -76,7 +76,7 @@ export const CloseIcon = styled.div`
   cursor: pointer;
 `;
 
-function Notification ({ message, handleNotice, handleMessage }) {
+function Notification ({ message, handleNotice, handleMessage, modal }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user).token;
   const [deleteIds, setDeleteIds] = useState([]);
@@ -87,7 +87,7 @@ function Notification ({ message, handleNotice, handleMessage }) {
     // localStorage.clear();
 
     axios
-      .delete(process.env.REACT_APP_API_URL + '/withdrawal', {
+      .delete(`${process.env.REACT_APP_API_URL}/withdrawal`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -101,8 +101,14 @@ function Notification ({ message, handleNotice, handleMessage }) {
           localStorage.clear();
         }
       })
-      .catch((err) => {
-        console.log(err.response.data.message);
+      .catch((error) => {
+        if (error.response.status === 401) {
+          handleNotice(false);
+          modal();
+        } else {
+          handleMessage('오류가 발생하였습니다.');
+          console.log('error: ', error.response.data.message);
+        }
       });
   };
 
@@ -113,7 +119,7 @@ function Notification ({ message, handleNotice, handleMessage }) {
     // console.log(ids);
     // dispatch(cancelDogwalker(ids));
     axios
-      .delete(process.env.REACT_APP_API_URL + '/request', {
+      .delete(`${process.env.REACT_APP_API_URL}/request`, {
         data: { serviceId: ids },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -127,8 +133,14 @@ function Notification ({ message, handleNotice, handleMessage }) {
           handleMessage('요청이 삭제되었습니다.');
         }
       })
-      .catch((err) => {
-        console.log(err.response.data.message);
+      .catch((error) => {
+        if (error.response.status === 401) {
+          handleNotice(false);
+          modal();
+        } else {
+          handleMessage('오류가 발생하였습니다.');
+          console.log('error: ', error.response.data.message);
+        }
       });
   };
 
@@ -136,7 +148,7 @@ function Notification ({ message, handleNotice, handleMessage }) {
     <NoticeBackdrop>
       <NoticeView>
         <CloseIcon>
-          {message.includes('삭제되었습니다')
+          {message.includes('요청이 삭제되었습니다')
             ? <FontAwesomeIcon
                 icon={faTimes}
                 color={Colors.gray}
@@ -164,7 +176,7 @@ function Notification ({ message, handleNotice, handleMessage }) {
               : '1rem'
           }
         >
-          {message.includes('정말 요청을 취소하시겠습니까?') ? message.split('!')[0] : message}
+          {message.includes('정말 요청을 취소하시겠습니까?') || message.includes('만료된 요청을 삭제하시겠습니까?') ? message.split('!')[0] : message}
         </Message>
         {message === '로그인 성공!' ||
         message === '로그아웃 성공!' ||
@@ -197,15 +209,19 @@ function Notification ({ message, handleNotice, handleMessage }) {
                 ? (
                   <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>취소하기</NoticeButton>
                   )
-                : message.includes('요청이 완료되었습니다.')
+                : message.includes('만료된 요청을 삭제하시겠습니까?')
                   ? (
-                    <NoticeButton onClick={() => {
-                      window.location.replace('/myrequest');
-                    }}
-                    >내역 확인하기
-                    </NoticeButton>
+                    <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>삭제하기</NoticeButton>
                     )
-                  : null}
+                  : message.includes('요청이 완료되었습니다.')
+                    ? (
+                      <NoticeButton onClick={() => {
+                        window.location.replace('/myrequest');
+                      }}
+                      >내역 확인하기
+                      </NoticeButton>
+                      )
+                    : null}
       </NoticeView>
     </NoticeBackdrop>
   );
