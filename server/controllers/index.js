@@ -17,6 +17,7 @@ module.exports = {
   deleteHistory: require('./history/delete-history'),
   getRating: require('./history/get-ratings'),
   rating: require('./history/rating'),
+  editRating: require('./history/edit-rating'),
   deleteRating: require('./history/delete-rating'),
   getReview: require('./history/get-reviews'),
   review: require('./history/review'),

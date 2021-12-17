@@ -40,6 +40,7 @@ app.get('/history', controllers.myHistory);
 app.delete('/history', controllers.deleteHistory);
 app.get('/rating', controllers.getRating);
 app.post('/rating', controllers.rating);
+app.patch('/rating', controllers.editRating);
 app.delete('/rating', controllers.deleteRating);
 app.get('/review', controllers.getReview);
 app.post('/review', controllers.review);
