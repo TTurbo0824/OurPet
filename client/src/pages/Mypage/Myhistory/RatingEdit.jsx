@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { giveRating } from '../../../redux/action';
+import { editRating, removeRating } from '../../../redux/action';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
@@ -31,26 +31,22 @@ export const RatingView = styled.div`
   }
 `;
 
-function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token, modal }) {
+function RatingEdit ({ handleModal, handleMessage, handleNotice, token, modal, targetRating }) {
   const dispatch = useDispatch();
-  const { historyId } = historyInfo;
-  const [walkerRate, setWalkerRate] = useState(null);
+  const { id, rating } = targetRating;
+  const [walkerRate, setWalkerRate] = useState(rating);
   const [errorMsg, setErrorMsg] = useState('');
-  // console.log(historyId);
 
   const setRating = (e) => {
     setWalkerRate(e.value);
   };
 
-  const ratingInfo = {
-    id: historyId,
-    rating: walkerRate
-  };
-
-  const handleRating = () => {
-    if (walkerRate) {
+  const handleEditRating = () => {
+    if (rating === walkerRate) {
+      setErrorMsg('평점을 수정해주세요');
+    } else {
       axios
-        .post(`${process.env.REACT_APP_API_URL}/rating`, ratingInfo, {
+        .patch(`${process.env.REACT_APP_API_URL}/rating`, { id: id, rating: walkerRate }, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -61,18 +57,43 @@ function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token,
           if (res.status === 200) {
             handleModal();
             handleNotice(true);
-            handleMessage('평점이 등록되었습니다.');
-            dispatch(giveRating(ratingInfo));
+            handleMessage('평점이 수정되었습니다.');
+            dispatch(editRating(id, walkerRate));
           }
         })
         .catch((error) => {
-          if (error.response.status === 410) {
+          if (error.response.status === 401) {
+            handleModal();
             modal();
-          } else console.log(error.response.data.message);
+          } else console.log('error: ', error.response.data.message);
         });
-    } else {
-      setErrorMsg('평점을 선택해 주세요');
     }
+  };
+
+  const handleCancelRating = () => {
+    axios
+      .delete(`${process.env.REACT_APP_API_URL}/rating`, {
+        data: { historyId: id },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          handleModal();
+          handleNotice(true);
+          handleMessage('평점이 삭제되었습니다.');
+          dispatch(removeRating(id));
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          handleModal();
+          modal();
+        } else console.log('error: ', error.response.data.message);
+      });
   };
 
   return (
@@ -85,17 +106,17 @@ function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token,
             onChange={setRating}
             styles={customStyles}
             isSearchable={false}
-            placeholder='평점 선택'
+            placeholder={options[5 - rating].label || '평점 선택'}
             options={options}
             maxMenuHeight={125}
           />
         </div>
-        <HistoryButton bntColor={Colors.gray} onClick={handleModal}>취소</HistoryButton>
-        <HistoryButton bntColor={Colors.lightYellow} onClick={handleRating}>등록</HistoryButton>
+        <HistoryButton bntColor={Colors.lightYellow} onClick={handleEditRating}>수정</HistoryButton>
+        <HistoryButton bntColor={Colors.gray} onClick={handleCancelRating}>삭제</HistoryButton>
         <Alertbox>{errorMsg}</Alertbox>
       </RatingView>
     </Backdrop>
   );
 }
 
-export default Rating;
+export default RatingEdit;

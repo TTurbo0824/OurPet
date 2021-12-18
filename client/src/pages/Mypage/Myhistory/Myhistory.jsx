@@ -1,13 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { deleteHistory, removeRating } from '../../../redux/action';
+import { deleteHistory } from '../../../redux/action';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 // import { Colors } from '../../../components/utils/_var';
-import { MyPageTable } from '../../../components/MyPageTable';
+import { MyPageTable } from '../../../components/MyPageComponents';
 import TopNavigation from '../../../components/TopNavigation';
 import Rating from './Rating';
+import RatingEdit from './RatingEdit';
 import Review from './Review';
 import ReviewEdit from './ReviewEdit';
 axios.defaults.withCredentials = true;
@@ -64,6 +65,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const history = useHistory();
   const token = useSelector((state) => state.user).token;
   const [openRating, setOpenRating] = useState(false);
+  const [openRatingEdit, setOpenRatingEdit] = useState(false);
   const [openReview, setOpenReview] = useState(false);
   const [openReviewEdit, setOpenReviewEdit] = useState(false);
   const [historyInfo, setHistoryInfo] = useState({ historyId: null, historyIndex: null });
@@ -71,6 +73,10 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const [targetReview, setTargetReview] = useState({
     id: null,
     content: null
+  });
+  const [targetRating, setTargetRating] = useState({
+    id: null,
+    rating: null
   });
   const [IdList, setIdList] = useState([]);
   const [CheckList, setCheckList] = useState([]);
@@ -140,37 +146,24 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
     setOpenReviewEdit(true);
   };
 
-  // console.log(targetReview);
-  const handleReviewEditClose = () => {
-    setOpenReviewEdit(false);
+  const handleRatingEditOpen = (id) => {
+    givenRatings.forEach((el) => {
+      if (el.id === id) {
+        setTargetRating({
+          id: el.id,
+          rating: el.rating
+        });
+      }
+    });
+    setOpenRatingEdit(true);
   };
 
-  const handleCancelRating = (el) => {
-    // console.log(el.id);
-    // dispatch(removeRating(el.id));
-
-    axios
-      .delete(`${process.env.REACT_APP_API_URL}/rating`, {
-        data: { historyId: el.id },
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        withCredentials: true
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          handleNotice(true);
-          handleMessage('평점이 삭제되었습니다.');
-          dispatch(removeRating(el.id));
-        }
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          modal();
-        } else console.log('error: ', error.response.data.message);
-      });
-    // window.location.reload();
+  // console.log(targetReview);
+  const handleRatingEditClose = () => {
+    setOpenRatingEdit(false);
+  };
+  const handleReviewEditClose = () => {
+    setOpenReviewEdit(false);
   };
 
   const handleClick = (id) => {
@@ -271,9 +264,9 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
                       ? (
                         <div
                           className='bnt rating'
-                          onClick={() => handleCancelRating(el)}
+                          onClick={() => handleRatingEditOpen(el.id)}
                         >
-                          평점 삭제
+                          평점 확인
                         </div>
                         )
                       : (
@@ -314,6 +307,16 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
               modal={modal}
             />
           : null}
+        {openRatingEdit
+          ? <RatingEdit
+              handleModal={handleRatingEditClose}
+              handleMessage={handleMessage}
+              handleNotice={handleNotice}
+              token={token}
+              modal={modal}
+              targetRating={targetRating}
+            />
+          : null}
         {openReview
           ? (
             <Review
@@ -323,6 +326,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
               handleNotice={handleNotice}
               historyInfo={historyInfo}
               serviceDate={serviceDate}
+              targetReview={targetReview}
               token={token}
             />
             )
