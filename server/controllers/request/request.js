@@ -28,12 +28,6 @@ module.exports = async (req, res) => {
         return res.status(409).json({ message: 'You cannot make the duplicate request' });
       }
 
-      const allRequests = await requests.findAll({
-        where: {
-          userId: accessTokenData.id
-        }
-      });
-
       const now = new Date();
       const target = moment(now);
       let requestTime = 0;
@@ -68,7 +62,6 @@ module.exports = async (req, res) => {
 
       const payload = {
         id: tempId,
-        requestId: allRequests.length + 1,
         userId: accessTokenData.id,
         dogwalkerId: dogwalkerId,
         type: type,
@@ -76,8 +69,7 @@ module.exports = async (req, res) => {
         date: date,
         duration: duration,
         price: price,
-        time: time,
-        status: 'pending'
+        time: time
       };
 
       requests.create(payload);
