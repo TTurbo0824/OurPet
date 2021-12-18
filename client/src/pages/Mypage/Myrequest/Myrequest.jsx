@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import TopNavigation from '../../../components/TopNavigation';
 import { Colors } from '../../../components/utils/_var';
-import { MyPageTable } from '../../../components/MyPageTable';
+import { MyPageTable } from '../../../components/MyPageComponents';
 axios.defaults.withCredentials = true;
 require('dotenv').config();
 const moment = require('moment');
@@ -64,12 +64,11 @@ export const MyRequestWrapper = styled.div`
   }
 `;
 
-function MyRequest ({ modal, handleMessage, handleNotice }) {
+function MyRequest ({ handleMessage, handleNotice }) {
   // document.querySelectorAll('input[type=checkbox]').forEach( el => {console.log(el.checked)} );
   // document.querySelectorAll('input[type=checkbox]').forEach( el => el.checked = false );
 
   const history = useHistory();
-  const token = useSelector((state) => state.user).token;
   const dogWalkerList = useSelector((state) => state.dogwalker).dogWalkers;
   const allRequest = useSelector((state) => state.request).dogWalkerRequest;
   const [IdList, setIdList] = useState([]);
@@ -236,7 +235,6 @@ function MyRequest ({ modal, handleMessage, handleNotice }) {
                     <div className='name'>{el.name}</div>
                     <div className='info'>{el.date} {el.time} {el.location}</div>
                     <div className='type'>{el.type}  <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
-                    {/* <div className='status'>{el.status === 'pending' ? '요청 처리 중' : '요청 만료'}</div> */}
                     <div className='status'>{isExpired(el.date, el.time)}</div>
                     <div className='cancel bnt' onClick={() => deleteClick(el.id)}>요청 취소</div>
                   </div>

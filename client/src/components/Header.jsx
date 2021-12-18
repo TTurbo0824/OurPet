@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { userLogout, getRequest, getHistory, getRating, getReview } from '../redux/action';
 import axios from 'axios';
@@ -113,6 +113,7 @@ export const HeaderButton = styled.button`
 
 function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const isLogin = useSelector((state) => state.user).token;
   const nickname = useSelector((state) => state.user).walkingDogUserInfo.nickname;
   const isGuest = !!nickname.includes('guest');
@@ -164,20 +165,22 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
             withCredentials: true
           }
         )
-        .then(() => {
-          dispatch(userLogout());
-          dispatch(getRequest([]));
-          dispatch(getHistory([]));
-          dispatch(getRating([]));
-          dispatch(getReview([]));
-          localStorage.clear();
-          handleNotice(true);
-          handleMessage('로그아웃 성공!');
+        .then((res) => {
+          if (res.status === 205) {
+            dispatch(userLogout());
+            dispatch(getRequest([]));
+            dispatch(getHistory([]));
+            dispatch(getRating([]));
+            dispatch(getReview([]));
+            localStorage.clear();
+            handleNotice(true);
+            handleMessage('로그아웃 성공!');
+          }
         })
-        .catch((err) => {
-          if (err.response.data.message === "You're not logged in") {
+        .catch((error) => {
+          if (error.response.status === 401) {
             modal();
-          } else console.log(err.response.data.message);
+          } else console.log(error.response.data.message);
         });
     }
   };
@@ -189,8 +192,9 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
   // console.log(navState);
 
   const goToMypage = () => {
-    window.location.replace('/mypage');
+    history.push({ pathname: '/mypage' });
   };
+
   return (
     <HeaderWrapper>
       <div className={`menu-container ${navState}`} onClick={handleClick}>

@@ -205,14 +205,13 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
     // dispatch(requestDogwalker(requestOptions));
     // console.log(requestOptions);
 
-    if (requestOptions.type === '' || requestOptions.location === '' || requestOptions.date === '' || requestOptions.duration === 0) {
-      handleNotice(true);
-      handleMessage('모든 항목을 입력해주세요.');
-    } else if (!token) {
+    if (!token) {
       handleNotice(true);
       handleMessage('로그인이 필요한 서비스입니다.');
+    } else if (requestOptions.type === '' || requestOptions.location === '' || requestOptions.date === '' || requestOptions.duration === 0) {
+      handleNotice(true);
+      handleMessage('모든 항목을 입력해주세요.');
     } else {
-      // console.log('clicked');
       axios.post(
         process.env.REACT_APP_API_URL + '/request', requestOptions, {
           headers: {
