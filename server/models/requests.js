@@ -22,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   requests.init({
-    requestId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
     dogwalkerId: DataTypes.INTEGER,
     type: DataTypes.STRING,
@@ -30,8 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     date: DataTypes.STRING,
     time: DataTypes.STRING,
     duration: DataTypes.INTEGER,
-    price: DataTypes.INTEGER,
-    status: DataTypes.STRING
+    price: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'requests'

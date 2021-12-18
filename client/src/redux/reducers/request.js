@@ -22,8 +22,7 @@ function request (state = initRequestState, action) {
             date: action.payload.date,
             time: action.payload.time,
             duration: action.payload.duration,
-            price: action.payload.price,
-            status: 'pending'
+            price: action.payload.price
           }
         ]
       };

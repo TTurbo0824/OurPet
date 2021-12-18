@@ -6,46 +6,8 @@ import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Alertbox, Backdrop } from '../../../components/UserComponents';
 import CloseButton from '../../../components/CloseButton';
+import { ReviewView, ReviewInput, HistoryButton } from '../../../components/MyPageComponents';
 axios.defaults.withCredentials = true;
-
-export const ReviewView = styled.div`
-  box-sizing: border-box;
-  width: 19rem;
-  height: 21rem;
-  background-color: white;
-  position: relative;
-  text-align: center;
-  padding-top: 0.7rem;
-  box-shadow: 10px 10px grey;
-  .description {
-    margin: 0.7rem auto 0.8rem;
-  }
-`;
-
-const ReviewInput = styled.textarea`
-  resize: none;
-  outline: none;
-  width: 80%;
-  height: 8rem;
-  padding: 0.5rem;
-  border-color: ${Colors.lightGray};
-  font-family: 'Noto Sans KR', sans-serif;
-`;
-
-const ReviewButton = styled.button`
-  margin: 1rem 0.6rem 0.5rem;
-  cursor: pointer;
-  font-size: 0.9rem;
-  background-color: ${Colors.lightYellow};
-  width: 7rem;
-  height: 2.5rem;
-  border-radius: 7px;
-  border: none;
-  color: white;
-  :hover {
-    background-color: ${Colors.yellow};
-  }
-`;
 
 function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, targetReview }) {
   const dispatch = useDispatch();
@@ -81,7 +43,8 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
           }
         })
         .catch((error) => {
-          if (error.response.status === 410) {
+          if (error.response.status === 401) {
+            handleModal();
             modal();
           } else console.log(error.response.data.message);
         });
@@ -89,10 +52,10 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
   };
 
   const handleDeleteReview = () => {
-    console.log(id);
+    // console.log(id);
     // dispatch(deleteReview(id));
     axios
-      .delete(process.env.REACT_APP_API_URL + '/review', {
+      .delete(`${process.env.REACT_APP_API_URL}/review`, {
         data: { id: id },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -108,7 +71,8 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
         }
       })
       .catch((error) => {
-        if (error.response.status === 410) {
+        if (error.response.status === 401) {
+          handleModal();
           modal();
         } else console.log(error.response.data.message);
       });
@@ -120,8 +84,8 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
         <CloseButton onClick={handleModal} />
         <div className='description'>서비스는 어떠셨나요?</div>
         <ReviewInput onChange={handleInput} value={walkerReview} />
-        <ReviewButton onClick={handleEditReview}>수정</ReviewButton>
-        <ReviewButton onClick={handleDeleteReview}>삭제</ReviewButton>
+        <HistoryButton bntColor={Colors.lightYellow} onClick={handleEditReview}>수정</HistoryButton>
+        <HistoryButton bntColor={Colors.gray} onClick={handleDeleteReview}>삭제</HistoryButton>
         <Alertbox>{errorMsg}</Alertbox>
       </ReviewView>
     </Backdrop>

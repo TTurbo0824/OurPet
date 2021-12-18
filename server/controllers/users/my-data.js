@@ -36,8 +36,7 @@ module.exports = async (req, res) => {
             duration: request.duration,
             time: request.time,
             location: request.location,
-            price: request.price,
-            status: request.status
+            price: request.price
           };
         });
       }

@@ -146,17 +146,18 @@ const LoadingWrapper = styled.div`
 function Mainpage () {
   const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
-  const rating = useSelector((state) => state.rating).dogWalkers;
+  // const rating = useSelector((state) => state.rating).dogWalkers;
   const [location, setLocation] = useState('');
   const [walkerResult, setWalkerResult] = useState(dogWalkers);
-  const [allTags, setAllTags] = useState({
+  const initTagState = {
     소형견: false,
     중형견: false,
     대형견: false,
     '야외 배변': false,
     '산책 후 뒤처리': false,
     '산책 예절 교육': false
-  });
+  };
+  const [allTags, setAllTags] = useState(initTagState);
 
   const [sortbyRating, setSortbyRating] = useState('none');
   const [sortbyPrice, setSortbyPrice] = useState('none');
@@ -188,18 +189,7 @@ function Mainpage () {
       setSortbyRating({});
       setSortbyPrice({});
     };
-  }, [allTags]);
-
-  useEffect(() => {
-    setWalkerResult(dogWalkers);
-    setSortbyRating('none');
-    setSortbyPrice('none');
-    return () => {
-      setWalkerResult({});
-      setSortbyRating({});
-      setSortbyPrice({});
-    };
-  }, [location]);
+  }, [allTags, location]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -210,8 +200,6 @@ function Mainpage () {
             'Content-Type': 'application/json'
           }
         });
-        // setRatingData(result.data.data[0].ratings);
-        // setReviewData(result.data.data[0].reviews);
         // setIsLoading(false);
         setRatingData(result.data.data.allRating);
       } catch (error) {

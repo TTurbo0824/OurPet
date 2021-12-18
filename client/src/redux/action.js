@@ -10,6 +10,7 @@ export const GET_HISTORY = 'GET_HISTORY';
 export const DELETE_HISTORY = 'DELETE_HISTORY';
 export const GET_RATING = 'GET_RATING';
 export const GIVE_RATING = 'GIVE_RATING';
+export const EDIT_RATING = 'EDIT_RATING';
 export const REMOVE_RATING = 'REMOVE_RATING';
 export const GET_REVIEW = 'GET_REVIEW';
 export const POST_REVIEW = 'POST_REVIEW';
@@ -72,6 +73,11 @@ export const getRating = (rating) => ({
 export const giveRating = (ratingInfo) => ({
   type: GIVE_RATING,
   payload: ratingInfo
+});
+
+export const editRating = (id, rating) => ({
+  type: EDIT_RATING,
+  payload: { id, rating }
 });
 
 export const removeRating = (id) => ({

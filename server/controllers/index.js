@@ -15,11 +15,12 @@ module.exports = {
   cancelRequest: require('./request/cancel-request'),
   myHistory: require('./history/myhistory'),
   deleteHistory: require('./history/delete-history'),
-  getRating: require('./history/get-ratings'),
-  rating: require('./history/rating'),
-  deleteRating: require('./history/delete-rating'),
-  getReview: require('./history/get-reviews'),
-  review: require('./history/review'),
-  editReview: require('./history/edit-review'),
-  deleteReview: require('./history/delete-review')
+  getRating: require('./rating/get-ratings'),
+  rating: require('./rating/rating'),
+  editRating: require('./rating/edit-rating'),
+  deleteRating: require('./rating/delete-rating'),
+  getReview: require('./review/get-reviews'),
+  review: require('./review/review'),
+  editReview: require('./review/edit-review'),
+  deleteReview: require('./review/delete-review')
 };

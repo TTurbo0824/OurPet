@@ -5,46 +5,8 @@ import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Alertbox, Backdrop } from '../../../components/UserComponents';
 import CloseButton from '../../../components/CloseButton';
+import { ReviewView, ReviewInput, HistoryButton } from '../../../components/MyPageComponents';
 import axios from 'axios';
-
-export const ReviewView = styled.div`
-  box-sizing: border-box;
-  width: 19rem;
-  height: 21rem;
-  background-color: white;
-  position: relative;
-  text-align: center;
-  padding-top: 0.7rem;
-  box-shadow: 10px 10px grey;
-  .description {
-    margin: .7rem auto 0.8rem;
-  }
-`;
-
-const ReviewInput = styled.textarea`
-  resize: none;
-  outline: none;
-  width: 80%;
-  height: 8rem;
-  padding: 0.5rem;
-  border-color: ${Colors.lightGray};
-  font-family: 'Noto Sans KR', sans-serif;
-`;
-
-const ReviewButton = styled.button`
-  margin: 1rem 0.6rem 0.5rem;
-  cursor: pointer;
-  font-size: 0.9rem;
-  background-color: ${Colors.lightYellow};
-  width: 7rem;
-  height: 2.5rem;
-  border-radius: 7px;
-  border: none;
-  color: white;
-  :hover {
-    background-color: ${Colors.yellow};
-  }
-`;
 
 function Review ({ modal, token, historyInfo, handleModal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
@@ -56,9 +18,8 @@ function Review ({ modal, token, historyInfo, handleModal, handleMessage, handle
   };
 
   const reviewInfo = {
-    content: walkerReview,
-    id: historyId
-    // historyIndex: historyIndex
+    id: historyId,
+    content: walkerReview
   };
 
   const handleReview = () => {
@@ -84,7 +45,8 @@ function Review ({ modal, token, historyInfo, handleModal, handleMessage, handle
           }
         })
         .catch((error) => {
-          if (error.response.status === 410) {
+          if (error.response.status === 401) {
+            handleModal();
             modal();
           } else console.log(error.response.data.message);
         });
@@ -97,8 +59,8 @@ function Review ({ modal, token, historyInfo, handleModal, handleMessage, handle
         <CloseButton onClick={handleModal} />
         <div className='description'>서비스는 어떠셨나요?</div>
         <ReviewInput onChange={handleInput} placeholder='최소 10자 이상 입력해주세요.' />
-        <ReviewButton onClick={handleModal}>취소</ReviewButton>
-        <ReviewButton onClick={handleReview}>등록</ReviewButton>
+        <HistoryButton bntColor={Colors.gray} onClick={handleModal}>취소</HistoryButton>
+        <HistoryButton bntColor={Colors.lightYellow} onClick={handleReview}>등록</HistoryButton>
         <Alertbox>{errorMsg}</Alertbox>
       </ReviewView>
     </Backdrop>
