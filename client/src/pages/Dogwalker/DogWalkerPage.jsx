@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../components/utils/_var';
+import { media } from '../../components/utils/_media-queries';
 import Charge from './Charge';
 import DateSelector from './DateSelector';
 import DurationSelector from './DurationSelector';
@@ -54,12 +55,18 @@ const DogWalkerPageWrapper = styled.div`
   }
   .bottom-container {
     display: grid;
-    grid-template-areas: 'left-c right-c';
-    grid-template-columns: 60% 40%;
+    grid-template-areas: 'tag-c' 'right-c' 'review-c';
+    grid-template-columns: 1fr;
+    ${media.tablet`grid-template-areas: 'tag-c right-c' 'review-c right-c';`}
+    ${media.tablet`grid-template-columns: 60% 40%;`}
     justify-content: stretch;
   }
-  .left-container {
-    grid-area: left-c;
+  .tag-container {
+    grid-area: tag-c;
+    margin-bottom: 1rem;
+  }
+  .review-container {
+    grid-area: review-c;
     padding-right: 3rem;
   }
   .right-container {
@@ -77,9 +84,6 @@ const DogWalkerPageWrapper = styled.div`
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-  }
-  .tag-container {
-    margin-bottom: 1rem;
   }
   .title {
     margin: 1rem 0 1rem;
@@ -258,16 +262,14 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
           <div className='location'>{dogWalker.locations.map((el, idx) => <span key={idx} className='location-name'>서울 {el}</span>)}</div>
         </div>
         <div className='bottom-container'>
-          <div className='left-container'>
-            <div className='tag-container'>
-              <div className='title'>이용 가능 서비스</div>
-              {dogWalker.tags.map((tag, idx) =>
-                <Tag key={idx}>{tag}</Tag>
-              )}
-            </div>
-            <div className='review-container'>
-              <ReviewContainer averageRating={averageRating} rating={allRating} reviews={allReview} />
-            </div>
+          <div className='tag-container'>
+            <div className='title'>이용 가능 서비스</div>
+            {dogWalker.tags.map((tag, idx) =>
+              <Tag key={idx}>{tag}</Tag>
+            )}
+          </div>
+          <div className='review-container'>
+            <ReviewContainer averageRating={averageRating} rating={allRating} reviews={allReview} />
           </div>
           <div className='right-container'>
             <div className='request-container'>
