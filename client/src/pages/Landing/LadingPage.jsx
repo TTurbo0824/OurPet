@@ -52,6 +52,37 @@ const LandingWrapper = styled.div`
     margin: 1rem auto 2.5rem;
     font-size: 2.75rem;
   }
+  .price-container {
+    display: flex;
+  }
+  .price-card {
+    /* border: 1px solid black; */
+    width: 16.5rem;
+    height: 25rem;
+    box-shadow: 1px 1px 5px 2px ${Colors.lightGray};
+    background-color: white;
+    border-radius: 8px;
+    margin-right: 1.5rem;
+  }
+  .charge-img {
+    height: 9.5rem;
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+  }
+  .h-line {
+    border-bottom: 1px dashed ${Colors.mediumLightGray};
+    width: 80%;
+    margin: auto auto 2.5rem;
+  }
+  .time, .price {
+    text-align: center;
+    font-size: 1.15rem;
+  }
+  .time {
+    padding-top: 2.5rem;
+    height: 7rem;
+    /* background-color: yellow; */
+  }
   .review-container {
     display: flex;
     justify-content: space-around;
@@ -60,17 +91,6 @@ const LandingWrapper = styled.div`
     flex-wrap: wrap;
     ${media.tablet`width: 92vw;`}
     margin: 0 auto;
-  }
-  .price-container {
-    display: flex;
-  }
-  .price-card {
-    /* border: 1px solid black; */
-    width: 16.5rem;
-    height: 25rem;
-    background-color: white;
-    border-radius: 3px;
-    box-shadow: 1px 1px 5px 2px ${Colors.lightGray};
   }
   .review-card {
     /* border: 1px solid black; */
@@ -89,6 +109,8 @@ const LandingWrapper = styled.div`
   }
   .review-profile {
     width: 15rem;
+    /* height: 9.5rem; */
+    /* width: 100%; */
   }
   .nickname {
     font-size: 1.2rem;
@@ -135,8 +157,10 @@ function LandingPage () {
             {charges.map((el, idx) => (
               <div key={idx}>
                 <div className='price-card'>
-                  <img className='review-profile' alt='profile' src={el.img} />
-                  {el.duration} {el.price}부터
+                  <img className='charge-img' alt='profile' src={el.img} />
+                  <div className='time'>{el.duration}</div>
+                  <div className='h-line' />
+                  <div className='price'>{el.price}부터</div>
                 </div>
               </div>
             ))}
