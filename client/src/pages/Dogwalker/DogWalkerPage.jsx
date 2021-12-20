@@ -27,8 +27,9 @@ const DogWalkerPageWrapper = styled.div`
       'img location';
     grid-template-columns: 10rem 1fr;
     grid-template-rows: 2rem 1fr;
-    padding-top: 2rem;
     margin-bottom: 1rem;
+    padding: 2rem .8rem 0;
+    ${media.tablet`padding: 2rem 0 0;`}
   }
   .image-container {
     grid-area: img;
@@ -57,20 +58,29 @@ const DogWalkerPageWrapper = styled.div`
     display: grid;
     grid-template-areas: 'tag-c' 'right-c' 'review-c';
     grid-template-columns: 1fr;
-    ${media.tablet`grid-template-areas: 'tag-c right-c' 'review-c right-c';`}
+    ${media.tablet`grid-template-areas: 'intro-c right-c' 'tag-c right-c'  'review-c right-c';`}
     ${media.tablet`grid-template-columns: 60% 40%;`}
     justify-content: stretch;
   }
+  .intro-container {
+    grid-area: intro-c;
+    margin-bottom: 2rem;
+  }
   .tag-container {
     grid-area: tag-c;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+    ${media.tablet`padding: 0;`}
   }
   .review-container {
     grid-area: review-c;
-    padding-right: 3rem;
+    padding: 0 1rem;
+    ${media.tablet`padding-right: 3rem; padding-left: 0;`}
   }
   .right-container {
     grid-area: right-c;
+    padding: 0 .8rem;
+    ${media.tablet`padding: 0;`}
   }
   .request-container {
     border: 1px solid ${Colors.lightGray};
@@ -262,6 +272,10 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
           <div className='location'>{dogWalker.locations.map((el, idx) => <span key={idx} className='location-name'>서울 {el}</span>)}</div>
         </div>
         <div className='bottom-container'>
+          <div className='intro-container'>
+            <div className='title'>도그워커 소개</div>
+            도그워커 소개
+          </div>
           <div className='tag-container'>
             <div className='title'>이용 가능 서비스</div>
             {dogWalker.tags.map((tag, idx) =>
