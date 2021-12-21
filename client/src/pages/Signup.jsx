@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import axios from 'axios';
 import logo from '../images/logo.png';
 import { Colors } from '../components/utils/_var';
+import { media } from '../components/utils/_media-queries';
 import { Alertbox, Backdrop, InputField } from '../components/UserComponents';
 import CloseButton from '../components/CloseButton';
 
 export const SignupView = styled.div`
   box-sizing: border-box;
-  width: 20rem;
+  width: 20.7rem;
   height: 25rem;
   background-color: white;
   position: relative;
@@ -17,7 +18,7 @@ export const SignupView = styled.div`
   box-shadow: 10px 10px grey;
   .logo {
     width: 7.5rem;
-    margin: 0.7rem auto 1rem;
+    margin: 0.4rem auto 1rem;
   }
 `;
 
@@ -37,7 +38,7 @@ export const SignUpButton = styled.button`
   border-radius: 7px;
   border: none;
   color: white;
-  :hover {
+  &:hover {
     background-color: ${Colors.yellow};
   }
 `;
