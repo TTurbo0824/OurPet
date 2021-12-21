@@ -178,7 +178,7 @@ function LandingPage () {
           <div className='price-container'>
             <div className='intro2'>우리 아이 산책 {'\n'} 더 이상 {'\n'}미루지 마세요</div>
             {charges.map((el, idx) => (
-              <div key={idx} className={`price-card c${idx+1}`}>
+              <div key={idx} className={`price-card c${idx + 1}`}>
                 <img className='charge-img' alt='profile' src={el.img} />
                 <div className='time'>{el.duration}</div>
                 <div className='h-line' />
