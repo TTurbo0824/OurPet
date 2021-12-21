@@ -28,7 +28,6 @@ const LandingWrapper = styled.div`
     font-size: 2.75rem;
     text-align: center;
     color: ${Colors.black};
-    /* width: rem; */
     margin: 1.5rem auto;
     white-space: pre-line;
   }
@@ -53,16 +52,34 @@ const LandingWrapper = styled.div`
     font-size: 2.75rem;
   }
   .price-container {
-    display: flex;
+    display: grid;
+    grid-template-areas:
+      'des c1 c2';
+    /* background-color: lime; */
+  }
+  .intro2 {
+    grid-area: des;
+    font-size: 2.75rem;
+    width: 26rem;
+    white-space: pre-line;
+    margin-top: 4.5rem; 
+    /* background-color: lavender; */
   }
   .price-card {
-    /* border: 1px solid black; */
     width: 16.5rem;
     height: 25rem;
     box-shadow: 1px 1px 5px 2px ${Colors.lightGray};
     background-color: white;
     border-radius: 8px;
-    margin-right: 1.5rem;
+  }
+  .c1 {
+    /* background-color: cyan; */
+    grid-area: c1;
+    margin-top: 1.5rem;
+    margin-right: 2rem;
+  }
+  .c2 {
+    grid-area: c2;
   }
   .charge-img {
     height: 9.5rem;
@@ -82,6 +99,12 @@ const LandingWrapper = styled.div`
     padding-top: 2.5rem;
     height: 7rem;
     /* background-color: yellow; */
+  }
+  .highlight {
+    color: ${Colors.yellow};
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-right: .2rem;
   }
   .review-container {
     display: flex;
@@ -132,7 +155,7 @@ function LandingPage () {
   const reviews = useSelector((state) => state.review).dogWalkers[0].review;
   let selectedReview = [...reviews];
   selectedReview = selectedReview.slice(0, 3);
-  // console.log(selectedReview);
+
   const charges = [{ duration: '30분 산책', price: '₩12,000', img: charge01 }, { duration: '60분 산책', price: '₩15,000', img: charge02 }];
   const profileImage = [pug, minipin, corgi, default_profile];
 
@@ -152,16 +175,14 @@ function LandingPage () {
           <button className='intro-bnt' onClick={handleClicked}>내 주변 도그워커 찾기</button>
         </div>
         <div className='landing-container'>
-          우리 아이 산책 더 이상 미루지 마세요
           <div className='price-container'>
+            <div className='intro2'>우리 아이 산책 {'\n'} 더 이상 {'\n'}미루지 마세요</div>
             {charges.map((el, idx) => (
-              <div key={idx}>
-                <div className='price-card'>
-                  <img className='charge-img' alt='profile' src={el.img} />
-                  <div className='time'>{el.duration}</div>
-                  <div className='h-line' />
-                  <div className='price'>{el.price}부터</div>
-                </div>
+              <div key={idx} className={`price-card c${idx+1}`}>
+                <img className='charge-img' alt='profile' src={el.img} />
+                <div className='time'>{el.duration}</div>
+                <div className='h-line' />
+                <div className='price'><span className='highlight'>{el.price}</span>부터</div>
               </div>
             ))}
           </div>
