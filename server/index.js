@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
   res.send('Let\'s have a safe and enjoyable walk with WalkingDog!');
 });
 app.post('/signup', controllers.signup);
+app.post('/auth', controllers.auth);
 app.post('/login', controllers.login);
 app.post('/logout', controllers.logout);
 app.get('/my-data', controllers.myData);
