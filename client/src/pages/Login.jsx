@@ -8,7 +8,7 @@ import { Colors } from '../components/utils/_var';
 import { Alertbox, Backdrop, InputField } from '../components/UserComponents';
 import CloseButton from '../components/CloseButton';
 
-export const LoginView = styled.div`
+const LoginView = styled.div`
   box-sizing: border-box;
   width: 19rem;
   height: 21rem;
@@ -23,14 +23,14 @@ export const LoginView = styled.div`
   }
 `;
 
-export const LoginInputContainer = styled.div`
+const LoginInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
 `;
 
-export const LoginButton = styled.button`
+const LoginButton = styled.button`
   margin: 0.2rem 0.4rem 0.4rem;
   cursor: pointer;
   font-size: 0.9rem;
@@ -45,7 +45,7 @@ export const LoginButton = styled.button`
   }
 `;
 
-export const SignupSpan = styled.span`
+const SignupSpan = styled.span`
   font-size: 0.8rem;
   margin: auto 0.2rem auto 0.1rem;
   text-align: right;

@@ -4,36 +4,65 @@ import axios from 'axios';
 import logo from '../images/logo.png';
 import { Colors } from '../components/utils/_var';
 import { media } from '../components/utils/_media-queries';
-import { Alertbox, Backdrop, InputField } from '../components/UserComponents';
+import { Alertbox, Backdrop } from '../components/UserComponents';
 import CloseButton from '../components/CloseButton';
 
-export const SignupView = styled.div`
+const SignupView = styled.div`
   box-sizing: border-box;
-  width: 20.7rem;
-  height: 25rem;
+  width: 21rem;
+  height: 26rem;
   background-color: white;
   position: relative;
   text-align: center;
-  padding-top: 0.7rem;
+  padding-top: .5rem;
   box-shadow: 10px 10px grey;
   .logo {
     width: 7.5rem;
-    margin: 0.4rem auto 1rem;
+    margin: -.2rem auto .5rem;
+  }
+  .veri {
+    cursor: pointer;
+    font-size: .75rem;
+    margin-top: -.2rem;
+    margin-bottom: .5rem;
+    text-decoration: underline;
+    color: ${Colors.darkGray};
+    :hover {
+      color: ${Colors.black};
+    }
   }
 `;
 
-export const SignUpInputContainer = styled.div`
+const SignUpInputField = styled.input`
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 15px;
+  width: 15rem;
+  height: 1.9rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  color: ${Colors.darkGray};
+  :focus {
+    outline: none;
+  }
+  ::-webkit-input-placeholder {
+    color: ${Colors.gray};
+    font-size: 0.8rem;
+  }
+`;
+
+const SignUpInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-export const SignUpButton = styled.button`
+const SignUpButton = styled.button`
   margin: 0.2rem 0.4rem 0rem;
   cursor: pointer;
   font-size: 0.9rem;
   background-color: ${Colors.lightYellow};
-  width: 13.2rem;
+  width: 15rem;
   height: 2.5rem;
   border-radius: 7px;
   border: none;
@@ -47,13 +76,15 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
   const [userInfo, setUserInfo] = useState({
     nickname: '',
     email: '',
-    password: ''
+    password: '',
+    verified: false
   });
 
   const [checkNickname, setCheckNickname] = useState('');
   const [checkEmail, setCheckEmail] = useState(true);
   const [checkPassword, setCheckPassword] = useState('');
   const [checkRetypePassword, setCheckRetypePassword] = useState(false);
+  const [veriCode, setVeriCode] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleInputValue = (key) => (e) => {
@@ -108,6 +139,15 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
     }
   };
 
+  const handleCheckVeriCode = (e) => {
+    // console.log(userInfo.verified, veriCode, e.target.value);
+    if (Number(e.target.value) === veriCode) {
+      setUserInfo({ ...userInfo, verified: true });
+    } else {
+      setUserInfo({ ...userInfo, verified: false });
+    }
+  };
+
   const inputCheck = (key) => (e) => {
     handleInputValue(key)(e);
     if (key === 'nickname') {
@@ -142,6 +182,8 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
       setErrorMsg('비밀번호 형식을 확인해주세요');
     } else if (checkRetypePassword !== true) {
       setErrorMsg('비밀번호가 일치하지 않습니다');
+    } else if (!userInfo.verified) {
+      setErrorMsg('이메일을 확인해 인증코드를 입력해주세요.');
     } else {
       axios
         .post(`${process.env.REACT_APP_API_URL}/signup`, userInfo, {
@@ -167,16 +209,40 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
     }
   };
 
+  const sendEmail = () => {
+    if (!checkEmail || !userInfo.email) {
+      setErrorMsg('올바른 이메일 주소를 입력해주세요');
+    } else {
+      axios
+        .post(`${process.env.REACT_APP_API_URL}/auth`, { email: userInfo.email }, {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            setVeriCode(res.data.data);
+            setErrorMsg('인증 이메일이 발송되었습니다');
+          }
+        })
+        .catch((error) => {
+          setErrorMsg('오류가 발생했습니다');
+          console.log(error.response.data.message);
+        });
+    }
+  };
+
   return (
     <Backdrop>
       <SignupView>
         <CloseButton onClick={handleModal} />
         <img className='logo' src={logo} alt='logo' />
         <SignUpInputContainer>
-          <InputField onChange={inputCheck('nickname')} placeholder='닉네임 (3-8자)' />
-          <InputField onChange={inputCheck('email')} placeholder='이메일' />
-          <InputField type='password' onChange={inputCheck('password')} placeholder='비밀번호 (영문, 숫자 반드시 포함)' />
-          <InputField
+          <SignUpInputField onChange={inputCheck('nickname')} placeholder='닉네임 (3-8자)' />
+          <SignUpInputField onChange={inputCheck('email')} placeholder='이메일' />
+          <div className='veri' onClick={sendEmail}>이메일 인증</div>
+          <SignUpInputField onChange={handleCheckVeriCode} placeholder='인증코드 입력' />
+          <SignUpInputField type='password' onChange={inputCheck('password')} placeholder='비밀번호 (영문, 숫자 반드시 포함)' />
+          <SignUpInputField
             type='password'
             onChange={handleCheckPassword}
             placeholder='비밀번호 재확인'
