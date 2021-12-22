@@ -32,7 +32,7 @@ export const InputField = styled.input`
   :focus {
     outline: none;
   }
-  &::-webkit-input-placeholder {
+  ::-webkit-input-placeholder {
     color: ${Colors.gray};
     font-size: 0.8rem;
   }
