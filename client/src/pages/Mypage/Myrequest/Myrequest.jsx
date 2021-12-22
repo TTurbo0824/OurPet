@@ -98,7 +98,7 @@ function MyRequest ({ handleMessage, handleNotice }) {
   useEffect(() => {
     const ids = [];
     if (allRequest.length !== 0) {
-      allRequest.map((request, i) => {
+      allRequest.forEach((request, i) => {
         ids[i] = request.id;
       });
       setIdList(ids);

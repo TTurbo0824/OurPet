@@ -142,7 +142,6 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   let dogWalker = dogWalkerList.filter((dogwalker) => dogwalker.id === dogWalkerId);
   const rating = useSelector((state) => state.rating).dogWalkers[dogWalkerId - 1].rating;
   const reviews = useSelector((state) => state.review).dogWalkers[dogWalkerId - 1].review;
-  let allRequest = useSelector((state) => state.request).dogWalkerRequest;
   const [isLoading, setIsLoading] = useState(false);
   const [ratingData, setRatingData] = useState([]);
   const [reviewData, setReviewData] = useState([]);
@@ -180,8 +179,6 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   const allReview = [...reviews];
   allReview.push(...reviewData);
 
-  allRequest = allRequest ? allRequest.length : 0;
-
   const requestInitial = {
     id: 0,
     dogwalkerId: dogWalkerId,
@@ -209,7 +206,7 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   const charges = dogWalker.charges;
   const chargeList = [];
   // console.log(dogWalker.charges);
-  Object.keys(charges).map((charge) => {
+  Object.keys(charges).forEach((charge) => {
     chargeList.push(charge);
     chargeList.push(...charges[charge]);
   });

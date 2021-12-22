@@ -28,7 +28,7 @@ const LandingWrapper = styled.div`
     font-size: 2.75rem;
     text-align: center;
     color: ${Colors.black};
-    margin: 1.5rem auto;
+    margin: 3.5rem auto 1.5rem;
     white-space: pre-line;
   }
   .intro-bnt {
@@ -42,7 +42,7 @@ const LandingWrapper = styled.div`
     color: white;
     border: none;
     border-radius: 8px;
-    &:hover {
+    :hover {
       background-color: ${Colors.yellow};
     }
   }
@@ -55,6 +55,9 @@ const LandingWrapper = styled.div`
     display: grid;
     grid-template-areas:
       'des c1 c2';
+    grid-template-columns: 43% 27% 30%;
+    width: 100%;
+    margin-bottom: 8rem;
     /* background-color: lime; */
   }
   .intro2 {
@@ -63,6 +66,7 @@ const LandingWrapper = styled.div`
     width: 26rem;
     white-space: pre-line;
     margin-top: 4.5rem; 
+    padding-left: 3.25rem;
     /* background-color: lavender; */
   }
   .price-card {
@@ -70,13 +74,14 @@ const LandingWrapper = styled.div`
     height: 25rem;
     box-shadow: 1px 1px 5px 2px ${Colors.lightGray};
     background-color: white;
+    /* background-color: lime; */
     border-radius: 8px;
   }
   .c1 {
     /* background-color: cyan; */
     grid-area: c1;
     margin-top: 1.5rem;
-    margin-right: 2rem;
+    /* margin-right: 2rem; */
   }
   .c2 {
     grid-area: c2;
@@ -176,7 +181,7 @@ function LandingPage () {
         </div>
         <div className='landing-container'>
           <div className='price-container'>
-            <div className='intro2'>우리 아이 산책 {'\n'} 더 이상 {'\n'}미루지 마세요</div>
+            <div className='intro2'>우리 아이 산책 {'\n'} 더 이상 {'\n'}미루지 마세요!</div>
             {charges.map((el, idx) => (
               <div key={idx} className={`price-card c${idx + 1}`}>
                 <img className='charge-img' alt='profile' src={el.img} />
