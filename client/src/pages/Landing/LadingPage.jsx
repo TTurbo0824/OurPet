@@ -9,6 +9,7 @@ import { Colors } from '../../components/utils/_var';
 import { media } from '../../components/utils/_media-queries';
 import charge01 from '../../images/charge01.jpeg';
 import charge02 from '../../images/charge02.jpeg';
+import mainImg from '../../images/main.jpeg';
 
 const LandingWrapper = styled.div`
   .main {
@@ -17,6 +18,13 @@ const LandingWrapper = styled.div`
     min-height: calc(100vh - 10.65rem);
     padding: 0 2rem;
   }
+  .main-img {
+    display: flex;
+    width: 48rem;
+    margin: 1rem auto;
+    padding: .5rem;
+    /* background-color: lavender;  */
+  }
   .landing-container {
     /* background-color: lavender; */
     width: 100vw;
@@ -24,11 +32,20 @@ const LandingWrapper = styled.div`
     padding: 1rem;
     margin-bottom: 1rem;
   }
+  .landing-container:first-of-type {
+    /* background-color: lavender; */
+    margin-bottom: 8rem;
+  }
+  .landing-container:nth-child(3) {
+    background-color: #fafafa;
+    padding-top: 4.5rem;
+    padding-bottom: 7.5rem;
+  }
   .intro1 {
-    font-size: 2.75rem;
+    font-size: 2.7rem;
     text-align: center;
     color: ${Colors.black};
-    margin: 3.5rem auto 1.5rem;
+    margin: 1.75rem auto 1.5rem;
     white-space: pre-line;
   }
   .intro-bnt {
@@ -48,7 +65,7 @@ const LandingWrapper = styled.div`
   }
   .title {
     text-align: center;
-    margin: 1rem auto 2.5rem;
+    margin: 1rem auto 3rem;
     font-size: 2.75rem;
   }
   .price-container {
@@ -178,6 +195,7 @@ function LandingPage () {
             즐거운 산책 시간, {'\n'} 워킹도그에게 맡겨보세요!
           </div>
           <button className='intro-bnt' onClick={handleClicked}>내 주변 도그워커 찾기</button>
+          <img className='main-img' alt='main-image' src={mainImg} />
         </div>
         <div className='landing-container'>
           <div className='price-container'>
