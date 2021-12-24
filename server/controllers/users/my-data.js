@@ -21,7 +21,6 @@ module.exports = async (req, res) => {
           userId: accessTokenData.id
         }
       });
-      // console.log(allRequests);
 
       if (allRequests) {
         allRequests = Sequelize.getValues(allRequests);
@@ -72,7 +71,7 @@ module.exports = async (req, res) => {
           where: {
             userId: accessTokenData.id
           },
-          attributes: ['id', 'historyId', 'dogwalkerId']
+          attributes: ['id', 'dogwalkerId']
         });
 
         allRatings = Sequelize.getValues(allRatings);
@@ -93,7 +92,7 @@ module.exports = async (req, res) => {
           where: {
             userId: accessTokenData.id
           },
-          attributes: ['id', 'historyId', 'dogwalkerId']
+          attributes: ['id', 'dogwalkerId']
         });
 
         allReviews = Sequelize.getValues(allReviews);

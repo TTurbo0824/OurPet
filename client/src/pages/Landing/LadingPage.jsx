@@ -9,6 +9,8 @@ import { Colors } from '../../components/utils/_var';
 import { media } from '../../components/utils/_media-queries';
 import charge01 from '../../images/charge01.jpeg';
 import charge02 from '../../images/charge02.jpeg';
+import Intro1 from './Intro1';
+import Intro2 from './Intro2';
 
 const LandingWrapper = styled.div`
   .main {
@@ -24,37 +26,27 @@ const LandingWrapper = styled.div`
     padding: 1rem;
     margin-bottom: 1rem;
   }
-  .intro1 {
-    font-size: 2.75rem;
-    text-align: center;
-    color: ${Colors.black};
-    margin: 1.5rem auto;
-    white-space: pre-line;
+  .landing-container:first-of-type {
+    /* background-color: lavender; */
+    margin-bottom: 8rem;
   }
-  .intro-bnt {
-    cursor: pointer;
-    display: flex;
-    margin: 3rem auto auto;
-    font-size: 1.2rem;
-    font-weight: bold;
-    padding: 1rem 1.5rem;
-    background-color: ${Colors.lightYellow};
-    color: white;
-    border: none;
-    border-radius: 8px;
-    &:hover {
-      background-color: ${Colors.yellow};
-    }
+  .landing-container:nth-child(3) {
+    background-color: #fafafa;
+    padding-top: 4.5rem;
+    padding-bottom: 7.5rem;
   }
   .title {
     text-align: center;
-    margin: 1rem auto 2.5rem;
+    margin: 1rem auto 3rem;
     font-size: 2.75rem;
   }
   .price-container {
     display: grid;
     grid-template-areas:
       'des c1 c2';
+    grid-template-columns: 43% 27% 30%;
+    width: 100%;
+    margin-bottom: 8rem;
     /* background-color: lime; */
   }
   .intro2 {
@@ -63,6 +55,7 @@ const LandingWrapper = styled.div`
     width: 26rem;
     white-space: pre-line;
     margin-top: 4.5rem; 
+    padding-left: 3.25rem;
     /* background-color: lavender; */
   }
   .price-card {
@@ -70,13 +63,14 @@ const LandingWrapper = styled.div`
     height: 25rem;
     box-shadow: 1px 1px 5px 2px ${Colors.lightGray};
     background-color: white;
+    /* background-color: lime; */
     border-radius: 8px;
   }
   .c1 {
     /* background-color: cyan; */
     grid-area: c1;
     margin-top: 1.5rem;
-    margin-right: 2rem;
+    /* margin-right: 2rem; */
   }
   .c2 {
     grid-area: c2;
@@ -169,14 +163,17 @@ function LandingPage () {
     <LandingWrapper>
       <div className='main'>
         <div className='landing-container'>
-          <div className='intro1'>
+          {/* <Intro1 /> */}
+          <Intro2 />
+          {/* <div className='intro1'>
             즐거운 산책 시간, {'\n'} 워킹도그에게 맡겨보세요!
           </div>
           <button className='intro-bnt' onClick={handleClicked}>내 주변 도그워커 찾기</button>
+          <img className='main-img' alt='main-image' src={mainImg} /> */}
         </div>
         <div className='landing-container'>
           <div className='price-container'>
-            <div className='intro2'>우리 아이 산책 {'\n'} 더 이상 {'\n'}미루지 마세요</div>
+            <div className='intro2'>우리 아이 산책 {'\n'} 더 이상 {'\n'}미루지 마세요!</div>
             {charges.map((el, idx) => (
               <div key={idx} className={`price-card c${idx + 1}`}>
                 <img className='charge-img' alt='profile' src={el.img} />

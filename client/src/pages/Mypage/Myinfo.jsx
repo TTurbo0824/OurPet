@@ -204,9 +204,10 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
             handleMessage('회원정보가 수정되었습니다.');
             if (myInfo.nickname === '') {
               myInfo.nickname = nickname;
-            } else {
-              myInfo.nickname = myInfo.nickname;
             }
+            // else {
+            //   myInfo.nickname = myInfo.nickname;
+            // }
             if (myInfo.password === '') {
               myInfo.password = '';
             }

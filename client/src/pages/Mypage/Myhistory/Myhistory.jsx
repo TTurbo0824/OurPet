@@ -87,7 +87,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   useEffect(() => {
     const ids = [];
     if (allHistories.length !== 0) {
-      allHistories.map((history, i) => {
+      allHistories.forEach((history, i) => {
         ids[i] = history.id;
       });
       setIdList(ids);
