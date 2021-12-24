@@ -9,7 +9,8 @@ import { Colors } from '../../components/utils/_var';
 import { media } from '../../components/utils/_media-queries';
 import charge01 from '../../images/charge01.jpeg';
 import charge02 from '../../images/charge02.jpeg';
-import mainImg from '../../images/main.jpeg';
+import Intro1 from './Intro1';
+import Intro2 from './Intro2';
 
 const LandingWrapper = styled.div`
   .main {
@@ -17,13 +18,6 @@ const LandingWrapper = styled.div`
     flex-wrap: wrap;
     min-height: calc(100vh - 10.65rem);
     padding: 0 2rem;
-  }
-  .main-img {
-    display: flex;
-    width: 48rem;
-    margin: 1rem auto;
-    padding: .5rem;
-    /* background-color: lavender;  */
   }
   .landing-container {
     /* background-color: lavender; */
@@ -40,28 +34,6 @@ const LandingWrapper = styled.div`
     background-color: #fafafa;
     padding-top: 4.5rem;
     padding-bottom: 7.5rem;
-  }
-  .intro1 {
-    font-size: 2.7rem;
-    text-align: center;
-    color: ${Colors.black};
-    margin: 1.75rem auto 1.5rem;
-    white-space: pre-line;
-  }
-  .intro-bnt {
-    cursor: pointer;
-    display: flex;
-    margin: 3rem auto auto;
-    font-size: 1.2rem;
-    font-weight: bold;
-    padding: 1rem 1.5rem;
-    background-color: ${Colors.lightYellow};
-    color: white;
-    border: none;
-    border-radius: 8px;
-    :hover {
-      background-color: ${Colors.yellow};
-    }
   }
   .title {
     text-align: center;
@@ -191,11 +163,13 @@ function LandingPage () {
     <LandingWrapper>
       <div className='main'>
         <div className='landing-container'>
-          <div className='intro1'>
+          {/* <Intro1 /> */}
+          <Intro2 />
+          {/* <div className='intro1'>
             즐거운 산책 시간, {'\n'} 워킹도그에게 맡겨보세요!
           </div>
           <button className='intro-bnt' onClick={handleClicked}>내 주변 도그워커 찾기</button>
-          <img className='main-img' alt='main-image' src={mainImg} />
+          <img className='main-img' alt='main-image' src={mainImg} /> */}
         </div>
         <div className='landing-container'>
           <div className='price-container'>

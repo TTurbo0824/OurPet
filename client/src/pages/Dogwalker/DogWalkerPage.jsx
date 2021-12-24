@@ -56,7 +56,7 @@ const DogWalkerPageWrapper = styled.div`
   }
   .bottom-container {
     display: grid;
-    grid-template-areas: 'tag-c' 'right-c' 'review-c';
+    grid-template-areas: 'intro-c' 'tag-c' 'right-c' 'review-c';
     grid-template-columns: 1fr;
     ${media.tablet`grid-template-areas: 'intro-c right-c' 'tag-c right-c'  'review-c right-c';`}
     ${media.tablet`grid-template-columns: 60% 40%;`}
@@ -65,6 +65,8 @@ const DogWalkerPageWrapper = styled.div`
   .intro-container {
     grid-area: intro-c;
     margin-bottom: 2rem;
+    padding: 0 1rem;
+    ${media.tablet`padding: 0;`}
   }
   .tag-container {
     grid-area: tag-c;
