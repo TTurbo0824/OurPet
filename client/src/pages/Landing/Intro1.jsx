@@ -8,6 +8,7 @@ const Intro1Wrapper = styled.div`
     text-align: center;
     color: ${Colors.black};
     margin: 1.75rem auto 1.5rem;
+
     white-space: pre-line;
   }
   .intro-bnt {
@@ -28,8 +29,9 @@ const Intro1Wrapper = styled.div`
   .main-img {
     display: flex;
     width: 48rem;
-    margin: 1rem auto;
+    margin: 1rem auto 0;
     padding: .5rem;
+    /* margin: 0rem; */
   }
 `;
 function Intro1 () {
@@ -39,7 +41,7 @@ function Intro1 () {
         즐거운 산책 시간, {'\n'} 워킹도그에게 맡겨보세요!
       </div>
       <button className='intro-bnt'> 내 주변 도그워커 찾기</button>
-      <img className='main-img' alt='main-image' src={mainImg} />
+      {/* <img className='main-img' alt='main-image' src={mainImg} /> */}
     </Intro1Wrapper>
   );
 }

@@ -28,9 +28,9 @@ const LandingWrapper = styled.div`
   }
   .landing-container:first-of-type {
     /* background-color: lavender; */
-    margin-bottom: 8rem;
+    /* margin-bottom: 8rem; */
   }
-  .landing-container:nth-child(3) {
+  .landing-container:nth-child(2) {
     background-color: #fafafa;
     padding-top: 4.5rem;
     padding-bottom: 7.5rem;
@@ -46,17 +46,27 @@ const LandingWrapper = styled.div`
       'des c1 c2';
     grid-template-columns: 43% 27% 30%;
     width: 100%;
+    margin-top: 3rem;
     margin-bottom: 8rem;
     /* background-color: lime; */
   }
   .intro2 {
     grid-area: des;
-    font-size: 2.75rem;
     width: 26rem;
     white-space: pre-line;
-    margin-top: 4.5rem; 
     padding-left: 3.25rem;
     /* background-color: lavender; */
+  }
+  .intro2-title {
+    font-size: 2.75rem;
+    margin-top: 3rem; 
+    color: ${Colors.black};
+  }
+  .intro2-con {
+    margin-top: 1.5rem; 
+    font-size: 1.2rem;
+    line-height: 2rem;
+    color: ${Colors.darkGray};
   }
   .price-card {
     width: 16.5rem;
@@ -163,8 +173,8 @@ function LandingPage () {
     <LandingWrapper>
       <div className='main'>
         <div className='landing-container'>
-          {/* <Intro1 /> */}
-          <Intro2 />
+          <Intro1 />
+          {/* <Intro2 /> */}
           {/* <div className='intro1'>
             즐거운 산책 시간, {'\n'} 워킹도그에게 맡겨보세요!
           </div>
@@ -173,7 +183,11 @@ function LandingPage () {
         </div>
         <div className='landing-container'>
           <div className='price-container'>
-            <div className='intro2'>우리 아이 산책 {'\n'} 더 이상 {'\n'}미루지 마세요!</div>
+            <div className='intro2'>
+              <div className='intro2-title'>우리 아이 산책 {'\n'} 더 이상 {'\n'}미루지 마세요!</div>
+              <div className='intro2-con'>검증된 도그워커가 집 앞까지! {'\n'} 우리 아이의 안전하고{'\n'} 즐거운 산책을 책임집니다</div>
+
+            </div>
             {charges.map((el, idx) => (
               <div key={idx} className={`price-card c${idx + 1}`}>
                 <img className='charge-img' alt='profile' src={el.img} />
