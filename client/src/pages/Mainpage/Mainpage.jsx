@@ -137,7 +137,7 @@ const LoadingWrapper = styled.div`
     margin-bottom: 1.2rem;
   } */
   .loading {
-    width: 6.5rem;
+    width: 7rem;
     /* margin-top: .5rem; */
     margin-bottom: 1rem;
   }
@@ -399,7 +399,7 @@ function Mainpage () {
             <div className='dogwalker-container'>
               {walkerResult.length === 0
                 ? (
-                  <div>검색 결과가 없습니다</div>
+                  <div>검색 조건에 해당하는 도그워커가 없습니다.</div>
                   )
                 : (
                     ratingData.length !== 0 && walkerResult.map((dogWalker, idx) => {

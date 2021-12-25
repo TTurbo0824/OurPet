@@ -90,8 +90,8 @@ export default function Dogwalker ({ rating, minPrice, dogWalker, handleClick, t
         <img className='dogwalker-img' src={dogWalker.img} alt={dogWalker.name} />
         <span className='dogwalker-location'>{dogWalker.locations.join(' ')}</span>
         <span className='dogwalker-name'>
-          {/* {dogWalker.name} */}
-          {dogWalker.name} {dogWalker.id}
+          {dogWalker.name}
+          {/* {dogWalker.name} {dogWalker.id} */}
         </span>
         <div className='h-line' />
         <div className='tag-container'>
