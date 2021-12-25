@@ -42,12 +42,11 @@ function Intro2 () {
     <Intro2Wrapper>
       <div className='intro'>
         <div className='intro1'>
-            즐거운 산책 시간, {'\n'} 워킹도그에게 {'\n'} 맡겨보세요!
+          즐거운 산책 시간, {'\n'} 워킹도그에게 {'\n'} 맡겨보세요!
         </div>
         <button className='intro-bnt'> 내 주변 도그워커 찾기</button>
       </div>
-        <img className='main-img' alt='main-image' src={mainImg2} />
-      
+      <img className='main-img' alt='main-image' src={mainImg2} />
     </Intro2Wrapper>
   );
 }
