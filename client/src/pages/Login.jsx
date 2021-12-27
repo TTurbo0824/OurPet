@@ -8,6 +8,8 @@ import { Colors } from '../components/utils/_var';
 import { Alertbox, Backdrop, InputField } from '../components/UserComponents';
 import CloseButton from '../components/CloseButton';
 
+const { Kakao } = window;
+
 const LoginView = styled.div`
   box-sizing: border-box;
   width: 19rem;
@@ -109,7 +111,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
         })
         .then((token) => {
           axios
-            .get(process.env.REACT_APP_API_URL + '/user-info', {
+            .get(`${process.env.REACT_APP_API_URL}/user-info`, {
               headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -122,7 +124,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
             })
             .then(() => {
               axios
-                .get(process.env.REACT_APP_API_URL + '/my-data', {
+                .get(`${process.env.REACT_APP_API_URL}/my-data`, {
                   headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -153,6 +155,74 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const goSignup = () => {
     handleModal();
     signup();
+  };
+
+  const kakaoLogin = () => {
+    Kakao.Auth.login({
+      scope: 'profile_nickname, profile_image',
+      success: (res) => {
+        Kakao.API.request({
+          url: '/v2/user/me',
+          success: (res) => {
+            const data = {
+              nickname: res.kakao_account.profile.nickname,
+              email: res.id.toString(),
+            };
+            // console.log(data);
+            dispatch(getRequest([]));
+            dispatch(getHistory([]));
+            dispatch(getRating([]));
+            dispatch(getReview([]));
+            axios
+              .post(`${process.env.REACT_APP_API_URL}/kakao`, data, {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+              })
+              .then((res) => {
+                if (res.status === 200 || res.status === 201) {
+                  handleModal();
+                  handleNotice(true);
+                  handleMessage('로그인 성공!');
+                  return res.data.accessToken;
+                }
+              })
+              .then((token) => {
+                axios
+                  .get(`${process.env.REACT_APP_API_URL}/user-info`, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                      'Content-Type': 'application/json'
+                    }
+                  })
+                  .then((res) => {
+                    if (res.status === 200) {
+                      dispatch(userLogin(token, res.data.data));
+                    }
+                  })
+                  .then(() => {
+                    axios
+                      .get(`${process.env.REACT_APP_API_URL}/my-data`, {
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                          'Content-Type': 'application/json'
+                        }
+                      })
+                      .then((res) => {
+                        if (res.status === 200) {
+                          dispatch(getRequest(res.data.data.allRequests));
+                          dispatch(getHistory(res.data.data.allHistories));
+                          dispatch(getRating(res.data.data.ratings));
+                          dispatch(getReview(res.data.data.reviews));
+                        }
+                      });
+                  })
+                  
+              })
+              .catch((err) => console.log(err.response));
+          }
+        });
+      }
+    });
   };
 
   const guestLoginRequest = () => {
@@ -203,6 +273,8 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
       });
   };
 
+
+
   return (
     <Backdrop>
       <LoginView>
@@ -230,6 +302,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
           <SignupSpan textColor={Colors.gray} onClick={goSignup}>회원가입</SignupSpan>
           <SignupSpan>|</SignupSpan>
           <SignupSpan textColor={Colors.gray} onClick={guestLoginRequest}>체험하기</SignupSpan>
+          <SignupSpan textColor={Colors.gray} onClick={kakaoLogin}>카카오로그인</SignupSpan>
         </div>
         <Alertbox>{errorMsg}</Alertbox>
       </LoginView>
