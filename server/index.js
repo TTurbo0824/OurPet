@@ -27,6 +27,7 @@ app.post('/auth', controllers.auth);
 app.post('/login', controllers.login);
 app.post('/logout', controllers.logout);
 app.get('/my-data', controllers.myData);
+app.post('/kakao', controllers.kakao);
 app.get('/guest', controllers.guest);
 app.post('/guest', controllers.guestReset);
 app.get('/mainpage', controllers.mainpage);

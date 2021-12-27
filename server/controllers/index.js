@@ -4,6 +4,7 @@ module.exports = {
   login: require('./users/login'),
   logout: require('./users/logout'),
   myData: require('./users/my-data'),
+  kakao: require('./users/kakao'),
   guest: require('./guest/guest'),
   guestReset: require('./guest/guest-reset'),
   mainpage: require('./mainpage/mainpage'),
