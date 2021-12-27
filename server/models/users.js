@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     kakao: DataTypes.BOOLEAN,
     nickname: DataTypes.STRING,
     email: DataTypes.STRING,
+    img_url: DataTypes.TEXT,
     salt: DataTypes.TEXT,
     password: DataTypes.TEXT
   }, {

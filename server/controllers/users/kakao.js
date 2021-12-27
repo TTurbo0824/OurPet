@@ -3,7 +3,7 @@ const { generateAccessToken, generateRefreshToken } = require('../tokenFunctions
 
 module.exports = async (req, res) => {
   try {
-    const { nickname, email } = req.body;
+    const { nickname, email, img } = req.body;
 
     const members = await users.findAll({
       where: {
@@ -34,11 +34,12 @@ module.exports = async (req, res) => {
 
       const payload = {
         id: allMembers[0].dataValues.id + 1,
-        email: email,
+        kakao: true,
         nickname: userNickname,
+        email: email,
+        img_url: img,
         salt: null,
-        password: null,
-        kakao: true
+        password: null
       };
 
       await users.create(payload);
