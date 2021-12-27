@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   users.init({
+    kakao: DataTypes.BOOLEAN,
     nickname: DataTypes.STRING,
     email: DataTypes.STRING,
     salt: DataTypes.TEXT,
