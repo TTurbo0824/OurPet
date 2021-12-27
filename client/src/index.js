@@ -5,8 +5,9 @@ import { store, persistor } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import './index.css';
-
 require('dotenv').config();
+
+window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
 
 ReactDOM.render(
   <React.StrictMode>
