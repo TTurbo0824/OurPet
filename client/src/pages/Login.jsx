@@ -5,15 +5,17 @@ import axios from 'axios';
 import { userLogin, getHistory, getRequest, resetHistory, resetRequest, getRating, getReview } from '../redux/action';
 import logo from '../images/logo.png';
 import { Colors } from '../components/utils/_var';
+import { media } from '../components/utils/_media-queries';
 import { Alertbox, Backdrop, InputField } from '../components/UserComponents';
 import CloseButton from '../components/CloseButton';
+import kakaoLogo from '../images/kakao_logo.png';
 
 const { Kakao } = window;
 
 const LoginView = styled.div`
   box-sizing: border-box;
-  width: 19rem;
-  height: 21rem;
+  width: 20rem;
+  height: 24rem;
   background-color: white;
   position: relative;
   text-align: center;
@@ -33,8 +35,8 @@ const LoginInputContainer = styled.div`
 `;
 
 const LoginButton = styled.button`
-  margin: 0.2rem 0.4rem 0.4rem;
   cursor: pointer;
+  margin: 0.1rem auto 0.3rem;
   font-size: 0.9rem;
   background-color: ${Colors.lightYellow};
   width: 13.2rem;
@@ -45,6 +47,36 @@ const LoginButton = styled.button`
   :hover {
     background-color: ${Colors.yellow};
   }
+`;
+
+const KakaoButton = styled.div`
+  cursor: pointer;
+  width: 13.2rem;
+  height: 2.5rem;
+  margin: 0.3rem auto;
+  padding: 0.3rem 0.2rem 0.3rem 0;
+  /* ${media.tabletMini`padding: .37rem .2rem .37rem 0;`} */
+  padding: 0.4rem 1.1rem 0.3rem 0;
+  font-size: 0.9rem;
+  background-color: #fee500;
+  border-radius: 7px;
+  border: none;
+  :hover {
+    background-color: #edc707;
+  }
+  img {
+    vertical-align: middle;
+    margin-right: 1.8rem;
+  }
+`;
+
+const KakaoContent = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+  margin: auto 1.8rem auto 0;
+  font-size: 0.9rem;
+  ${media.tablet`font-size: .9rem;`}
+  color: #000000 85%;
 `;
 
 const SignupSpan = styled.span`
@@ -85,6 +117,67 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
     }
   };
 
+  const loginRequest = (endpoint, loginInfo) => {
+    dispatch(getRequest([]));
+    dispatch(getHistory([]));
+    dispatch(getRating([]));
+    dispatch(getReview([]));
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/${endpoint}`, loginInfo, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          handleModal();
+          handleNotice(true);
+          handleMessage('로그인 성공!');
+          return res.data.accessToken;
+        }
+      })
+      .then((token) => {
+        axios
+          .get(`${process.env.REACT_APP_API_URL}/user-info`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              dispatch(userLogin(token, res.data.data));
+            }
+          })
+          .then(() => {
+            axios
+              .get(`${process.env.REACT_APP_API_URL}/my-data`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+                }
+              })
+              .then((res) => {
+                if (res.status === 200) {
+                  dispatch(getRequest(res.data.data.allRequests));
+                  dispatch(getHistory(res.data.data.allHistories));
+                  dispatch(getRating(res.data.data.ratings));
+                  dispatch(getReview(res.data.data.reviews));
+                }
+              });
+          });
+      })
+      .catch((error) => {
+        if (error.response.data.message === 'please check your password and try again') {
+          setErrorMsg('잘못된 비밀번호입니다');
+        } else if (error.response.data.message === 'Invalid user') {
+          setErrorMsg('등록되지 않은 이메일입니다');
+        } else {
+          setErrorMsg('오류가 발생했습니다.');
+          console.log('error: ', error.response.data.message);
+        }
+      });
+  };
+
   const handleLoginRequest = () => {
     // FOR TESTING PURPOSES
     // dispatch(userLogin('token', { email: '123', nickname: 'testuser' }));
@@ -92,63 +185,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
     if (loginInfo.email === '' || loginInfo.password === '') {
       setErrorMsg('모든 항목을 입력해 주세요');
     } else {
-      dispatch(getRequest([]));
-      dispatch(getHistory([]));
-      dispatch(getRating([]));
-      dispatch(getReview([]));
-      axios
-        .post(`${process.env.REACT_APP_API_URL}/login`, loginInfo, {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            handleModal();
-            handleNotice(true);
-            handleMessage('로그인 성공!');
-            return res.data.accessToken;
-          }
-        })
-        .then((token) => {
-          axios
-            .get(`${process.env.REACT_APP_API_URL}/user-info`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
-              }
-            })
-            .then((res) => {
-              if (res.status === 200) {
-                dispatch(userLogin(token, res.data.data));
-              }
-            })
-            .then(() => {
-              axios
-                .get(`${process.env.REACT_APP_API_URL}/my-data`, {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                  }
-                })
-                .then((res) => {
-                  if (res.status === 200) {
-                    dispatch(getRequest(res.data.data.allRequests));
-                    dispatch(getHistory(res.data.data.allHistories));
-                    dispatch(getRating(res.data.data.ratings));
-                    dispatch(getReview(res.data.data.reviews));
-                  }
-                });
-            });
-        })
-        .catch((error) => {
-          if (error.response.data.message === 'please check your password and try again') {
-            setErrorMsg('잘못된 비밀번호입니다');
-          }
-          if (error.response.data.message === 'Invalid user') {
-            setErrorMsg('등록되지 않은 이메일입니다');
-          }
-          console.log(error.response.data.message);
-        });
+      loginRequest('login', loginInfo);
     }
   };
 
@@ -160,65 +197,24 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const kakaoLogin = () => {
     Kakao.Auth.login({
       scope: 'profile_nickname, profile_image',
-      success: (res) => {
+      success: () => {
         Kakao.API.request({
           url: '/v2/user/me',
           success: (res) => {
             const data = {
               nickname: res.kakao_account.profile.nickname,
               email: res.id.toString(),
+              img: res.kakao_account.profile.profile_image_url
             };
             // console.log(data);
-            dispatch(getRequest([]));
-            dispatch(getHistory([]));
-            dispatch(getRating([]));
-            dispatch(getReview([]));
-            axios
-              .post(`${process.env.REACT_APP_API_URL}/kakao`, data, {
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true
-              })
-              .then((res) => {
-                if (res.status === 200 || res.status === 201) {
-                  handleModal();
-                  handleNotice(true);
-                  handleMessage('로그인 성공!');
-                  return res.data.accessToken;
-                }
-              })
-              .then((token) => {
-                axios
-                  .get(`${process.env.REACT_APP_API_URL}/user-info`, {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                      'Content-Type': 'application/json'
-                    }
-                  })
-                  .then((res) => {
-                    if (res.status === 200) {
-                      dispatch(userLogin(token, res.data.data));
-                    }
-                  })
-                  .then(() => {
-                    axios
-                      .get(`${process.env.REACT_APP_API_URL}/my-data`, {
-                        headers: {
-                          Authorization: `Bearer ${token}`,
-                          'Content-Type': 'application/json'
-                        }
-                      })
-                      .then((res) => {
-                        if (res.status === 200) {
-                          dispatch(getRequest(res.data.data.allRequests));
-                          dispatch(getHistory(res.data.data.allHistories));
-                          dispatch(getRating(res.data.data.ratings));
-                          dispatch(getReview(res.data.data.reviews));
-                        }
-                      });
-                  })
-                  
-              })
-              .catch((err) => console.log(err.response));
+
+            loginRequest('kakao', data);
+          },
+          fail: (error) => {
+            handleModal();
+            handleNotice(true);
+            handleMessage('오류가 발생하였습니다.');
+            console.log('error: ', error.response.data.message);
           }
         });
       }
@@ -255,8 +251,6 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
           })
           .then((res) => {
             dispatch(userLogin(token, res.data.data));
-            // dispatch(getRequest());
-            // dispatch(getHistory());
           })
           .then(() => {
             axios
@@ -269,11 +263,10 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
           });
       })
       .catch((error) => {
+        handleMessage('오류가 발생하였습니다.');
         console.log('error: ', error.response.data.message);
       });
   };
-
-
 
   return (
     <Backdrop>
@@ -298,11 +291,14 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
           />
         </LoginInputContainer>
         <LoginButton onClick={handleLoginRequest}>로그인</LoginButton>
+        <KakaoButton onClick={kakaoLogin}>
+          <img src={kakaoLogo} alt='kakao-logo' width='20px' />
+          <KakaoContent>카카오 로그인</KakaoContent>
+        </KakaoButton>
         <div>
           <SignupSpan textColor={Colors.gray} onClick={goSignup}>회원가입</SignupSpan>
           <SignupSpan>|</SignupSpan>
           <SignupSpan textColor={Colors.gray} onClick={guestLoginRequest}>체험하기</SignupSpan>
-          <SignupSpan textColor={Colors.gray} onClick={kakaoLogin}>카카오로그인</SignupSpan>
         </div>
         <Alertbox>{errorMsg}</Alertbox>
       </LoginView>
