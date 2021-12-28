@@ -28,13 +28,15 @@ module.exports = async (req, res) => {
 
     const payload = {
       id: guestID,
+      kakao: false,
       nickname: guestNickname,
       email: 'guest@walkingdog.com',
+      img_url: null,
       salt: null,
       password: null
     };
 
-    users.create(payload);
+    await users.create(payload);
 
     const accessToken = generateGuestAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);

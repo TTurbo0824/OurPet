@@ -67,6 +67,7 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
   const token = useSelector((state) => state.user).token;
   const userInfo = useSelector((state) => state.user).walkingDogUserInfo;
   const { email, nickname } = userInfo;
+  const kakaoUser = !email.includes('@');
   const isGuest = nickname.includes('guest#');
   const [checkNickname, setCheckNickname] = useState('ok');
   const [checkPassword, setCheckPassword] = useState('ok');
@@ -236,7 +237,9 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
         })
         .then(() => {
           handleNotice(true);
-          handleMessage('정말 탈퇴하시겠습니까?');
+          kakaoUser
+            ? handleMessage('정말 탈퇴하시겠습니까?!k')
+            : handleMessage('정말 탈퇴하시겠습니까?!g');
         })
         .catch((err) => {
           if (err.response.data.message === 'You\'re not logged in') {

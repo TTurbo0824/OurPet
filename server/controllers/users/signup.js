@@ -45,8 +45,10 @@ module.exports = async (req, res) => {
         .toString('base64');
 
       await users.create({
+        kakao: false,
         nickname: nickname,
         email: email,
+        img_url: null,
         salt: salt,
         password: encryptedPassword
       });

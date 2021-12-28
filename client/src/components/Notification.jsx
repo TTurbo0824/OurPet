@@ -8,6 +8,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Colors } from './utils/_var';
 require('dotenv').config();
 
+const { Kakao } = window;
+
 export const NoticeBackdrop = styled.div`
   position: fixed;
   z-index: 999;
@@ -79,6 +81,10 @@ export const CloseIcon = styled.div`
 function Notification ({ message, handleNotice, handleMessage, modal }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user).token;
+  const email = useSelector((state) => state.user).walkingDogUserInfo.email;
+  const kakaoUser = !email.includes('@');
+  console.log(kakaoUser);
+
   const [deleteIds, setDeleteIds] = useState([]);
 
   const withdrawalRequest = () => {
@@ -110,6 +116,23 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
           console.log('error: ', error.response.data.message);
         }
       });
+  };
+
+  const kakaoWithdrawal = () => {
+    Kakao.Auth.login({
+      success: () => {
+        Kakao.API.request({
+          url: '/v1/user/unlink',
+          success: () => {
+            withdrawalRequest();
+          },
+          fail: (error) => {
+            handleMessage('오류가 발생하였습니다.');
+            console.log('error: ', error.response.data.message);
+          }
+        });
+      }
+    });
   };
 
   const cancelRequest = (id) => {
@@ -167,7 +190,7 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
         </CloseIcon>
         <Message
           topMargin={
-            message === '정말 탈퇴하시겠습니까?' ||
+            message.includes('정말 탈퇴하시겠습니까?') ||
             message === '로그인 성공!' ||
             message === '로그아웃 성공!' ||
             message === '회원가입 성공!' ||
@@ -176,7 +199,11 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
               : '1rem'
           }
         >
-          {message.includes('정말 요청을 취소하시겠습니까?') || message.includes('만료된 요청을 삭제하시겠습니까?') ? message.split('!')[0] : message}
+          {message.includes('정말 요청을 취소하시겠습니까?') ||
+          message.includes('만료된 요청을 삭제하시겠습니까?') ||
+          message.includes('정말 탈퇴하시겠습니까?')
+            ? message.split('!')[0]
+            : message}
         </Message>
         {message === '로그인 성공!' ||
         message === '로그아웃 성공!' ||
@@ -201,27 +228,31 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
                 확인
               </NoticeClose>
               )
-            : message === '정말 탈퇴하시겠습니까?'
+            : message === '정말 탈퇴하시겠습니까?!g'
               ? (
                 <NoticeButton onClick={withdrawalRequest}>탈퇴하기</NoticeButton>
                 )
-              : message.includes('정말 요청을 취소하시겠습니까?')
+              : message === '정말 탈퇴하시겠습니까?!k'
                 ? (
-                  <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>취소하기</NoticeButton>
+                  <NoticeButton onClick={kakaoWithdrawal}>탈퇴하기</NoticeButton>
                   )
-                : message.includes('만료된 요청을 삭제하시겠습니까?')
+                : message.includes('정말 요청을 취소하시겠습니까?')
                   ? (
-                    <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>삭제하기</NoticeButton>
+                    <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>취소하기</NoticeButton>
                     )
-                  : message.includes('요청이 완료되었습니다.')
+                  : message.includes('만료된 요청을 삭제하시겠습니까?')
                     ? (
-                      <NoticeButton onClick={() => {
-                        window.location.replace('/myrequest');
-                      }}
-                      >내역 확인하기
-                      </NoticeButton>
+                      <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>삭제하기</NoticeButton>
                       )
-                    : null}
+                    : message.includes('요청이 완료되었습니다.')
+                      ? (
+                        <NoticeButton onClick={() => {
+                          window.location.replace('/myrequest');
+                        }}
+                        >내역 확인하기
+                        </NoticeButton>
+                        )
+                      : null}
       </NoticeView>
     </NoticeBackdrop>
   );
