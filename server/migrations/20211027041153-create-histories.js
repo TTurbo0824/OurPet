@@ -26,13 +26,16 @@ module.exports = {
         },
         onDelete: 'cascade'
       },
-      service: {
-        type: Sequelize.TEXT
+      type: {
+        type: Sequelize.STRING
       },
       location: {
-        type: Sequelize.TEXT
+        type: Sequelize.STRING
       },
       date: {
+        type: Sequelize.STRING
+      },
+      time: {
         type: Sequelize.STRING
       },
       duration: {

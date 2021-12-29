@@ -11,20 +11,8 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      age: {
-        type: Sequelize.INTEGER
-      },
-      location: {
+      profile: {
         type: Sequelize.TEXT
-      },
-      tags: {
-        type: Sequelize.TEXT
-      },
-      charges: {
-        type: Sequelize.TEXT
-      },
-      certified: {
-        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

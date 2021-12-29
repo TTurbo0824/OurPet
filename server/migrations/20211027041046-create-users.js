@@ -8,11 +8,17 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      kakao: {
+        type: Sequelize.BOOLEAN
+      },
       nickname: {
         type: Sequelize.STRING
       },
       email: {
         type: Sequelize.STRING
+      },
+      img_url: {
+        type: Sequelize.TEXT
       },
       salt: {
         type: Sequelize.TEXT
