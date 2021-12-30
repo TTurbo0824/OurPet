@@ -11,7 +11,8 @@ export const initialUserState = {
   token: '',
   walkingDogUserInfo: {
     email: '',
-    nickname: ''
+    nickname: '',
+    profile_url: ''
   }
 };
 
