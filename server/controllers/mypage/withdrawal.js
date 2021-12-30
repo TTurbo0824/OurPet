@@ -34,9 +34,8 @@ module.exports = async (req, res) => {
         });
       }
     }
-  } catch {
-    res.status(400).json({
-      message: 'error'
-    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: 'error' });
   }
 };

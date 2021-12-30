@@ -16,15 +16,14 @@ module.exports = async (req, res) => {
       res.status(200).json({
         data: {
           nickname: userInfo.nickname,
-          email: userInfo.email
+          email: userInfo.email,
+          img_url: userInfo.img_url
         },
         message: 'ok'
       });
     }
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      message: 'error'
-    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: 'error' });
   }
 };

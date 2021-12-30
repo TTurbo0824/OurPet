@@ -14,11 +14,11 @@ const ReviewWrapper = styled.div`
     /* background-color: lightsteelblue; */
   }
   .user-info {
-      display: grid;
-      grid-template-areas:
-      'img nickname'
-      'img date';
-      grid-template-columns: 4.7rem 1fr;
+    display: grid;
+    grid-template-areas:
+    'img nickname'
+    'img date';
+    grid-template-columns: 4.7rem 1fr;
   }
   .profile-container {
     grid-area: img;

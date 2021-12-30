@@ -8,7 +8,7 @@ import LandingPage from './pages/Landing/LadingPage';
 import Mainpage from './pages/Mainpage/Mainpage';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Myinfo from './pages/Mypage/Myinfo';
+import Myinfo from './pages/Mypage/Myinfo/Myinfo';
 import Myrequest from './pages/Mypage/Myrequest/Myrequest';
 import Myhistory from './pages/Mypage/Myhistory/Myhistory';
 import Modal from './components/Modal';

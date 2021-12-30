@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
         });
       }
     }
-  } catch {
+  } catch (error) {
     res.status(400).json({ message: 'error' });
   }
 };
