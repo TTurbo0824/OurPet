@@ -201,3 +201,17 @@ export const options = [
     )
   }
 ];
+
+export const ProfileImage = styled.div`
+  width: 9.75rem;
+  height: 9.75rem;
+  overflow: hidden;
+  position: relative;
+  border-radius: 50%;
+  margin: 0 auto;
+  .review-profile {
+    width: 9.75rem;
+    height: 9.75rem;
+    object-fit: cover;
+  }
+`;
