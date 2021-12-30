@@ -1,4 +1,3 @@
-require('dotenv').config();
 const fs = require('fs');
 const https = require('https');
 const cors = require('cors');
@@ -6,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
 const controllers = require('./controllers');
+const { editProfile } = require('./controllers');
+require('dotenv').config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -34,6 +35,7 @@ app.get('/mainpage', controllers.mainpage);
 app.get('/dogwalker', controllers.dogwalker);
 app.get('/user-info', controllers.myInfo);
 app.patch('/user-info', controllers.editMyInfo);
+app.patch('/profile-image', editProfile.upload.single('image'), editProfile.sendPost);
 app.delete('/withdrawal', controllers.withdrawal);
 app.get('/request', controllers.myRequest);
 app.post('/request', controllers.request);
@@ -48,6 +50,7 @@ app.get('/review', controllers.getReview);
 app.post('/review', controllers.review);
 app.patch('/review', controllers.editReview);
 app.delete('/review', controllers.deleteReview);
+app.get('/walker-request', controllers.dogwalkerRequest);
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 80;
 

@@ -11,6 +11,7 @@ module.exports = {
   dogwalker: require('./dogwalkers/dogwalker'),
   myInfo: require('./mypage/myinfo'),
   editMyInfo: require('./mypage/edit-my-info'),
+  editProfile: require('./mypage/profile-image'),
   withdrawal: require('./mypage/withdrawal'),
   myRequest: require('./request/myrequest'),
   request: require('./request/request'),
@@ -24,5 +25,6 @@ module.exports = {
   getReview: require('./review/get-reviews'),
   review: require('./review/review'),
   editReview: require('./review/edit-review'),
-  deleteReview: require('./review/delete-review')
+  deleteReview: require('./review/delete-review'),
+  dogwalkerRequest: require('./dogwalkers/dogwalker-request')
 };
