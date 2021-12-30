@@ -1,6 +1,7 @@
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
 export const EDIT_INFO = 'EDIT_INFO';
+export const EDIT_PROFILE = 'EDIT_PROFILE';
 export const RESET_REQUEST = 'RESET_REQUEST';
 export const GET_REQUEST = 'GET_REQUEST';
 export const REQUEST_DOGWALKER = 'REQUEST_DOGWALKER';
@@ -30,6 +31,11 @@ export const userLogout = () => ({
 export const editInfo = (nickname) => ({
   type: EDIT_INFO,
   payload: nickname
+});
+
+export const editProfile = (img_url) => ({
+  type: EDIT_PROFILE,
+  payload: img_url
 });
 
 export const resetRequest = () => ({

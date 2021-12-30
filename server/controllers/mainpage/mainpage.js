@@ -51,10 +51,8 @@ module.exports = async (req, res) => {
       },
       message: 'ok'
     });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      message: 'error'
-    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: 'error' });
   }
 };

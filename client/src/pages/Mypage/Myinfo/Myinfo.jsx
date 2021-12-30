@@ -1,21 +1,32 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { editInfo } from '../../redux/action';
+import { editInfo } from '../../../redux/action';
 import styled from 'styled-components';
 import axios from 'axios';
-import { Colors } from '../../components/utils/_var';
-import { Alertbox, InputField } from '../../components/UserComponents';
-import TopNavigation from '../../components/TopNavigation';
+import { Colors } from '../../../components/utils/_var';
+import { Alertbox, InputField } from '../../../components/UserComponents';
+import TopNavigation from '../../../components/TopNavigation';
+import UserProfile from './UserProfile';
+import default_profile from '../../../images/default_profile.jpeg';
+import { ProfileImage } from '../../../components/MyPageComponents';
 
 export const MyinfoWrapper = styled.div`
   .main {
     display: flex;
     min-height: calc(100vh - 13.45rem);
   }
+  .profile-edit {
+    cursor: pointer;
+    font-size: .85rem;
+    color: ${Colors.darkGray};
+    width: fit-content;
+    margin: .25rem auto 1.5rem;
+    text-decoration: underline;
+  }
 `;
 
 export const MyinfoView = styled.div`
-  margin: 3rem auto;
+  margin: 1.2rem auto;
   padding-top: 0.7rem;
   box-sizing: border-box;
   width: 19rem;
@@ -23,7 +34,6 @@ export const MyinfoView = styled.div`
   background-color: white;
   position: relative;
   text-align: center;
-
   input:disabled {
     background: ${Colors.lightGray};
     color: ${Colors.gray};
@@ -66,13 +76,14 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user).token;
   const userInfo = useSelector((state) => state.user).walkingDogUserInfo;
-  const { email, nickname } = userInfo;
+  const { email, nickname, profile_url } = userInfo;
   const kakaoUser = !email.includes('@');
   const isGuest = nickname.includes('guest#');
   const [checkNickname, setCheckNickname] = useState('ok');
   const [checkPassword, setCheckPassword] = useState('ok');
   const [checkRetypePassword, setCheckRetypePassword] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
+  const [openProfile, setOpenProfile] = useState(false);
 
   const [myInfo, setMyInfo] = useState({
     nickname: '',
@@ -249,11 +260,35 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
     }
   };
 
+  const handleProfileOpen = () => {
+    setOpenProfile(true);
+  };
+
+  const handleProfileClose = () => {
+    setOpenProfile(false);
+  };
+
+  console.log(email, nickname, profile_url);
   return (
     <MyinfoWrapper>
       <TopNavigation />
       <div className='main'>
         <MyinfoView>
+          {/* <img alt='profile-img' src={profile_url} /> */}
+          <ProfileImage>
+            <img className='review-profile' alt='profile-img' src={profile_url !== '' ? profile_url : default_profile} />
+          </ProfileImage>
+          <div className='profile-edit' onClick={handleProfileOpen}>사진 수정</div>
+          {openProfile
+            ? <UserProfile
+                handleProfileClose={handleProfileClose}
+                profile_url={profile_url}
+                token={token}
+                handleMessage={handleMessage}
+                handleNotice={handleNotice}
+                modal={modal}
+              />
+            : null}
           <MyinfoInputContainer>
             <InputField
               disabled={isGuest ? 'disabled' : null}

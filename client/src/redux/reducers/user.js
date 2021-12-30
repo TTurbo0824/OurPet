@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT, EDIT_INFO } from '../action';
+import { LOG_IN, LOG_OUT, EDIT_INFO, EDIT_PROFILE } from '../action';
 import { initialUserState } from './initialState/initialState';
 
 function user (state = initialUserState, action) {
@@ -8,13 +8,14 @@ function user (state = initialUserState, action) {
         token: action.token,
         walkingDogUserInfo: {
           email: action.payload.email,
-          nickname: action.payload.nickname
+          nickname: action.payload.nickname,
+          profile_url: action.payload.img_url
         }
       });
     case LOG_OUT:
       return Object.assign({}, state, {
         token: '',
-        walkingDogUserInfo: { email: '', nickname: '' }
+        walkingDogUserInfo: { email: '', nickname: '', profile_url: '' }
       });
     case EDIT_INFO:
       return {
@@ -22,6 +23,14 @@ function user (state = initialUserState, action) {
         walkingDogUserInfo: {
           ...state.walkingDogUserInfo,
           nickname: action.payload
+        }
+      };
+    case EDIT_PROFILE:
+      return {
+        ...state,
+        walkingDogUserInfo: {
+          ...state.walkingDogUserInfo,
+          profile_url: action.payload
         }
       };
     default:
