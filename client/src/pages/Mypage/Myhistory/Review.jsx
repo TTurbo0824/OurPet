@@ -25,7 +25,7 @@ function Review ({ modal, token, historyInfo, handleModal, handleMessage, handle
   const handleReview = () => {
     if (!walkerReview || walkerReview.length < 5) {
     // if (!walkerReview || walkerReview.length < 10) {
-      setErrorMsg('리뷰를 10자 이상 작성해 주세요');
+      setErrorMsg('리뷰를 10자 이상 작성해주세요');
     } else {
       // dispatch(postReview(reviewInfo));
       axios

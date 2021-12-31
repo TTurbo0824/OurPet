@@ -121,8 +121,8 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
   };
 
   const isValidPassword = (e) => {
-    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/;
-    if (e.target.value.length < 8 || e.target.value.length > 10) {
+    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,12}$/;
+    if (e.target.value.length < 8 || e.target.value.length > 12) {
       setCheckPassword('length');
     } else if (regExp.test(e.target.value)) {
       setCheckPassword('ok');
@@ -177,7 +177,7 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
     } else if (!checkEmail) {
       setErrorMsg('이메일 형식을 확인해주세요');
     } else if (checkPassword === 'length') {
-      setErrorMsg('비밀번호는 8-10자입니다');
+      setErrorMsg('비밀번호는 8-12자입니다');
     } else if (checkPassword !== 'ok') {
       setErrorMsg('비밀번호 형식을 확인해주세요');
     } else if (checkRetypePassword !== true) {
@@ -241,7 +241,7 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
           <SignUpInputField onChange={inputCheck('email')} placeholder='이메일' />
           <div className='veri' onClick={sendEmail}>이메일 인증</div>
           <SignUpInputField onChange={handleCheckVeriCode} placeholder='인증코드 입력' />
-          <SignUpInputField type='password' onChange={inputCheck('password')} placeholder='비밀번호 (영문, 숫자 반드시 포함)' />
+          <SignUpInputField type='password' onChange={inputCheck('password')} placeholder='비밀번호 (영문, 숫자 포함 8-12자)' />
           <SignUpInputField
             type='password'
             onChange={handleCheckPassword}

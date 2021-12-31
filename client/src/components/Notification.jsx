@@ -2,13 +2,19 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
-import { cancelDogwalker } from '../redux/action';
+import { cancelDogwalker, deleteReview } from '../redux/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Colors } from './utils/_var';
 require('dotenv').config();
 
 const { Kakao } = window;
+
+// ==================================================================
+//                               TO DO
+// ==================================================================
+//  1. CSS 점검
+//
 
 export const NoticeBackdrop = styled.div`
   position: fixed;
@@ -88,10 +94,6 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
   const [deleteIds, setDeleteIds] = useState([]);
 
   const withdrawalRequest = () => {
-    // handleNotice(true);
-    // handleMessage('회원탈퇴가 완료되었습니다.');
-    // localStorage.clear();
-
     axios
       .delete(`${process.env.REACT_APP_API_URL}/withdrawal`, {
         headers: {
@@ -167,6 +169,41 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
       });
   };
 
+  const handleDeleteReview = (id) => {
+    let toBeReloaded = false;
+    if (id.includes('#')) {
+      id = id.slice(0, -1);
+      toBeReloaded = true;
+    }
+
+    id = Number(id);
+
+    axios
+      .delete(`${process.env.REACT_APP_API_URL}/review`, {
+        data: { id: id },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          handleNotice(true);
+          if (toBeReloaded) handleMessage('리뷰가 삭제되었습니다.!');
+          else handleMessage('리뷰가 삭제되었습니다.');
+          dispatch(deleteReview(id));
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          modal();
+        } else {
+          handleMessage('오류가 발생하였습니다.');
+          console.log('error: ', error.response.data.message);
+        }
+      });
+  };
+
   return (
     <NoticeBackdrop>
       <NoticeView>
@@ -180,13 +217,22 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
                   dispatch(cancelDogwalker(deleteIds));
                 }}
               />
-            : <FontAwesomeIcon
-                icon={faTimes}
-                color={Colors.gray}
-                onClick={() => {
-                  handleNotice(false);
-                }}
-              />}
+            : message === '리뷰가 수정되었습니다.!' || message === '리뷰가 삭제되었습니다.!'
+              ? <FontAwesomeIcon
+                  icon={faTimes}
+                  color={Colors.gray}
+                  onClick={() => {
+                    handleNotice(false);
+                    window.location.reload();
+                  }}
+                />
+              : <FontAwesomeIcon
+                  icon={faTimes}
+                  color={Colors.gray}
+                  onClick={() => {
+                    handleNotice(false);
+                  }}
+                />}
         </CloseIcon>
         <Message
           topMargin={
@@ -201,7 +247,10 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
         >
           {message.includes('정말 요청을 취소하시겠습니까?') ||
           message.includes('만료된 요청을 삭제하시겠습니까?') ||
-          message.includes('정말 탈퇴하시겠습니까?')
+          message.includes('정말 탈퇴하시겠습니까?') ||
+          message === '리뷰가 수정되었습니다.!' ||
+          message.includes('리뷰를 삭제하시겠습니까?') ||
+          message === '리뷰가 삭제되었습니다.!'
             ? message.split('!')[0]
             : message}
         </Message>
@@ -252,7 +301,11 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
                         >내역 확인하기
                         </NoticeButton>
                         )
-                      : null}
+                      : message.includes('리뷰를 삭제하시겠습니까?')
+                        ? (
+                          <NoticeButton onClick={() => handleDeleteReview(message.split('!')[1])}>삭제하기</NoticeButton>
+                          )
+                        : null}
       </NoticeView>
     </NoticeBackdrop>
   );
