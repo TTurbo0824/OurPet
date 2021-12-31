@@ -14,6 +14,14 @@ import TypeSelector from './TypeSelector';
 import LocationSelector from './LocationSelector';
 import ReviewContainer from './ReviewContainer';
 import profile from '../../images/profile_sample.jpeg';
+
+// ==================================================================
+//                               TO DO
+// ==================================================================
+//  1. 반응형 구현
+//  2. 도그워커 소개 4-5개 작성
+//
+
 const DogWalkerPageWrapper = styled.div`
   .main {
     min-height: calc(100vh - 10.9rem);
@@ -282,7 +290,15 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
             )}
           </div>
           <div className='review-container'>
-            <ReviewContainer averageRating={averageRating} rating={allRating} reviews={allReview} />
+            <ReviewContainer
+              token={token}
+              modal={handleNotice}
+              handleNotice={handleNotice}
+              handleMessage={handleMessage}
+              averageRating={averageRating}
+              rating={allRating}
+              reviews={allReview}
+            />
           </div>
           <div className='right-container'>
             <div className='request-container'>

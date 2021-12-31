@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { editReview, deleteReview } from '../../../redux/action';
+import { editReview } from '../../../redux/action';
 import axios from 'axios';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Alertbox, Backdrop } from '../../../components/UserComponents';
 import CloseButton from '../../../components/CloseButton';
@@ -22,7 +22,7 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
   const handleEditReview = () => {
     if (!walkerReview || walkerReview.length < 5) {
       // if (!walkerReview || walkerReview.length < 10) {
-      setErrorMsg('리뷰를 10자 이상 작성해 주세요');
+      setErrorMsg('리뷰를 10자 이상 작성해주세요');
     } else if (walkerReview === content) {
       setErrorMsg('수정 사항을 입력해주세요.');
     } else {
@@ -52,30 +52,9 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
   };
 
   const handleDeleteReview = () => {
-    // console.log(id);
-    // dispatch(deleteReview(id));
-    axios
-      .delete(`${process.env.REACT_APP_API_URL}/review`, {
-        data: { id: id },
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          handleModal();
-          handleNotice(true);
-          handleMessage('리뷰가 삭제되었습니다.');
-          dispatch(deleteReview(id));
-        }
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          handleModal();
-          modal();
-        } else console.log(error.response.data.message);
-      });
+    handleNotice(true);
+    handleMessage(`리뷰를 삭제하시겠습니까?!${id}`);
+    handleModal();
   };
 
   return (
