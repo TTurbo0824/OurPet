@@ -122,7 +122,7 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
   };
 
   const isValidPassword = (e) => {
-    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/;
+    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,12}$/;
 
     if (e.target.value === '') {
       if (myInfo.passwordRetype === '' && checkNickname !== 'ok') {
@@ -143,7 +143,11 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
         setCheckRetypePassword(false);
       }
       if (!regExp.test(e.target.value)) {
-        setCheckPassword('no');
+        if (e.target.value.length < 8 || e.target.value.length > 12) {
+          setCheckPassword('length');
+        } else {
+          setCheckPassword('no');
+        }
       } else {
         setCheckPassword('ok');
       }
@@ -188,6 +192,8 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
     // console.log(myInfo);
     if (isGuest) {
       setErrorMsg('체험하기 중에는 이용할 수 없습니다');
+    } else if (checkPassword === 'length') {
+      setErrorMsg('비밀번호는 8-12자입니다');
     } else if (checkPassword === 'no') {
       setErrorMsg('올바른 비밀번호가 아닙니다');
     } else if (!checkRetypePassword) {
@@ -217,9 +223,7 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
             if (myInfo.nickname === '') {
               myInfo.nickname = nickname;
             }
-            // else {
-            //   myInfo.nickname = myInfo.nickname;
-            // }
+
             if (myInfo.password === '') {
               myInfo.password = '';
             }
@@ -268,7 +272,8 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
     setOpenProfile(false);
   };
 
-  console.log(email, nickname, profile_url);
+  // console.log(email, nickname, profile_url);
+
   return (
     <MyinfoWrapper>
       <TopNavigation />
@@ -278,7 +283,7 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
           <ProfileImage>
             <img className='review-profile' alt='profile-img' src={profile_url !== '' ? profile_url : default_profile} />
           </ProfileImage>
-          <div className='profile-edit' onClick={handleProfileOpen}>사진 수정</div>
+          <div className='profile-edit' onClick={handleProfileOpen}>프로필 사진 수정</div>
           {openProfile
             ? <UserProfile
                 handleProfileClose={handleProfileClose}
@@ -299,7 +304,7 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
             <InputField
               disabled={isGuest ? 'disabled' : null}
               type='password'
-              placeholder='비밀번호 (영문, 숫자 반드시 포함)'
+              placeholder='비밀번호 (영문, 숫자 포함 8-12자)'
               onChange={inputCheck('password')}
             />
             <InputField

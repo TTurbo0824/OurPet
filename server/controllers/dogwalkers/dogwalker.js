@@ -25,12 +25,12 @@ module.exports = async (req, res) => {
       include: [
         {
           model: histories,
-          attributes: ['date', 'dogwalkerId'],
+          attributes: ['id', 'date', 'dogwalkerId'],
           where: { dogwalkerId: dogwalkerId },
           include: [
             {
               model: users,
-              attributes: ['nickname']
+              attributes: ['nickname', 'img_url']
             }
           ]
         }
@@ -42,9 +42,11 @@ module.exports = async (req, res) => {
 
     allReviews = allReviews.map((el) => {
       return {
+        id: el.history.id,
         date: el.history.date,
         content: el.content,
-        nickname: el.history.user.nickname
+        nickname: el.history.user.nickname,
+        profile_url: el.history.user.img_url
       };
     });
 
