@@ -84,15 +84,14 @@ function Modal ({ handleModal, login }) {
               </div>
             </>)
           : (
-          <>
-            <Content topMargin='1.6rem'>체험하기가 종료되었습니다.</Content>
-            <NoticeButton
-              onClick={logout}
-            >
-              메인화면으로
-            </NoticeButton>
-          </>)
-        }
+            <>
+              <Content topMargin='1.6rem'>체험하기가 종료되었습니다.</Content>
+              <NoticeButton
+                onClick={logout}
+              >
+                메인화면으로
+              </NoticeButton>
+            </>)}
       </ModalView>
     </ModalBackdrop>
   );
