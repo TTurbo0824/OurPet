@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { NoticeButton } from './Notification';
 import { Colors } from '../components/utils/_var';
+import { useSelector, useDispatch } from 'react-redux';
+import { userLogout, getRequest, getHistory } from '../redux/action';
 
 export const ModalBackdrop = styled.div`
   position: fixed;
@@ -27,13 +29,15 @@ export const ModalView = styled.div`
   box-shadow: 10px 10px grey;
 `;
 
-export const Content = styled.div`
-  margin: 0.6rem auto 0;
+const Content = styled.div`
+  color: ${Colors.black};
+  margin: auto auto 0;
+  margin-top: ${(props) => props.topMargin};
   padding: auto 0.3rem;
   font-size: 1rem;
 `;
 
-export const LogOutButton = styled.button`
+const LogOutButton = styled.button`
   margin-top: 0.5rem;
   background-color: ${Colors.gray};
   border: none;
@@ -50,12 +54,18 @@ export const LogOutButton = styled.button`
 `;
 
 function Modal ({ handleModal, login }) {
+  const nickname = useSelector((state) => state.user).walkingDogUserInfo.nickname;
+  const isGuest = !!nickname.includes('guest');
+  const dispatch = useDispatch();
   const goLogin = () => {
     handleModal();
     login();
   };
 
   const logout = () => {
+    dispatch(userLogout());
+    dispatch(getRequest([]));
+    dispatch(getHistory([]));
     localStorage.clear();
     handleModal();
     window.location.replace('/');
@@ -64,11 +74,25 @@ function Modal ({ handleModal, login }) {
   return (
     <ModalBackdrop>
       <ModalView>
-        <Content>[토큰 만료] 다시 로그인 하시겠습니까?</Content>
-        <NoticeButton onClick={goLogin}>로그인</NoticeButton>
-        <div>
-          <LogOutButton onClick={logout}>로그아웃</LogOutButton>
-        </div>
+        {!isGuest
+          ? (
+            <>
+              <Content topMargin='0.4rem'>[토큰 만료] 재로그인 하시겠습니까?</Content>
+              <NoticeButton onClick={goLogin}>로그인</NoticeButton>
+              <div>
+                <LogOutButton onClick={logout}>로그아웃</LogOutButton>
+              </div>
+            </>)
+          : (
+          <>
+            <Content topMargin='1.6rem'>체험하기가 종료되었습니다.</Content>
+            <NoticeButton
+              onClick={logout}
+            >
+              메인화면으로
+            </NoticeButton>
+          </>)
+        }
       </ModalView>
     </ModalBackdrop>
   );
