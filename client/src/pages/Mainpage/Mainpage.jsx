@@ -8,6 +8,7 @@ import { media } from '../../components/utils/_media-queries';
 import Dogwalker from './DogWalkerItem';
 import LocationDropDown from './LocationDropDown';
 import DateSelector from './DateSelector';
+
 const MainpageWrapper = styled.div`
   .main {
     display: flex;
@@ -20,9 +21,8 @@ const MainpageWrapper = styled.div`
     margin: 0 auto;
     display: block;
     padding: 0 auto;
-    ${media.tablet`width: 90vw;`}
     max-width: 62rem;
-    /* background-color: lime; */
+    ${media.tablet`width: 90vw;`}
   }
   input:focus {
     outline: none;
@@ -42,12 +42,10 @@ const MainpageWrapper = styled.div`
     grid-template-columns: 100%;
     ${media.tablet`grid-template-areas: 'location date' 'tag tag';`}
     ${media.tablet`grid-template-columns: 50% 50%;`}
-    /* background-color: pink; */
   }
   .location-container {
     grid-area: location;
     /* padding: 0 1rem; */
-    /* background-color: pink; */
   }
   .date-container {
     grid-area: date;
@@ -142,6 +140,14 @@ const LoadingWrapper = styled.div`
     margin-bottom: 1rem;
   }
 `;
+
+// ==================================================================
+//                               TO DO
+// ==================================================================
+//  1. 태그 CSS 점검
+//  2. 도그워커 카드 CSS 점검 반응형
+//  3. DatePicker CSS 재점검
+//
 
 function Mainpage () {
   const history = useHistory();
