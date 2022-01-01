@@ -258,25 +258,21 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
         message === '로그아웃 성공!' ||
         message === '회원가입 성공!' ||
         message === '회원탈퇴가 완료되었습니다.'
-          ? (
-            <NoticeButton
+          ? <NoticeButton
               onClick={() => {
                 window.location.replace('/');
               }}
             >
-              메인화면으로
-            </NoticeButton>
-            )
+            메인화면으로
+          </NoticeButton>
           : message === '비밀번호가 수정되었습니다.'
-            ? (
-              <NoticeClose
+            ? <NoticeClose
                 onClick={() => {
                   window.location.replace('/mypage');
                 }}
               >
-                확인
-              </NoticeClose>
-              )
+              확인
+            </NoticeClose>
             : message === '정말 탈퇴하시겠습니까?!g'
               ? (
                 <NoticeButton onClick={withdrawalRequest}>탈퇴하기</NoticeButton>

@@ -121,16 +121,12 @@ function App () {
             <Route path='/search' component={Mainpage} />
             <Route path='/mypage'>
               {isLogin
-                ? (
-                  <Myinfo
+                ? <Myinfo
                     modal={handleModalOpen}
                     handleMessage={handleMessage}
                     handleNotice={handleNotice}
                   />
-                  )
-                : (
-                  <Redirect to='/' />
-                  )}
+                : <Redirect to='/' />}
             </Route>
             <Route path='/myrequest'>
               <Myrequest
@@ -158,35 +154,29 @@ function App () {
             />
           </Switch>
           {openNotice
-            ? (
-              <Notification
+            ? <Notification
                 message={message}
                 handleNotice={handleNotice}
                 handleMessage={handleMessage}
                 modal={handleModalOpen}
               />
-              )
             : null}
           {scrolled ? <MoveTop moveToTop={moveToTop} /> : null}
           <Footer />
           {openSignup
-            ? (
-              <Signup
+            ? <Signup
                 handleModal={handleSignupModalClose}
                 handleMessage={handleMessage}
                 handleNotice={handleNotice}
               />
-              )
             : null}
           {openLogin
-            ? (
-              <Login
+            ? <Login
                 signup={handleSignupModalOpen}
                 handleModal={handleLoginModalClose}
                 handleMessage={handleMessage}
                 handleNotice={handleNotice}
               />
-              )
             : null}
         </div>
       </AppWrapper>
