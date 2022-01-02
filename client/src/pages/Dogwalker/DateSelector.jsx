@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Colors } from '../../components/utils/_var';
-import { media } from '../../components/utils/_media-queries';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { ko } from 'date-fns/esm/locale';
@@ -13,11 +12,37 @@ const DatePickerWrapper = styled.div`
     border: none;
     width: 100%;
     color: ${Colors.gray};
-    font-size: 1rem;
-    /* background-color: lightseagreen; */
+    font-size: .98rem;
   }
   .description {
-    margin-bottom: 0.8rem;
+    margin-bottom: .8rem;
+  }
+  .react-datepicker__header {
+    background-color: #ffffff;
+  }
+  .react-datepicker {
+    font-size: .85rem;
+    border: 1px solid #e0e2e3;
+    background-color: #fff;
+    color: #000;
+    border-radius: .3rem;
+    display: inline-block;
+    position: relative;
+    padding: .7rem 1.2rem 1.2rem;
+    margin-top: .75rem;
+  }
+  .custom-heading {
+    color: ${Colors.black};
+    font-size: 1rem;
+    margin-bottom: .2rem;
+  }
+  .react-datepicker__day--selected {
+    border-radius: .3rem;
+    background-color: ${Colors.yellow};
+    color: #fff;
+  }
+  .react-datepicker__day--keyboard-selected {
+    background-color: ${Colors.yellow};
   }
 `;
 
@@ -27,7 +52,7 @@ const DateContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 2.35rem;
-  padding: 0 0.7rem;
+  padding: 0 .7rem;
   background-color: white;
   border: 1px solid ${Colors.lightGray};
   border-radius: 4px;

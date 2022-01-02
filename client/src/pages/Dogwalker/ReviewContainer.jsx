@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faTrash, faEdit, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Colors } from '../../components/utils/_var';
+import { media } from '../../components/utils/_media-queries';
 import pug from '../../images/pug.jpeg';
 import minipin from '../../images/minipin.jpeg';
 import corgi from '../../images/corgi.jpeg';
@@ -13,9 +14,9 @@ import default_profile from '../../images/default_profile.jpeg';
 
 const ReviewWrapper = styled.div`
   margin-bottom: 3rem;
+  color: ${Colors.black};
   .review {
     margin-bottom: .9rem;
-    /* background-color: lightsteelblue; */
   }
   .user-info {
     display: grid;
@@ -57,48 +58,54 @@ const ReviewWrapper = styled.div`
   }
   .nickname {
     grid-area: nickname;
-    margin-bottom: 0.5rem;
+    margin-bottom: .5rem;
+    font-size: .95rem;
+    ${media.tabletMini`font-size: 1rem;`}
   }
   .date {
     grid-area: date;
-    font-size: 0.85rem;
+    font-size: .85rem;
     color: ${Colors.darkGray};
   }
   .content {
     margin-top: 1rem;
-    line-height: 1.75rem;
-    font-size: 0.95rem;
     color: ${Colors.darkGray};
-    /* min-height: 2.75rem; */
-    /* background-color: lime; */
+    line-height: 1.75rem;
+    font-size: .9rem;
+    ${media.tabletMini`font-size: .95rem;`}
   }
   .dogwalker-review {
     margin: 1rem 0 1.5rem;
-    font-size: 1.2rem;
+    font-size: 1.05rem;
+    ${media.tabletMini`font-size: 1.2rem;`}
     font-weight: bold;
   }
   .rating {
     margin-left: auto;
     margin-right: 0;
+    font-size: .98rem;
+    ${media.tabletMini`font-size: 1rem;`}
   }
   .star-icon {
-    margin-right: 0.3rem;
+    margin-right: .3rem;
     color: ${Colors.yellow};
   }
 `;
 
 const ReviewInput = styled.textarea`
   display: flex;
-  min-height: 2.5rem;
-  margin: 1rem auto 0;
-  line-height: 1.75rem;
-  font-size: 0.95rem;
-  color: ${Colors.darkGray};
   width: 100%;
   height: 5rem;
+  margin: 1rem auto 0;
+  line-height: 1.75rem;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: .9rem;
+  ${media.tabletMini`font-size: .95rem;`}
+  color: ${Colors.darkGray};
   padding: 0 .4rem;
   border: 1px solid ${Colors.mediumLightGray};
   resize: none;
+  border-radius: 3px;
   :focus {
     outline: none;
   }
@@ -179,7 +186,7 @@ function ReviewContainer ({ token, modal, handleMessage, handleNotice, averageRa
       <div className='review-rating'>
         <div className='title dogwalker-review'>도그워커 리뷰</div>
         <div className='rating'>
-          <FontAwesomeIcon className='star-icon' icon={faStar} size='1x' />
+          <FontAwesomeIcon className='star-icon' icon={faStar} />
           {averageRating} ({rating.length})
         </div>
       </div>

@@ -4,6 +4,7 @@ import { editInfo } from '../../../redux/action';
 import styled from 'styled-components';
 import axios from 'axios';
 import { Colors } from '../../../components/utils/_var';
+import { media } from '../../../components/utils/_media-queries';
 import { Alertbox, InputField } from '../../../components/UserComponents';
 import TopNavigation from '../../../components/TopNavigation';
 import UserProfile from './UserProfile';
@@ -30,10 +31,13 @@ export const MyinfoView = styled.div`
   padding-top: 0.7rem;
   box-sizing: border-box;
   width: 19rem;
-  height: 15rem;
+  height: 28rem;
   background-color: white;
   position: relative;
   text-align: center;
+  margin-bottom: 2.5rem;
+  /* ${media.tabletMini`margin-bottom: 2.5rem;`} */
+  /* background-color: lavender; */
   input:disabled {
     background: ${Colors.lightGray};
     color: ${Colors.gray};

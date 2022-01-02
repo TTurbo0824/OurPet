@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import TopNavigation from '../../../components/TopNavigation';
 import { Colors } from '../../../components/utils/_var';
+import { media } from '../../../components/utils/_media-queries';
 import { MyPageTable } from '../../../components/MyPageComponents';
 axios.defaults.withCredentials = true;
 require('dotenv').config();
@@ -28,11 +29,14 @@ export const MyRequestWrapper = styled.div`
     border-bottom: 1px solid ${Colors.lightGray};
     grid-template-areas:
       'alls expired select';
-    grid-template-columns: 1fr 1fr 5.6rem;
-    width: 40rem;
+    grid-template-columns: 1fr 1fr 5.3rem;
+    width: 87vw;
+    ${media.tabletMini`width: 92vw; max-width: 40rem;`}
+    ${media.tablet`width: 40rem; grid-template-columns: 1fr 1fr 5.6rem;`}
   }
   .separator {
-    margin-left: .64rem;
+    margin-left: .6rem;
+    ${media.tablet`margin-left: .64rem;`}
     font-size: .65rem;
     line-height: 1.15rem;
     color: ${Colors.mediumLightGray};
@@ -42,9 +46,14 @@ export const MyRequestWrapper = styled.div`
   }
   .card {
     grid-template-areas:
+      'check img title title title'
+      'check img info info info'
+      'check img type type type'
+      'check status status cancel cancel';
+    ${media.tabletMini`grid-template-areas:
       'check img title status cancel'
       'check img info status cancel'
-      'check img type status cancel';
+      'check img type status cancel';`}
   }
   .status {
     grid-area: status;
@@ -52,7 +61,13 @@ export const MyRequestWrapper = styled.div`
     align-self: center;
     align-items: center;
     justify-content: center;
-    font-size: .85rem;
+    font-size: .82rem;
+    ${media.tabletMini`font-size: .85rem;`}
+  }
+  .res-bottom {
+    display: normal;
+    width: 20rem;
+    white-space: nowrap;
   }
   .cancel {
     grid-area: cancel;
@@ -62,12 +77,15 @@ export const MyRequestWrapper = styled.div`
     justify-content: center;
     /* background-color: navajowhite; */
   }
+  .status, .cancel {
+    margin-top: .5rem;
+    ${media.tabletMini`margin-top: 0;`}
+    /* background-color: navajowhite; */
+  }
+  
 `;
 
 function MyRequest ({ handleMessage, handleNotice }) {
-  // document.querySelectorAll('input[type=checkbox]').forEach( el => {console.log(el.checked)} );
-  // document.querySelectorAll('input[type=checkbox]').forEach( el => el.checked = false );
-
   const history = useHistory();
   const dogWalkerList = useSelector((state) => state.dogwalker).dogWalkers;
   const allRequest = useSelector((state) => state.request).dogWalkerRequest;
@@ -198,7 +216,6 @@ function MyRequest ({ handleMessage, handleNotice }) {
       <TopNavigation />
       <div className='main'>
         <div className='container'>
-          {/* <div className='total'>서비스 요청내역: {allRequest.length}개</div> */}
           <MyPageTable>
             <div className='field-container'>
               <label className='all'>
@@ -235,8 +252,10 @@ function MyRequest ({ handleMessage, handleNotice }) {
                     <div className='name'>{el.name}</div>
                     <div className='info'>{el.date} {el.time} {el.location}</div>
                     <div className='type'>{el.type}  <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
+                    {/* <div className='res-bottom'> */}
                     <div className='status'>{isExpired(el.date, el.time)}</div>
                     <div className='cancel bnt' onClick={() => deleteClick(el.id)}>요청 취소</div>
+                    {/* </div> */}
                   </div>
                 );
               })}

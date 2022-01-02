@@ -25,6 +25,7 @@ const DogWalkerWrapper = styled.div`
     box-shadow: 1px 1px 5px 2px ${Colors.lightGray};
     margin-bottom: 2rem;
     padding: 0.5rem;
+    /* background-color: lavender; */
   }
   .dogwalker-img {
     grid-area: img;
@@ -57,18 +58,24 @@ const DogWalkerWrapper = styled.div`
     height: 1rem;
     border-top: 1px solid rgb(175, 175, 175, 0.4);
     display: none;
+    margin-top: .35rem;
     ${media.tabletMini`display: flex;`}
+    ${media.tablet`margin-top: 0;`}
   }
   .tag-container {
     grid-area: tag;
     height: 3rem;
     display: none;
+    margin-right: .7rem;
     ${media.tabletMini`display: flex;`}
+    ${media.tablet`margin-right: 0rem;;`}
+    white-space: pre;
+    overflow-x: scroll;
   }
   .tag {
     margin-right: .25rem;
     font-size: .9rem;
-    ${media.tablet`font-size: 1rem;`}
+    ${media.tablet`font-size: 1rem;`}    
   }
   .tag:not(:last-child)::after {
     content: '·';

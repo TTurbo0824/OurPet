@@ -46,7 +46,12 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
           if (error.response.status === 401) {
             handleModal();
             modal();
-          } else console.log(error.response.data.message);
+          } else {
+            handleModal();
+            handleNotice(true);
+            handleMessage('오류가 발생하였습니다.');
+            console.log('error: ', error.response.data.message);
+          }
         });
     }
   };
