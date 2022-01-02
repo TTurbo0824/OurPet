@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Colors } from '../../components/utils/_var';
+import { media } from '../../components/utils/_media-queries';
 
 const ChargeWrapper = styled.div`
   border: 1px solid ${Colors.lightGray};
@@ -7,6 +8,8 @@ const ChargeWrapper = styled.div`
   box-shadow: 2px 2px 3px ${Colors.lightGray};
   margin-bottom: 2rem;
   padding: 1.5rem;
+  font-size: .92rem;
+  ${media.tabletMini`font-size: 1rem;`}
   table {
     width: 100%;
   }
@@ -15,9 +18,8 @@ const ChargeWrapper = styled.div`
     color: ${Colors.darkGray};
   }
   th {
-    /* color: ${Colors.darkGray}; */
+    color: ${Colors.black};
     font-weight: normal;
-    color: black;
     padding-bottom: .8rem;
   }
   td {
@@ -25,7 +27,8 @@ const ChargeWrapper = styled.div`
   }
   .title {
     font-weight: bold;
-    font-size: 1rem;
+    font-size: .98rem;
+    ${media.tabletMini`font-size: 1rem;`}
   }
   .h-line {
     width: 100%;
@@ -42,7 +45,6 @@ const ChargeWrapper = styled.div`
   }
   .weight {
     color: ${Colors.darkGray};
-
   }
 `;
 

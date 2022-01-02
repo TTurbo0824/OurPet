@@ -2,34 +2,12 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { editRating, removeRating } from '../../../redux/action';
 import axios from 'axios';
-import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Backdrop, Alertbox } from '../../../components/UserComponents';
 import CloseButton from '../../../components/CloseButton';
 import Select from 'react-select';
 import { customStyles } from '../../../components/SelectBoxStyle';
-import { options, HistoryButton } from '../../../components/MyPageComponents';
-
-export const RatingView = styled.div`
-  box-sizing: border-box;
-  width: 19rem;
-  height: 19rem;
-  background-color: white;
-  position: relative;
-  text-align: center;
-  padding-top: 0.7rem;
-  box-shadow: 10px 10px grey;
-  .description {
-    margin: 2.25rem auto 0.8rem;
-  }
-  .rating-container {
-    width: 80%;
-    margin: 0 auto;
-  }
-  .icon-container {
-    color: ${Colors.lightYellow};
-  }
-`;
+import { options, HistoryButton, RatingView } from '../../../components/MyPageComponents';
 
 function RatingEdit ({ handleModal, handleMessage, handleNotice, token, modal, targetRating }) {
   const dispatch = useDispatch();
@@ -92,7 +70,12 @@ function RatingEdit ({ handleModal, handleMessage, handleNotice, token, modal, t
         if (error.response.status === 401) {
           handleModal();
           modal();
-        } else console.log('error: ', error.response.data.message);
+        } else {
+          handleModal();
+          handleNotice(true);
+          handleMessage('오류가 발생하였습니다.');
+          console.log('error: ', error.response.data.message);
+        }
       });
   };
 
@@ -100,7 +83,7 @@ function RatingEdit ({ handleModal, handleMessage, handleNotice, token, modal, t
     <Backdrop>
       <RatingView>
         <CloseButton onClick={handleModal} />
-        <div className='description'>서비스에 만족하셨나요?</div>
+        <div className='rating-des'>서비스에 만족하셨나요?</div>
         <div className='rating-container'>
           <Select
             onChange={setRating}

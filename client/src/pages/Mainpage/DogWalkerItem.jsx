@@ -14,49 +14,68 @@ const DogWalkerWrapper = styled.div`
       'img hl hl'
       'img tag tag'
       'img rating price';
-    grid-template-columns: 9.75rem 1fr 1fr;
+    grid-template-columns: 8.75rem 1fr 1fr;
+    ${media.tabletMini`grid-template-columns: 10rem 1fr 1fr;`}
     ${media.tablet`grid-template-columns: 15rem 1fr 1fr;`}
     width: 90vw;
     max-width: 62rem;
+    background-color: white;
     border: solid rgb(238, 238, 238) 0.1rem;
     border-radius: 7px;
     box-shadow: 1px 1px 5px 2px ${Colors.lightGray};
     margin-bottom: 2rem;
     padding: 0.5rem;
-    background-color: white;
+    /* background-color: lavender; */
   }
   .dogwalker-img {
     grid-area: img;
-    width: 9rem;
-    height: 9rem;
+    width: 7.5rem;
+    height: 7.5rem;
+    ${media.tabletMini`width: 9rem; height: 9rem;`}
     ${media.tablet`width: 13.25rem; height: 13.25rem;`}
     border: 0.5px solid rgb(238, 238, 238);
     object-fit: cover;
     align-self: center;
   }
   .dogwalker-location {
-    margin-top: .8rem;
     grid-area: location;
     font-weight: 700;
+    margin-top: .3rem;
+    margin-bottom: .25rem;
+    font-size: .9rem;
+    ${media.tabletMini`margin-top: .5rem;`}
+    ${media.tablet`font-size: 1rem; margin-top: .8rem; margin-bottom: 0;`}
   }
   .dogwalker-name {
     grid-area: nickname;
     font-weight: 400;
+    font-size: .95rem;
+    ${media.tabletMini`font-size: 1rem;`}
   }
   .h-line {
     grid-area: hl;
-    height: 1rem;
     width: 97%;
-    /* background-color: pink; */
+    height: 1rem;
     border-top: 1px solid rgb(175, 175, 175, 0.4);
+    display: none;
+    margin-top: .35rem;
+    ${media.tabletMini`display: flex;`}
+    ${media.tablet`margin-top: 0;`}
   }
   .tag-container {
     grid-area: tag;
-    display: flex;
     height: 3rem;
+    display: none;
+    margin-right: .7rem;
+    ${media.tabletMini`display: flex;`}
+    ${media.tablet`margin-right: 0rem;;`}
+    white-space: pre;
+    overflow-x: scroll;
   }
   .tag {
     margin-right: .25rem;
+    font-size: .9rem;
+    ${media.tablet`font-size: 1rem;`}    
   }
   .tag:not(:last-child)::after {
     content: '·';
@@ -67,12 +86,18 @@ const DogWalkerWrapper = styled.div`
     display: flex;
     align-items: center;
     align-self: center;
-    padding-bottom: .5rem;
+    padding-bottom: .4rem;
+    ${media.tabletMini`padding-bottom: .5rem;`}
+  }
+  .count-people {
+    display: none;
+    ${media.tabletMini`display: inline-block;`}
   }
   .price {
     grid-area: price;
     align-self: center;
-    padding-bottom: .5rem;
+    padding-bottom: .4rem;
+    ${media.tabletMini`padding-bottom: .5rem;`}
   }
 `;
 
@@ -91,7 +116,6 @@ export default function Dogwalker ({ rating, minPrice, dogWalker, handleClick, t
         <span className='dogwalker-location'>{dogWalker.locations.join(' ')}</span>
         <span className='dogwalker-name'>
           {dogWalker.name}
-          {/* {dogWalker.name} {dogWalker.id} */}
         </span>
         <div className='h-line' />
         <div className='tag-container'>
@@ -101,7 +125,7 @@ export default function Dogwalker ({ rating, minPrice, dogWalker, handleClick, t
         </div>
         <div className='rating-container'>
           <FontAwesomeIcon style={{ marginRight: '.3rem', color: Colors.yellow }} icon={faStar} size='1x' />
-          <div>{averageRating} ({walkerRating.length})</div>
+          <div>{averageRating} <span className='count-people'>({walkerRating.length})</span></div>
         </div>
         <div className='price'>₩{minPrice}+</div>
       </div>

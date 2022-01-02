@@ -6,26 +6,21 @@ import { userLogout, getRequest, getHistory, getRating, getReview } from '../red
 import axios from 'axios';
 import { Colors } from '../components/utils/_var';
 import { media } from '../components/utils/_media-queries';
-import logo from '../images/logo.png';
+import logo from '../images/logo_text.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const HeaderContainer = styled.div`
   display: grid;
   width: 100vw;
-  justify-content: center;
-  align-items: center;
+  align-items: start;
+  ${media.tablet`justify-content: center; align-items: center;`}
   border-bottom: 1px solid rgba(150, 150, 150, 0.2);
   border-color: white;
-  border-color: ${(props) => { return props.showing !== '11.5rem' ? props.borderColor : 'white'; }};
-  box-shadow: ${(props) => { return props.showing !== '11.5rem' ? 'none' : '0px 4px 4px rgba(75, 75, 75, 0.2)'; }};
-  /* box-shadow:0px 4px 4px rgba(75, 75, 75, 0.2); */
   grid-template-areas: 'pages';
   grid-template-columns: 1fr;
   height: ${(props) => props.showing};
-  /* height: 11.5rem; */
   ${media.tablet`border-color: ${(props) => props.borderColor}; height: 3.5rem; grid-template-areas: 'logo pages'; grid-template-columns: 50% 50%;`}
-  background-color: lavender;
   background-color: white;
 `;
 
@@ -39,25 +34,28 @@ const HeaderWrapper = styled.div`
       display: flex;
     }
     &.deactive, &.close  {
-      display: none;
+      display: flex;
+      position: fixed;
+      margin: 0rem auto;
+      top: 0;
+      right: 0;
+      left: 0;
     }
   }
   .header-container-2 {
     grid-area: pages;
     justify-self: end;
     padding-right: 1rem;
-    margin-top: 0;
-    /* background-color: lime; */
-    /* width: 100%; */
+    margin-top: 2.5rem;
+    ${media.tablet`margin-top: 0;`}
     &.active {
       display: flex;
     }
     &.deactive, &.close {
-      /* background-color: pink; */
       padding-left: 1rem;
       display: block;
       width: 9rem;
-      height: 8rem;
+      height: 20rem;
       flex-wrap: nowrap;
       justify-self: start;
     }
@@ -66,13 +64,16 @@ const HeaderWrapper = styled.div`
     }
   }
   .logo-image {
-    padding-top: 0.1rem;
+    padding-top: .1rem;
     width: 5.75rem;
+    /* newly-added */
+    width: 5.75rem;
+    padding-top: .95rem;
+    ${media.tablet`padding-top: .4rem; width: 6.25rem;`}
   }
   .menu-container {
     display: flex;
     justify-content: left;
-    /* background-color: ${Colors.yellow}; */
     &.active {
       display: none;
     }
@@ -81,34 +82,41 @@ const HeaderWrapper = styled.div`
     }
   }
   .menu {
-    margin: 1.1rem 1.5rem 0.4rem;
+    margin: 1.1rem 1.5rem .4rem;
     font-size: 1.2rem;
     color: ${Colors.darkGray};
     cursor: pointer;
-    &:hover {
+    :hover {
       color: ${Colors.yellow};
     }
   }
 `;
 
-export const HeaderButton = styled.button`
+const HeaderButton = styled.button`
   background-color: transparent;
   border: none;
   cursor: pointer;
   font-size: 1rem;
-  ${media.tablet`font-size: 0.85rem;`}
-  padding-left: 0.5rem;
-  color: ${Colors.gray};
-  padding-bottom: 1.3rem;
+  ${media.tablet`font-size: .85rem;`}
+  padding-left: .5rem;
+  color: ${Colors.darkGray};
+  ${media.tablet`color: ${Colors.gray};`}
+  padding-bottom: 1.75rem;
   ${media.tablet`padding-bottom: 0;`}
-  /* height: 1rem; */
-  /* background-color: yellow; */
-  &:hover {
+  :hover {
     color: ${Colors.yellow};
   }
-  &:focus {
+  :focus {
     outline: none;
   }
+`;
+
+const HLine = styled.div`
+  display:  ${(props) => props.showing};
+  width: 95vw;
+  margin: 0 auto ;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid rgb(175, 175, 175, 0.4);
 `;
 
 function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }) {
@@ -117,9 +125,6 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
   const isLogin = useSelector((state) => state.user).token;
   const nickname = useSelector((state) => state.user).walkingDogUserInfo.nickname;
   const isGuest = !!nickname.includes('guest');
-
-  // console.log(isGuest);
-
   const [navState, setNavState] = useState('active');
 
   useEffect(() => window.addEventListener('resize', maintainNavState));
@@ -142,16 +147,9 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
 
   const handleLogoutRequest = () => {
     if (isGuest) {
-      dispatch(userLogout());
-      dispatch(getRequest([]));
-      dispatch(getHistory([]));
-      localStorage.clear();
-      handleNotice(true);
-      handleMessage('게스트 모드를 종료합니다');
-      window.location.replace('/search');
+      modal();
     } else {
       const token = isLogin;
-      // console.log(token);
 
       axios
         .post(
@@ -180,7 +178,11 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
         .catch((error) => {
           if (error.response.status === 401) {
             modal();
-          } else console.log(error.response.data.message);
+          } else {
+            handleNotice(true);
+            handleMessage('오류가 발생하였습니다.');
+            console.log('error: ', error.response.data.message);
+          }
         });
     }
   };
@@ -189,9 +191,8 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
     window.location.replace('/search');
   };
 
-  // console.log(navState);
-
   const goToMypage = () => {
+    if (navState === 'close') setNavState('deactive');
     history.push({ pathname: '/mypage' });
   };
 
@@ -199,35 +200,26 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
     <HeaderWrapper>
       <div className={`menu-container ${navState}`} onClick={handleClick}>
         {navState === 'deactive'
-          ? (
-            <FontAwesomeIcon className='menu' icon={faBars} />
-            )
-          : (
-            <FontAwesomeIcon className='menu' icon={faTimes} />
-            )}
+          ? <FontAwesomeIcon className='menu' icon={faBars} />
+          : <FontAwesomeIcon className='menu' icon={faTimes} />}
       </div>
-      <HeaderContainer showing={navState === 'close' ? '11.5rem' : '1rem'} borderColor={scrolled ? 'rgba(150, 150, 150, 0.2)' : 'white'}>
+      <HeaderContainer showing={navState === 'close' ? '100vh' : '1rem'} borderColor={scrolled ? 'rgba(150, 150, 150, 0.2)' : 'white'}>
         <div className={`header-container-1 ${navState}`}>
           <Link to='/'>
-            <img src={logo} className='logo-image' alt='logo_img' />
+            <img src={logo} onClick={() => { if (navState === 'close') setNavState('deactive'); }} className='logo-image' alt='logo_img' />
           </Link>
         </div>
         <div className={`header-container-2 ${navState}`}>
           <HeaderButton onClick={goToSearch}>도그워커 찾기</HeaderButton>
+          <HLine showing={navState !== 'close' ? 'none' : 'flex'} />
           {!isLogin
-            ? (
-              <HeaderButton onClick={login}>로그인</HeaderButton>
-              )
-            : (
-              <HeaderButton onClick={handleLogoutRequest}>로그아웃</HeaderButton>
-              )}
+            ? <HeaderButton onClick={login}>로그인</HeaderButton>
+            : <HeaderButton onClick={handleLogoutRequest}>로그아웃</HeaderButton>}
+          <HLine showing={navState !== 'close' ? 'none' : 'flex'} />
           {!isLogin
-            ? (
-              <HeaderButton onClick={signup}>회원가입</HeaderButton>
-              )
-            : (
-              <HeaderButton onClick={goToMypage}>마이페이지</HeaderButton>
-              )}
+            ? <HeaderButton onClick={signup}>회원가입</HeaderButton>
+            : <HeaderButton onClick={goToMypage}>마이페이지</HeaderButton>}
+          <HLine showing={navState !== 'close' ? 'none' : 'flex'} />
         </div>
       </HeaderContainer>
     </HeaderWrapper>

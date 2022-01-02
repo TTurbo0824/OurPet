@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 // import { Colors } from '../../../components/utils/_var';
+import { media } from '../../../components/utils/_media-queries';
 import { MyPageTable } from '../../../components/MyPageComponents';
 import TopNavigation from '../../../components/TopNavigation';
 import Rating from './Rating';
@@ -26,26 +27,29 @@ export const MyHistoryWrapper = styled.div`
     grid-template-areas:
       'alls select';
     grid-template-columns: 1fr 1fr;
+    width: 87vw;
+    ${media.tabletMini`width: 92vw; max-width: 40rem;`}
+    ${media.tablet`width: 40rem;`}
   }
   .card {
     grid-template-areas:
+      'check img title title title'
+      'check img info info info'
+      'check img type type type'
+      'check rating rating review review';
+      /* 'check review review'; */
+    ${media.tabletMini`grid-template-areas:
       'check img title rating review'
       'check img info rating review'
-      'check img type rating review';
-  }
-  .dogwalker-img {
-    cursor: pointer;
-    grid-area: img;
-    width: 6rem;
-    height: 6rem;
-    border: 0.5px solid rgb(238, 238, 238);
-    object-fit: cover;
+      'check img type rating review';`}
   }
   .rating {
     grid-area: rating;
+    margin-right: .5rem ;
   }
   .review {
     grid-area: review;
+    margin-left: .5rem ;
   }
 `;
 

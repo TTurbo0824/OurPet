@@ -21,6 +21,11 @@ const AppWrapper = styled.div`
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  * ::-webkit-scrollbar {
+    display: none;
   }
   .App {
     font-family: 'Noto Sans KR', sans-serif;
@@ -118,19 +123,20 @@ function App () {
             : null}
           <Switch>
             <Route exact path='/' component={LandingPage} />
-            <Route path='/search' component={Mainpage} />
+            <Route path='/search'>
+              <Mainpage
+                handleMessage={handleMessage}
+                handleNotice={handleNotice}
+              />
+            </Route>
             <Route path='/mypage'>
               {isLogin
-                ? (
-                  <Myinfo
+                ? <Myinfo
                     modal={handleModalOpen}
                     handleMessage={handleMessage}
                     handleNotice={handleNotice}
                   />
-                  )
-                : (
-                  <Redirect to='/' />
-                  )}
+                : <Redirect to='/' />}
             </Route>
             <Route path='/myrequest'>
               <Myrequest
@@ -158,35 +164,30 @@ function App () {
             />
           </Switch>
           {openNotice
-            ? (
-              <Notification
+            ? <Notification
                 message={message}
                 handleNotice={handleNotice}
                 handleMessage={handleMessage}
                 modal={handleModalOpen}
               />
-              )
             : null}
           {scrolled ? <MoveTop moveToTop={moveToTop} /> : null}
           <Footer />
           {openSignup
-            ? (
-              <Signup
+            ? <Signup
+                login={handleLoginModalOpen}
                 handleModal={handleSignupModalClose}
                 handleMessage={handleMessage}
                 handleNotice={handleNotice}
               />
-              )
             : null}
           {openLogin
-            ? (
-              <Login
+            ? <Login
                 signup={handleSignupModalOpen}
                 handleModal={handleLoginModalClose}
                 handleMessage={handleMessage}
                 handleNotice={handleNotice}
               />
-              )
             : null}
         </div>
       </AppWrapper>

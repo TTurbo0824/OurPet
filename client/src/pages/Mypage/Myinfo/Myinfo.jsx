@@ -4,6 +4,7 @@ import { editInfo } from '../../../redux/action';
 import styled from 'styled-components';
 import axios from 'axios';
 import { Colors } from '../../../components/utils/_var';
+import { media } from '../../../components/utils/_media-queries';
 import { Alertbox, InputField } from '../../../components/UserComponents';
 import TopNavigation from '../../../components/TopNavigation';
 import UserProfile from './UserProfile';
@@ -30,10 +31,13 @@ export const MyinfoView = styled.div`
   padding-top: 0.7rem;
   box-sizing: border-box;
   width: 19rem;
-  height: 15rem;
+  height: 28rem;
   background-color: white;
   position: relative;
   text-align: center;
+  margin-bottom: 2.5rem;
+  /* ${media.tabletMini`margin-bottom: 2.5rem;`} */
+  /* background-color: lavender; */
   input:disabled {
     background: ${Colors.lightGray};
     color: ${Colors.gray};
@@ -207,7 +211,6 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
     } else {
       if (myInfo.nickname === '') setMyInfo({ ...myInfo, nickname: userInfo.nickname });
       setErrorMsg('');
-      // dispatch(editInfo(myInfo.nickname));
 
       axios
         .patch(process.env.REACT_APP_API_URL + '/user-info', myInfo, {
@@ -265,23 +268,25 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleProfileOpen = () => {
-    setOpenProfile(true);
+    if (isGuest) {
+      handleNotice(true);
+      handleMessage('체험하기 중에는 이용할 수 없는 기능입니다');
+    } else {
+      setOpenProfile(true);
+    }
   };
 
   const handleProfileClose = () => {
     setOpenProfile(false);
   };
 
-  // console.log(email, nickname, profile_url);
-
   return (
     <MyinfoWrapper>
       <TopNavigation />
       <div className='main'>
         <MyinfoView>
-          {/* <img alt='profile-img' src={profile_url} /> */}
           <ProfileImage>
-            <img className='review-profile' alt='profile-img' src={profile_url !== '' ? profile_url : default_profile} />
+            <img className='review-profile' alt='profile-img' src={profile_url && !isGuest ? profile_url : default_profile} />
           </ProfileImage>
           <div className='profile-edit' onClick={handleProfileOpen}>프로필 사진 수정</div>
           {openProfile

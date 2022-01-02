@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { Colors } from './utils/_var';
+import { media } from './utils/_media-queries';
 
 export const Alertbox = styled.div`
   color: red;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
+  font-size: .85rem;
+  margin-top: .5rem;
+  ${media.tabletMini`font-size: .9rem;`}
 `;
 
 export const Backdrop = styled.div`
@@ -24,16 +26,18 @@ export const InputField = styled.input`
   background-color: #f2f2f2;
   border: none;
   border-radius: 15px;
-  width: 13.5rem;
-  height: 2.2rem;
-  padding: 0.5rem 1rem;
-  margin-bottom: 0.5rem;
   color: ${Colors.darkGray};
+  padding: .5rem 1rem;
+  margin-bottom: .5rem;
+  width: 13rem;
+  height: 2rem;
+  /* ${media.tabletMini`width: 13rem; `} */
+  ${media.tablet`width: 13.5rem; height: 2.2rem;`}
   :focus {
     outline: none;
   }
   ::-webkit-input-placeholder {
     color: ${Colors.gray};
-    font-size: 0.8rem;
+    font-size: .8rem;
   }
 `;

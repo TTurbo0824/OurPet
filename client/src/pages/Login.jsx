@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { userLogin, getHistory, getRequest, resetHistory, resetRequest, getRating, getReview } from '../redux/action';
-import logo from '../images/logo.png';
+// import logo from '../images/logo.png';
+import logo from '../images/logo_text.png';
 import { Colors } from '../components/utils/_var';
 import { media } from '../components/utils/_media-queries';
 import { Alertbox, Backdrop, InputField } from '../components/UserComponents';
@@ -14,17 +15,26 @@ const { Kakao } = window;
 
 const LoginView = styled.div`
   box-sizing: border-box;
-  width: 20rem;
-  height: 24rem;
+  width: 18.4rem; 
+  height: 21.7rem;
+  ${media.tabletMini`width: 19.5rem; height: 22.5rem;`}
+  ${media.tablet`width: 20rem; height: 23.5rem;`}
   background-color: white;
   position: relative;
   text-align: center;
   padding-top: 0.7rem;
-  box-shadow: 10px 10px grey;
+  box-shadow: 8px 8px grey;
+  ${media.tablet`box-shadow: 10px 10px grey;`}
   .logo {
+    width: 6.75rem;
+    margin: .85rem auto .5rem;
+    ${media.tabletMini`width: 7rem; margin: .9rem auto .75rem;`}
+    ${media.tablet`width: 7.25rem; margin: 1.25rem auto .8rem;`}
+  }
+  /* .logo {
     width: 7.5rem;
     margin: 0.7rem auto 1rem;
-  }
+  } */
 `;
 
 const LoginInputContainer = styled.div`
@@ -36,14 +46,15 @@ const LoginInputContainer = styled.div`
 
 const LoginButton = styled.button`
   cursor: pointer;
-  margin: 0.1rem auto 0.3rem;
-  font-size: 0.9rem;
+  margin: .1rem auto .3rem;
+  font-size: .85rem;
   background-color: ${Colors.lightYellow};
-  width: 13.2rem;
-  height: 2.5rem;
+  width: 13rem;
+  height: 2.4rem;
   border-radius: 7px;
   border: none;
   color: white;
+  ${media.tablet`font-size: .9rem; width: 13.2rem; height: 2.5rem;`}
   :hover {
     background-color: ${Colors.yellow};
   }
@@ -51,16 +62,16 @@ const LoginButton = styled.button`
 
 const KakaoButton = styled.div`
   cursor: pointer;
-  width: 13.2rem;
-  height: 2.5rem;
-  margin: 0.3rem auto;
-  padding: 0.3rem 0.2rem 0.3rem 0;
-  /* ${media.tabletMini`padding: .37rem .2rem .37rem 0;`} */
-  padding: 0.4rem 1.1rem 0.3rem 0;
-  font-size: 0.9rem;
+  width: 13rem;
+  height: 2.4rem;
+  margin: .3rem auto;
+  padding: .4rem 1.1rem .3rem 0;
+  font-size: .85rem;
+  ${media.tablet`font-size: .9rem; width: 13.2rem; height: 2.5rem;`}
   background-color: #fee500;
   border-radius: 7px;
   border: none;
+  color: ${Colors.black};
   :hover {
     background-color: #edc707;
   }
@@ -74,14 +85,14 @@ const KakaoContent = styled.div`
   display: inline-block;
   vertical-align: middle;
   margin: auto 1.8rem auto 0;
-  font-size: 0.9rem;
+  font-size: .9rem;
   ${media.tablet`font-size: .9rem;`}
   color: #000000 85%;
 `;
 
 const SignupSpan = styled.span`
-  font-size: 0.8rem;
-  margin: auto 0.2rem auto 0.1rem;
+  font-size: .8rem;
+  margin: auto .2rem auto .1rem;
   text-align: right;
   color: ${Colors.gray};
   color: ${(props) => props.textColor};
@@ -93,14 +104,6 @@ const SignupSpan = styled.span`
 
 function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
-  // dispatch(resetRequest());
-  // dispatch(getHistory());
-
-  // const defaultHistory = useSelector((state) => state.history).dogWalkerHistory;
-  // const defaultRequest = useSelector((state) => state.request).dogWalkerRequest;
-
-  // console.log(defaultHistory);
-
   const [loginInfo, setLoginInfo] = useState({
     email: '',
     password: ''
@@ -110,7 +113,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const handleInputValue = (key) => (e) => {
     setLoginInfo({ ...loginInfo, [key]: e.target.value });
   };
-  // console.log(loginInfo.email);
+
   const enter = (e) => {
     if (e.key === 'Enter') {
       handleLoginRequest();
@@ -172,16 +175,15 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
         } else if (error.response.data.message === 'Invalid user') {
           setErrorMsg('등록되지 않은 이메일입니다');
         } else {
-          setErrorMsg('오류가 발생했습니다.');
+          handleModal();
+          handleNotice(true);
+          handleMessage('오류가 발생하였습니다.');
           console.log('error: ', error.response.data.message);
         }
       });
   };
 
   const handleLoginRequest = () => {
-    // FOR TESTING PURPOSES
-    // dispatch(userLogin('token', { email: '123', nickname: 'testuser' }));
-
     if (loginInfo.email === '' || loginInfo.password === '') {
       setErrorMsg('모든 항목을 입력해 주세요');
     } else {
@@ -206,8 +208,6 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
               email: res.id.toString(),
               img: res.kakao_account.profile.profile_image_url
             };
-            // console.log(data);
-
             loginRequest('kakao', data);
           },
           fail: (error) => {
@@ -222,9 +222,6 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   };
 
   const guestLoginRequest = () => {
-    // FOR TESTING PURPOSES
-    // dispatch(userLogin('token', { email: '123', nickname: 'guest' }));
-
     dispatch(resetRequest());
     dispatch(resetHistory());
     dispatch(getRating([]));
@@ -263,6 +260,8 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
           });
       })
       .catch((error) => {
+        handleModal();
+        handleNotice(true);
         handleMessage('오류가 발생하였습니다.');
         console.log('error: ', error.response.data.message);
       });
