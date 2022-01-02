@@ -21,6 +21,11 @@ const AppWrapper = styled.div`
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  * ::-webkit-scrollbar {
+    display: none;
   }
   .App {
     font-family: 'Noto Sans KR', sans-serif;
@@ -118,7 +123,12 @@ function App () {
             : null}
           <Switch>
             <Route exact path='/' component={LandingPage} />
-            <Route path='/search' component={Mainpage} />
+            <Route path='/search'>
+              <Mainpage
+                handleMessage={handleMessage}
+                handleNotice={handleNotice}
+              />
+            </Route>
             <Route path='/mypage'>
               {isLogin
                 ? <Myinfo

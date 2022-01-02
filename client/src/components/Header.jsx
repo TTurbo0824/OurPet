@@ -64,7 +64,7 @@ const HeaderWrapper = styled.div`
     }
   }
   .logo-image {
-    padding-top: 0.1rem;
+    padding-top: .1rem;
     width: 5.75rem;
   }
   .menu-container {
@@ -78,7 +78,7 @@ const HeaderWrapper = styled.div`
     }
   }
   .menu {
-    margin: 1.1rem 1.5rem 0.4rem;
+    margin: 1.1rem 1.5rem .4rem;
     font-size: 1.2rem;
     color: ${Colors.darkGray};
     cursor: pointer;
@@ -93,8 +93,8 @@ const HeaderButton = styled.button`
   border: none;
   cursor: pointer;
   font-size: 1rem;
-  ${media.tablet`font-size: 0.85rem;`}
-  padding-left: 0.5rem;
+  ${media.tablet`font-size: .85rem;`}
+  padding-left: .5rem;
   color: ${Colors.darkGray};
   ${media.tablet`color: ${Colors.gray};`}
   padding-bottom: 1.75rem;
@@ -198,18 +198,12 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
   };
 
   const goToMypage = () => {
+    if (navState === 'close') setNavState('deactive');
     history.push({ pathname: '/mypage' });
   };
 
-  // const openGuest = () => {
-  //   modal();
-  // };
-
-  // console.log(navState);
-
   return (
     <HeaderWrapper>
-      {/* <div onClick={openGuest}>테스트용</div> */}
       <div className={`menu-container ${navState}`} onClick={handleClick}>
         {navState === 'deactive'
           ? <FontAwesomeIcon className='menu' icon={faBars} />
@@ -218,7 +212,7 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
       <HeaderContainer showing={navState === 'close' ? '100vh' : '1rem'} borderColor={scrolled ? 'rgba(150, 150, 150, 0.2)' : 'white'}>
         <div className={`header-container-1 ${navState}`}>
           <Link to='/'>
-            <img src={logo} onClick={() => setNavState('deactive')} className='logo-image' alt='logo_img' />
+            <img src={logo} onClick={() => { if (navState === 'close') setNavState('deactive'); }} className='logo-image' alt='logo_img' />
           </Link>
         </div>
         <div className={`header-container-2 ${navState}`}>
