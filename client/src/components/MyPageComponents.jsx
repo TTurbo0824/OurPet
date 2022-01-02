@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Colors } from './utils/_var';
+import { media } from './utils/_media-queries';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as fasStar } from '@fortawesome/free-regular-svg-icons';
@@ -20,7 +21,7 @@ export const MyPageTable = styled.div`
     border-radius: 5px;
     color: white;
     font-size: .9rem;
-    &:hover {
+    :hover {
       background-color: ${Colors.yellow};
     }
   }
@@ -28,15 +29,18 @@ export const MyPageTable = styled.div`
     display: grid;
     padding-bottom: .1rem;
     border-bottom: 1px solid ${Colors.lightGray};
-    width: 40rem;
   }
   .card {
     display: grid;
-    grid-template-columns: 1.5rem 7.25rem 48% 15% 15%;
+    width: 87vw;
+    ${media.tabletMini`width: 92vw; max-width: 40rem;`}
+    grid-template-columns: 1.5rem 5.2rem 1fr 1fr 1fr;
+    ${media.tabletMini`grid-template-columns: 1.5rem 5.2rem 1fr 4.8rem 4.8rem;`}
+    ${media.tablet`grid-template-columns: 1.5rem 7.25rem 48% 15% 15%;`}
+    ${media.tablet`width: 40rem;`}
     border-bottom: 1px solid ${Colors.lightGray};
     margin: .3rem auto;
     padding-bottom: .4rem;
-    width: 40rem;
   }
   .name {
     grid-area: title;
@@ -48,7 +52,9 @@ export const MyPageTable = styled.div`
     grid-area: type;
   }
   .name, .info, .type {
-    font-size: .9rem;
+    color: ${Colors.black};
+    font-size: .85rem;
+    ${media.tablet`font-size: .9rem;`}
   }
   .select-all {
     align-self: center;
@@ -69,7 +75,8 @@ export const MyPageTable = styled.div`
   }
   .description {
     margin-left: .3rem;
-    font-size: .83rem;
+    font-size: .8rem;
+    ${media.tablet`font-size: .83rem;`}
     color: ${Colors.darkGray};
     align-self: center;
     padding-bottom: .15rem;
@@ -83,18 +90,49 @@ export const MyPageTable = styled.div`
   .dogwalker-img {
     cursor: pointer;
     grid-area: img;
-    width: 6rem;
-    height: 6rem;
-    border: 0.5px solid rgb(238, 238, 238);
+    width: 4.5rem;
+    height: 4.5rem;
+    ${media.tablet`width: 6rem; height: 6rem;`}
+    border: .5px solid rgb(238, 238, 238);
     object-fit: cover;
   }
   .bnt {
     cursor: pointer;
     align-self: center;
     justify-self: center;
-    padding: .4rem .7rem;
-    font-size: .85rem;
+    font-size: .82rem;
+    padding: .2rem 1rem;
+    margin-top: .4rem;
+    width: 95%;
+    text-align: center;
+    ${media.tabletMini`padding: .4rem; width: auto;`}
+    ${media.tablet`font-size: .85rem; padding: .4rem .7rem;`}
     border: 1px solid ${Colors.mediumLightGray};
+  }
+`;
+
+export const RatingView = styled.div`
+  box-sizing: border-box;
+  width: 17.5rem;
+  height: 16.75rem;
+  background-color: white;
+  position: relative;
+  text-align: center;
+  padding-top: .7rem;
+  box-shadow: 10px 10px grey;  
+  font-size: 1rem;
+  ${media.tablet`width: 19rem; height: 17.75rem;`}
+  .rating-des {
+    margin: 1.75rem auto .8rem;
+    font-size: .95rem;
+    ${media.tablet` font-size: 1rem; margin: 1.8rem auto .8rem;`}
+  }
+  .rating-container {
+    width: 80%;
+    margin: 0 auto;
+  }
+  .icon-container {
+    color: ${Colors.lightYellow};
   }
 `;
 
@@ -105,10 +143,10 @@ export const ReviewView = styled.div`
   background-color: white;
   position: relative;
   text-align: center;
-  padding-top: 0.7rem;
+  padding-top: .7rem;
   box-shadow: 10px 10px grey;
   .description {
-    margin: .7rem auto 0.8rem;
+    margin: .7rem auto .8rem;
   }
 `;
 
@@ -117,23 +155,24 @@ export const ReviewInput = styled.textarea`
   outline: none;
   width: 80%;
   height: 8rem;
-  padding: 0.5rem;
+  padding: .5rem;
   border-color: ${Colors.lightGray};
   font-family: 'Noto Sans KR', sans-serif;
 `;
 
 export const HistoryButton = styled.button`
-  margin: 1rem 0.6rem 0.5rem;
+  margin: 1rem .6rem .5rem;
   cursor: pointer;
-  font-size: 0.9rem;
   background-color: ${Colors.lightYellow};
   background-color: ${(props) => props.bntColor};
-  width: 7rem;
-  height: 2.5rem;
+  width: 6.3rem;
+  height: 2.3rem;
   border-radius: 7px;
   border: none;
   color: white;
-  &:hover {
+  font-size: .85rem;
+  ${media.tablet`font-size: .9rem; width: 7rem; height: 2.5rem;`}
+  :hover {
     background-color: ${(props) => { return props.bntColor !== Colors.gray ? Colors.yellow : Colors.black; }};
   }
 `;
@@ -160,7 +199,6 @@ export const options = [
         <FontAwesomeIcon icon={faStar} size='1x' />
         <FontAwesomeIcon icon={faStar} size='1x' />
         <FontAwesomeIcon icon={fasStar} size='1x' />
-        {/* <FontAwesomeIcon color={Colors.mediumLightGray} icon={faStar} size="1x" /> */}
       </div>
     )
   },

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import logo from '../images/logo.png';
+// import logo from '../images/logo.png';
+import logo from '../images/logo_text.png';
 import { Colors } from '../components/utils/_var';
 import { media } from '../components/utils/_media-queries';
 import { Alertbox, Backdrop } from '../components/UserComponents';
@@ -9,17 +10,26 @@ import CloseButton from '../components/CloseButton';
 
 const SignupView = styled.div`
   box-sizing: border-box;
-  width: 21rem;
-  height: 26rem;
+  width: 19rem;
+  height: 25.5rem;
+  ${media.tabletMini`width: 20rem; height: 26rem;`}
+  ${media.tablet`width: 21rem; height: 27rem;`}
   background-color: white;
   position: relative;
   text-align: center;
   padding-top: .5rem;
-  box-shadow: 10px 10px grey;
+  box-shadow: 8px 8px grey;
+  ${media.tablet`box-shadow: 10px 10px grey;`}
   .logo {
+    width: 6.75rem;
+    margin: .85rem auto .5rem;
+    ${media.tabletMini`width: 7rem; margin: .9rem auto .5rem;`}
+    ${media.tablet`width: 7.25rem; margin: 1rem auto .8rem;`}
+  }
+  /* .logo {
     width: 7.5rem;
     margin: -.2rem auto .5rem;
-  }
+  } */
   .veri {
     cursor: pointer;
     font-size: .75rem;
@@ -37,17 +47,19 @@ const SignUpInputField = styled.input`
   background-color: #f2f2f2;
   border: none;
   border-radius: 15px;
-  width: 15rem;
-  height: 1.9rem;
-  padding: 0.5rem 1rem;
-  margin-bottom: 0.5rem;
+  padding: .5rem 1rem;
+  margin-bottom: .5rem;
   color: ${Colors.darkGray};
+  width: 14rem;
+  height: 1.75rem;
+  ${media.tabletMini`width: 14.2rem;`}
+  ${media.tablet`width: 15rem; height: 1.9rem;`}
   :focus {
     outline: none;
   }
   ::-webkit-input-placeholder {
     color: ${Colors.gray};
-    font-size: 0.8rem;
+    font-size: .8rem;
   }
 `;
 
@@ -58,21 +70,37 @@ const SignUpInputContainer = styled.div`
 `;
 
 const SignUpButton = styled.button`
-  margin: 0.2rem 0.4rem 0rem;
+  margin: .2rem .4rem 0rem;
   cursor: pointer;
-  font-size: 0.9rem;
   background-color: ${Colors.lightYellow};
-  width: 15rem;
-  height: 2.5rem;
+  font-size: .85rem;
+  width: 14rem;
+  height: 2.4rem;
   border-radius: 7px;
   border: none;
   color: white;
-  &:hover {
+  ${media.tabletMini`width: 14.2rem;`}
+  ${media.tablet`width: 15rem; height: 2.5rem; font-size: .9rem;`}
+  :hover {
     background-color: ${Colors.yellow};
   }
 `;
 
-function Signup ({ handleModal, handleMessage, handleNotice }) {
+const IsUser = styled.div`
+  margin-top: .3rem;
+  color: ${Colors.darkGray};
+  font-size: .83rem;
+  ${media.tablet`font-size: .85rem;`}
+  .login {
+    cursor: pointer;
+    color: ${Colors.yellow};
+    :hover {
+      color: ${Colors.darkYellow};
+    }
+  }
+`;
+
+function Signup ({ login, handleModal, handleMessage, handleNotice }) {
   const [userInfo, setUserInfo] = useState({
     nickname: '',
     email: '',
@@ -112,7 +140,7 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
 
   const isValidEmail = (e) => {
     const regExp =
-      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     if (regExp.test(e.target.value)) {
       setCheckEmail(true);
     } else {
@@ -140,7 +168,6 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
   };
 
   const handleCheckVeriCode = (e) => {
-    // console.log(userInfo.verified, veriCode, e.target.value);
     if (Number(e.target.value) === veriCode) {
       setUserInfo({ ...userInfo, verified: true });
     } else {
@@ -231,6 +258,11 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
     }
   };
 
+  const goLogin = () => {
+    handleModal();
+    login();
+  };
+
   return (
     <Backdrop>
       <SignupView>
@@ -249,6 +281,7 @@ function Signup ({ handleModal, handleMessage, handleNotice }) {
           />
         </SignUpInputContainer>
         <SignUpButton onClick={handleSignupRequest}>회원가입</SignUpButton>
+        <IsUser>이미 회원이신가요? <span className='login' onClick={goLogin}>로그인 하기</span></IsUser>
         <Alertbox>{errorMsg}</Alertbox>
       </SignupView>
     </Backdrop>
