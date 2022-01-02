@@ -14,7 +14,7 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
   const { id, content } = targetReview;
   const [walkerReview, setWalkerReview] = useState(content);
   const [errorMsg, setErrorMsg] = useState('');
-  // console.log(targetReview);
+
   const handleInput = (e) => {
     setWalkerReview(e.target.value);
   };
@@ -26,7 +26,6 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
     } else if (walkerReview === content) {
       setErrorMsg('수정 사항을 입력해주세요.');
     } else {
-      // dispatch(editReview(id, walkerReview));
       axios
         .patch(`${process.env.REACT_APP_API_URL}/review`, { id: id, content: walkerReview }, {
           headers: {

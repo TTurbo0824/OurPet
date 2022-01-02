@@ -14,7 +14,6 @@ function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token,
   const { historyId } = historyInfo;
   const [walkerRate, setWalkerRate] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
-  // console.log(historyId);
 
   const setRating = (e) => {
     setWalkerRate(e.value);
@@ -44,7 +43,8 @@ function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token,
           }
         })
         .catch((error) => {
-          if (error.response.status === 410) {
+          console.log(error.response.status);
+          if (error.response.status === 401) {
             handleModal();
             modal();
           } else {
