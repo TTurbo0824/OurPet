@@ -175,6 +175,7 @@ function App () {
           <Footer />
           {openSignup
             ? <Signup
+                login={handleLoginModalOpen}
                 handleModal={handleSignupModalClose}
                 handleMessage={handleMessage}
                 handleNotice={handleNotice}

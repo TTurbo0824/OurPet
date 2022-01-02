@@ -6,7 +6,7 @@ import { userLogout, getRequest, getHistory, getRating, getReview } from '../red
 import axios from 'axios';
 import { Colors } from '../components/utils/_var';
 import { media } from '../components/utils/_media-queries';
-import logo from '../images/logo.png';
+import logo from '../images/logo_text.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -66,6 +66,10 @@ const HeaderWrapper = styled.div`
   .logo-image {
     padding-top: .1rem;
     width: 5.75rem;
+    /* newly-added */
+    width: 5.75rem;
+    padding-top: .95rem;
+    ${media.tablet`padding-top: .4rem; width: 6.25rem;`}
   }
   .menu-container {
     display: flex;
@@ -121,9 +125,6 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
   const isLogin = useSelector((state) => state.user).token;
   const nickname = useSelector((state) => state.user).walkingDogUserInfo.nickname;
   const isGuest = !!nickname.includes('guest');
-
-  // console.log(isGuest);
-
   const [navState, setNavState] = useState('active');
 
   useEffect(() => window.addEventListener('resize', maintainNavState));
@@ -146,13 +147,6 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
 
   const handleLogoutRequest = () => {
     if (isGuest) {
-      // dispatch(userLogout());
-      // dispatch(getRequest([]));
-      // dispatch(getHistory([]));
-      // localStorage.clear();
-      // handleNotice(true);
-      // handleMessage('게스트 모드를 종료합니다');
-      // window.location.replace('/search');
       modal();
     } else {
       const token = isLogin;
