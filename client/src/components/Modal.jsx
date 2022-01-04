@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { NoticeButton } from './Notification';
 import { Colors } from '../components/utils/_var';
+import { media } from './utils/_media-queries';
 import { useSelector, useDispatch } from 'react-redux';
 import { userLogout, getRequest, getHistory } from '../redux/action';
 
@@ -23,10 +24,13 @@ export const ModalView = styled.div`
   position: relative;
   text-align: center;
   color: ${Colors.darkGray};
-  width: 16.5rem;
-  height: 9.5rem;
+  width: 15.75rem;
+  height: 9.25rem;
   padding-top: 1.2rem;
-  box-shadow: 10px 10px grey;
+  box-shadow: 8px 8px grey;
+  ${media.tabletMini`font-size: .95rem; width: 16.2rem; height: 9.5rem;`}
+  ${media.tablet`font-size: 1rem; width: 16.5rem;`}
+  ${media.tablet`box-shadow: 10px 10px grey;`}
 `;
 
 const Content = styled.div`
@@ -34,10 +38,13 @@ const Content = styled.div`
   margin: auto auto 0;
   margin-top: ${(props) => props.topMargin};
   padding: auto 0.3rem;
-  font-size: 1rem;
+  font-size: .9rem;
+  ${media.tabletMini`font-size: .95rem;`}
+  ${media.tablet`font-size: 1rem;`}
 `;
 
 const LogOutButton = styled.button`
+  cursor: pointer;
   margin-top: 0.5rem;
   background-color: ${Colors.gray};
   border: none;
@@ -47,7 +54,8 @@ const LogOutButton = styled.button`
   padding-top: 0.1rem;
   font-size: 0.9rem;
   color: white;
-  cursor: pointer;
+  width: 6.5rem;
+  ${media.tablet`font-size: .9rem; width: 7rem;`}
   :hover {
     background-color: ${Colors.black};
   }

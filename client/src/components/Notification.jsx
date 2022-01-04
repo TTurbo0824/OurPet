@@ -6,17 +6,12 @@ import { cancelDogwalker, deleteReview } from '../redux/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Colors } from './utils/_var';
+import { media } from './utils/_media-queries';
 require('dotenv').config();
 
 const { Kakao } = window;
 
-// ==================================================================
-//                               TO DO
-// ==================================================================
-//  1. CSS 점검
-//
-
-export const NoticeBackdrop = styled.div`
+const NoticeBackdrop = styled.div`
   position: fixed;
   z-index: 999;
   top: 0;
@@ -29,39 +24,45 @@ export const NoticeBackdrop = styled.div`
   height: 100vh;
 `;
 
-export const NoticeView = styled.div`
+const NoticeView = styled.div`
   box-sizing: border-box;
   position: relative;
   text-align: center;
-  width: 16.5rem;
-  height: 9.5rem;
+  width: 14.25rem;
+  height: 9rem;
   background-color: rgb(255, 255, 255);
   color: ${Colors.darkGray};
-  box-shadow: 10px 10px grey;
-  padding: 0.8rem;
+  padding: .8rem;
+  box-shadow: 8px 8px grey;
+  ${media.tabletMini`width: 15rem; height: 9.25rem;`}
+  ${media.tablet`width: 16.5rem; height: 9.5rem;`}
+  ${media.tablet`box-shadow: 10px 10px grey;`}
 `;
 
-export const Message = styled.div`
+const Message = styled.div`
   margin-top: ${(props) => props.topMargin};
-  font-size: 1rem;
+  font-size: .87rem;
+  ${media.tabletMini`font-size: .9rem;`}
+  ${media.tablet`font-size: 1rem;`}
 `;
 
 export const NoticeButton = styled.button`
+  cursor: pointer;
   margin-top: 1rem;
   background-color: ${Colors.lightYellow};
   border: none;
   border-radius: 10px;
   height: 1.7rem;
-  font-size: 0.9rem;
-  width: 7rem;
+  width: 6.5rem;
   color: white;
-  cursor: pointer;
+  font-size: .88rem;
+  ${media.tablet`font-size: .9rem; width: 7rem;`}
   :hover {
     background-color: ${Colors.darkYellow};
   }
 `;
 
-export const NoticeClose = styled.button`
+const NoticeClose = styled.button`
   margin-top: 1rem;
   background-color: ${Colors.lightYellow};
   border: none;
@@ -79,7 +80,7 @@ export const NoticeClose = styled.button`
 export const CloseIcon = styled.div`
   display: flex;
   justify-content: right;
-  padding-bottom: 0.5rem;
+  padding-bottom: .5rem;
   font-size: 1.2rem;
   cursor: pointer;
 `;
@@ -87,10 +88,6 @@ export const CloseIcon = styled.div`
 function Notification ({ message, handleNotice, handleMessage, modal }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user).token;
-  const email = useSelector((state) => state.user).walkingDogUserInfo.email;
-  const kakaoUser = !email.includes('@');
-  console.log(kakaoUser);
-
   const [deleteIds, setDeleteIds] = useState([]);
 
   const withdrawalRequest = () => {
@@ -141,8 +138,7 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
     let ids = id.split(',');
     ids = ids.map((el) => Number(el));
     setDeleteIds(ids);
-    // console.log(ids);
-    // dispatch(cancelDogwalker(ids));
+
     axios
       .delete(`${process.env.REACT_APP_API_URL}/request`, {
         data: { serviceId: ids },
@@ -236,13 +232,17 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
         </CloseIcon>
         <Message
           topMargin={
+            message.includes('정말 요청을 취소하시겠습니까?') ||
+            message.includes('만료된 요청을 삭제하시겠습니까?') ||
+            message.includes('리뷰를 삭제하시겠습니까?') ||
             message.includes('정말 탈퇴하시겠습니까?') ||
+            message === '요청이 완료되었습니다.' ||
             message === '로그인 성공!' ||
             message === '로그아웃 성공!' ||
             message === '회원가입 성공!' ||
             message === '회원탈퇴가 완료되었습니다.'
               ? '.4rem'
-              : '1rem'
+              : '1.2rem'
           }
         >
           {message.includes('정말 요청을 취소하시겠습니까?') ||
