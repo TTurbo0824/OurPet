@@ -152,6 +152,7 @@ function MyRequest ({ handleMessage, handleNotice }) {
       handleNotice(true);
       handleMessage('취소할 요청이 없습니다.');
     } else {
+      console.log(id);
       handleNotice(true);
       handleMessage(`정말 요청을 취소하시겠습니까?!${id}`);
     }
@@ -248,7 +249,7 @@ function MyRequest ({ handleMessage, handleNotice }) {
                       onChange={(e) => onChangeEach(e, el.id)}
                       checked={CheckList.includes(el.id)}
                     />
-                    <img className='dogwalker-img' src={el.img} alt={el.name} onClick={() => handleClick(el.dogwalkerId)} />
+                    <img className='dogwalker-img' src={`/images/dog_images/dog_${el.dogwalkerId}.jpeg`} alt={el.name} onClick={() => handleClick(el.dogwalkerId)} />
                     <div className='name'>{el.name}</div>
                     <div className='info'>{el.date} {el.time} {el.location}</div>
                     <div className='type'>{el.type}  <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>

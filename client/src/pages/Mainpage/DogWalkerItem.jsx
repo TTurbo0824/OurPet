@@ -112,7 +112,7 @@ export default function Dogwalker ({ rating, minPrice, dogWalker, handleClick, t
   return (
     <DogWalkerWrapper>
       <div className='dogwalker-card' key={dogWalker.id} onClick={(e) => handleClick(e)}>
-        <img className='dogwalker-img' src={dogWalker.img} alt={dogWalker.name} />
+        <img className='dogwalker-img' src={`/images/dog_images/dog_${dogWalker.id}.jpeg`} alt={dogWalker.name} />
         <span className='dogwalker-location'>{dogWalker.locations.join(' ')}</span>
         <span className='dogwalker-name'>
           {dogWalker.name}

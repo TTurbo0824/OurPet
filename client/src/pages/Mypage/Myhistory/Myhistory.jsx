@@ -257,7 +257,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
                     />
                     <img
                       className='dogwalker-img'
-                      src={el.img}
+                      src={`/images/dog_images/dog_${el.dogwalkerId}.jpeg`}
                       alt={el.name}
                       onClick={() => handleClick(el.dogwalkerId)}
                     />
