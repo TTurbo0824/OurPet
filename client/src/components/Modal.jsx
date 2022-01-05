@@ -84,19 +84,19 @@ function Modal ({ handleModal, login }) {
       <ModalView>
         {!isGuest
           ? <>
-              <Content topMargin='0.4rem'>[토큰 만료] 재로그인 하시겠습니까?</Content>
-              <NoticeButton onClick={goLogin}>로그인</NoticeButton>
-              <div>
-                <LogOutButton onClick={logout}>로그아웃</LogOutButton>
-              </div>
+            <Content topMargin='0.4rem'>[토큰 만료] 재로그인 하시겠습니까?</Content>
+            <NoticeButton onClick={goLogin}>로그인</NoticeButton>
+            <div>
+              <LogOutButton onClick={logout}>로그아웃</LogOutButton>
+            </div>
             </>
           : <>
-              <Content topMargin='1.6rem'>체험하기가 종료되었습니다.</Content>
-              <NoticeButton
-                onClick={logout}
-              >
-                메인화면으로
-              </NoticeButton>
+            <Content topMargin='1.6rem'>체험하기가 종료되었습니다.</Content>
+            <NoticeButton
+              onClick={logout}
+            >
+              메인화면으로
+            </NoticeButton>
             </>}
       </ModalView>
     </ModalBackdrop>
