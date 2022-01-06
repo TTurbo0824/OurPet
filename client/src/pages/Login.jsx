@@ -247,7 +247,9 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
             }
           })
           .then((res) => {
-            dispatch(userLogin(token, res.data.data));
+            if (res.status === 200) {
+              dispatch(userLogin(token, res.data.data));
+            }
           })
           .then(() => {
             axios
@@ -256,8 +258,14 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
                   Authorization: `Bearer ${token}`,
                   'Content-Type': 'application/json'
                 }
-              });
-          });
+              })
+              .then((res) => {
+                if (res.status === 200) {
+                  dispatch(getRequest(res.data.data.allRequests));
+                  dispatch(getHistory(res.data.data.allHistories));
+                }
+              })
+          })
       })
       .catch((error) => {
         handleModal();

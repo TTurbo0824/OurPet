@@ -188,6 +188,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
       handleNotice(true);
       handleMessage('삭제할 내역이 없습니다.');
     } else if (CheckList.length > 0) {
+      setCheckList([]);
       axios
         .delete(process.env.REACT_APP_API_URL + '/history', {
           headers: {

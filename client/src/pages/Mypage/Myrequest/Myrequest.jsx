@@ -138,14 +138,13 @@ function MyRequest ({ handleMessage, handleNotice }) {
     }
   };
 
-  // console.log(CheckList);
+  // console.log('checked', CheckList);
+
   const walkerList = [];
 
   dogWalkerList.map((el) => (
     walkerList.push(el.name)
   ));
-
-  // console.log(allRequest);
 
   const deleteClick = (id) => {
     if (allRequest.length === 0) {
@@ -155,6 +154,7 @@ function MyRequest ({ handleMessage, handleNotice }) {
       console.log(id);
       handleNotice(true);
       handleMessage(`정말 요청을 취소하시겠습니까?!${id}`);
+      setCheckList([]);
     }
   };
 
@@ -167,7 +167,8 @@ function MyRequest ({ handleMessage, handleNotice }) {
       handleMessage('취소할 요청을 선택해주세요.');
     } else {
       handleNotice(true);
-      handleMessage(`정말 요청을 취소하시겠습니까?!${id}`);
+      handleMessage(`정말 요청을 취소하시겠습니까?!#${id}`);
+      setCheckList([]);
     }
   };
 
