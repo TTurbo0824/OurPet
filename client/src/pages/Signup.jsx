@@ -231,7 +231,10 @@ function Signup ({ login, handleModal, handleMessage, handleNotice }) {
             setErrorMsg('이미 가입된 이메일입니다');
           } else if (error.response.data.message === 'conflict: nickname') {
             setErrorMsg('이미 가입된 닉네임입니다');
-          } else console.log(error.response.data.message);
+          } else {
+            console.log('error: ', error.response.data.message);
+            setErrorMsg('오류가 발생했습니다');
+          }
         });
     }
   };

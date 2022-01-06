@@ -346,7 +346,8 @@ function Mainpage ({ handleMessage, handleNotice }) {
   };
 
   const handleClick = (dogwalker) => {
-    history.push({ pathname: `/dogwalker:id=${dogwalker.id}` });
+    // history.push({ pathname: `/dogwalker:id=${dogwalker.id}` });
+    window.location.replace(`/dogwalker:id=${dogwalker.id}`);
   };
 
   const resetSearch = () => {

@@ -20,8 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   dogwalkers.init({
-    name: DataTypes.STRING,
-    profile: DataTypes.TEXT
+    name: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'dogwalkers'

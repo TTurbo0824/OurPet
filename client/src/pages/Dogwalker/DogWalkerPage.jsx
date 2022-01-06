@@ -277,7 +277,7 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
           : <>
             <div className='top-container'>
               <div className='image-container'>
-                <img className='dogwalker-img' src={profile} alt='profile_image' />
+                <img className='dogwalker-img' src={`/images/dog_images/dog_${dogWalker.id}.jpeg`} alt='profile_image' />
               </div>
               <div className='name'>{dogWalker.name} · <span>프로 도그워커</span></div>
               <div className='location'>{dogWalker.locations.map((el, idx) => <span key={idx} className='location-name'>서울 {el}</span>)}</div>

@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
       to: email,
       subject: 'WalkingDog: 이메일 인증 코드',
       text:
-      'WalkingDog에 가입 하신 것을 환영합니다.\n\n아래의 인증 코드를 입력하시면 가입이 정상적으로 완료됩니다.\n\n' +
+      'WalkingDog에 가입하신 것을 환영합니다.\n\n아래의 인증 코드를 입력하시면 가입이 정상적으로 완료됩니다.\n\n' +
       randomNum + '\n\n감사합니다.'
     };
 
@@ -27,7 +27,6 @@ module.exports = async (req, res) => {
       }
     });
 
-    // console.log(randomNum);
     // send email
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {

@@ -39,7 +39,16 @@ module.exports = async (req, res) => {
 
         let changedNickname = nickname;
 
-        if (changedNickname === '' || userInfo.nickname === changedNickname) {
+        const dplctNickname = await users.findOne({
+          where: {
+            nickname: nickname
+          }
+        });
+
+        const defaultNicknames = ['pugqueen', 'doglover0522', 'rangrang2'];
+        if (dplctNickname || defaultNicknames.includes(nickname)) {
+          return res.status(409).json({ message: 'Duplicate nickname' });
+        } else if (changedNickname === '' || userInfo.nickname === changedNickname) {
           changedNickname = userInfo.nickname;
         }
 

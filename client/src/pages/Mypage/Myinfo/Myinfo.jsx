@@ -8,7 +8,8 @@ import { media } from '../../../components/utils/_media-queries';
 import { Alertbox, InputField } from '../../../components/UserComponents';
 import TopNavigation from '../../../components/TopNavigation';
 import UserProfile from './UserProfile';
-import default_profile from '../../../images/default_profile.jpeg';
+// import default_profile from '../../../images/default_profile.jpeg';
+import default_profile from '../../../images/default_profile.png';
 import { ProfileImage } from '../../../components/MyPageComponents';
 
 export const MyinfoWrapper = styled.div`
@@ -236,6 +237,8 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
         .catch((error) => {
           if (error.response.status === 401) {
             modal();
+          } else if (error.response.status === 409) {
+            setErrorMsg('중복되는 닉네임입니다.');
           } else {
             console.log('error: ', error.response.data.message);
           }
@@ -270,7 +273,7 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
   const handleProfileOpen = () => {
     if (isGuest) {
       handleNotice(true);
-      handleMessage('체험하기 중에는 이용할 수 없는 기능입니다');
+      handleMessage(`체험하기 중에는 이용할 수${'\n'}없는 기능입니다.`);
     } else {
       setOpenProfile(true);
     }
