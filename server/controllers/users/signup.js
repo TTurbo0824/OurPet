@@ -26,6 +26,8 @@ module.exports = async (req, res) => {
     });
 
     // 닉네임이 중복인 경우
+    const defaultNicknames = ['pugqueen', 'doglover0522', 'rangrang2'];
+
     const dplctNickname = await users.findAll({
       where: {
         nickname: nickname
@@ -36,7 +38,7 @@ module.exports = async (req, res) => {
       return res.status(409).json({ message: 'conflict: email & nickname' });
     } else if (dplctEmail.length !== 0) {
       return res.status(409).json({ message: 'conflict: email' });
-    } else if (dplctNickname.length !== 0) {
+    } else if (dplctNickname.length !== 0 || defaultNicknames.includes(nickname)) {
       return res.status(409).json({ message: 'conflict: nickname' });
     } else {
       const salt = crypto.randomBytes(64).toString('hex');
@@ -53,7 +55,7 @@ module.exports = async (req, res) => {
         password: encryptedPassword
       });
 
-      return res.status(201).json({ message: 'thank you for signing up!' });
+      res.status(201).json({ message: 'thank you for signing up!' });
     }
   } catch (error) {
     console.log(error);

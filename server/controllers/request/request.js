@@ -49,7 +49,7 @@ module.exports = async (req, res) => {
       }
 
       const temp = await requests.findAll({
-        order: [['createdAt', 'DESC']]
+        order: [['id', 'DESC']]
       });
 
       let tempId = 1;
@@ -58,8 +58,7 @@ module.exports = async (req, res) => {
         tempId = temp[0].dataValues.id + 1;
       }
 
-      // console.log(tempId);
-
+      console.log(temp[0].dataValues.id);
       const payload = {
         id: tempId,
         userId: accessTokenData.id,
