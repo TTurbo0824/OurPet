@@ -25,5 +25,5 @@ module.exports = {
   getReview: require('./review/get-reviews'),
   review: require('./review/review'),
   editReview: require('./review/edit-review'),
-  deleteReview: require('./review/delete-review'),
+  deleteReview: require('./review/delete-review')
 };

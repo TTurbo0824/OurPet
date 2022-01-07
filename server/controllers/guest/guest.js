@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
       users.destroy({
         where: {
           id: guestID,
-          nickname: guestNickname,
+          nickname: guestNickname
         }
       });
     }, exTime);
