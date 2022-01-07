@@ -36,7 +36,6 @@ const AppWrapper = styled.div`
     z-index: 10;
     height: 3.5rem;
     background-color: white;
-    /* opacity: 0.7; */
   }
   .space {
     margin-bottom: 4.7rem;
@@ -162,9 +161,14 @@ function App () {
                 />
               )}
             />
+            <Route path='*'>
+              <Redirect to='/' />
+            </Route>
           </Switch>
           {openNotice
             ? <Notification
+                login={handleLoginModalOpen}
+                handleModal={handleModalClose}
                 message={message}
                 handleNotice={handleNotice}
                 handleMessage={handleMessage}
@@ -172,7 +176,12 @@ function App () {
               />
             : null}
           {scrolled ? <MoveTop moveToTop={moveToTop} /> : null}
-          <Footer />
+          <Footer
+            login={handleLoginModalOpen}
+            signup={handleSignupModalOpen}
+            handleNotice={handleNotice}
+            handleMessage={handleMessage}
+          />
           {openSignup
             ? <Signup
                 login={handleLoginModalOpen}

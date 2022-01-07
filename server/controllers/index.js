@@ -26,5 +26,4 @@ module.exports = {
   review: require('./review/review'),
   editReview: require('./review/edit-review'),
   deleteReview: require('./review/delete-review'),
-  dogwalkerRequest: require('./dogwalkers/dogwalker-request')
 };

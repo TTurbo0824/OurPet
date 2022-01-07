@@ -50,7 +50,6 @@ app.get('/review', controllers.getReview);
 app.post('/review', controllers.review);
 app.patch('/review', controllers.editReview);
 app.delete('/review', controllers.deleteReview);
-app.get('/walker-request', controllers.dogwalkerRequest);
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 80;
 

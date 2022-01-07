@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     res.setHeader('authorization', '');
 
     res.status(205).json({ message: 'logged out successfully' });
-  } catch {
+  } catch (error) {
     res.status(400).json({ message: 'error' });
   }
 };

@@ -24,9 +24,5 @@ module.exports = {
     host: process.env.DATABASE_HOST,
     port: process.env.DATABASE_PORT,
     dialect: 'mysql',
-    dialectOptions: {
-      useUTC: false
-    },
-    timezone: 'Asia/Seoul'
   }
 };

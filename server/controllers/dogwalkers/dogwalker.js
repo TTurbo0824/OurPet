@@ -4,7 +4,11 @@ require('sequelize-values')(Sequelize);
 
 module.exports = async (req, res) => {
   try {
-    const dogwalkerId = req.query.id;
+    const dogwalkerId = Number(req.query.id);
+
+    if (dogwalkerId < 1 || dogwalkerId > 20 || typeof dogwalkerId !== 'number') {
+      return res.status(404).json({ message: 'No dog walkers are found' });
+    }
 
     let allRatings = await ratings.findAll({
       include: [
@@ -59,10 +63,8 @@ module.exports = async (req, res) => {
       ],
       message: 'ok'
     });
-  } catch (err) {
-    // console.log(err);
-    res.status(400).json({
-      message: 'error'
-    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: 'error' });
   }
 };
