@@ -31,7 +31,7 @@ module.exports = {
   checkRefreshToken: (refreshToken) => {
     try {
       return jwt.decode(refreshToken);
-    } catch {
+    } catch (error) {
       return null;
     }
   }
