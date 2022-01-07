@@ -4,11 +4,13 @@ const { generateGuestAccessToken, generateRefreshToken } = require('../tokenFunc
 module.exports = async (req, res) => {
   try {
     const allMembers = await users.findAll({
-      order: [['createdAt', 'ASC']]
+      order: [['id', 'DESC']]
     });
 
-    const guestID = allMembers[allMembers.length - 1].dataValues.id + 1;
-    const guestNickname = `guest#${guestID}`;
+    const guestID = allMembers[0].dataValues.id + 1;
+    const randomNum = (Math.floor(Math.random() * (9999 - 1000) + 1000));
+
+    const guestNickname = `guest#${randomNum}`;
 
     let exTime = process.env.GUEST_TIME;
     exTime = Number(exTime.slice(0, exTime.length - 1));

@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
       res.status(200).json({ accessToken, refreshToken, message: 'ok' });
     } else {
       const allMembers = await users.findAll({
-        order: [['createdAt', 'DESC']]
+        order: [['id', 'DESC']]
       });
 
       const randomNum = (Math.floor(Math.random() * (9999 - 1000) + 1000));

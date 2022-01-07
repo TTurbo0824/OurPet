@@ -14,7 +14,12 @@ module.exports = async (req, res) => {
     } else {
       const { dogwalkerId, type, location, date, duration, price, time } = req.body;
 
-      // console.log(dogwalkerId, type, location, date, duration, price, time);
+      const allUserRequest = await requests.findAll({
+        where: {
+          userId: accessTokenData.id
+        }
+      });
+
       const isNotNewRequest = await requests.findOne({
         where: {
           userId: accessTokenData.id,
@@ -26,6 +31,8 @@ module.exports = async (req, res) => {
 
       if (isNotNewRequest) {
         return res.status(409).json({ message: 'You cannot make the duplicate request' });
+      } else if (allUserRequest.length > 15) {
+        return res.status(413).json({ message: 'Too many requests' });
       }
 
       const now = new Date();
@@ -58,7 +65,6 @@ module.exports = async (req, res) => {
         tempId = temp[0].dataValues.id + 1;
       }
 
-      console.log(temp[0].dataValues.id);
       const payload = {
         id: tempId,
         userId: accessTokenData.id,
@@ -71,9 +77,9 @@ module.exports = async (req, res) => {
         time: time
       };
 
-      requests.create(payload);
+      await requests.create(payload);
 
-      return res.status(200).json({ message: 'ok', data: { id: tempId } });
+      res.status(200).json({ message: 'ok', data: { id: tempId } });
     }
   } catch (error) {
     console.log(error);
