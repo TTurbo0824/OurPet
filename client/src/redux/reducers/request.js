@@ -16,7 +16,6 @@ function request (state = initRequestState, action) {
             id: action.payload.id,
             dogwalkerId: action.payload.dogwalkerId,
             name: action.payload.name,
-            img: action.payload.img,
             type: action.payload.type,
             location: action.payload.location,
             date: action.payload.date,
