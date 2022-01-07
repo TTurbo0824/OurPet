@@ -42,6 +42,8 @@ const NoticeView = styled.div`
 const Message = styled.div`
   margin-top: ${(props) => props.topMargin};
   font-size: .87rem;
+  white-space: pre-line;
+  line-height: 1.7rem;
   ${media.tabletMini`font-size: .9rem;`}
   ${media.tablet`font-size: 1rem;`}
 `;
@@ -85,7 +87,7 @@ export const CloseIcon = styled.div`
   cursor: pointer;
 `;
 
-function Notification ({ message, handleNotice, handleMessage, modal }) {
+function Notification ({ login, handleModal, message, handleNotice, handleMessage, modal }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user).token;
   const [deleteIds, setDeleteIds] = useState([]);
@@ -200,6 +202,12 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
       });
   };
 
+  const goLogin = () => {
+    handleNotice(false);
+    handleModal();
+    login();
+  };
+
   return (
     <NoticeBackdrop>
       <NoticeView>
@@ -222,6 +230,14 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
                     window.location.reload();
                   }}
                 />
+              : message === '오류가 발생하였습니다.'
+              ? <FontAwesomeIcon
+                  icon={faTimes}
+                  color={Colors.gray}
+                  onClick={() => {
+                    window.location.replace('/');
+                  }}
+                />
               : <FontAwesomeIcon
                   icon={faTimes}
                   color={Colors.gray}
@@ -240,9 +256,11 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
             message === '로그인 성공!' ||
             message === '로그아웃 성공!' ||
             message === '회원가입 성공!' ||
-            message === '회원탈퇴가 완료되었습니다.'
+            message === '회원정보가 수정되었습니다.' ||
+            message === '회원탈퇴가 완료되었습니다.' ||
+            message === '로그인이 필요한 서비스입니다.'
               ? '.4rem'
-              : '1.2rem'
+              : message.includes('체험하기 중에는 이용할') ? '.6rem' : '1.2rem'
           }
         >
           {message.includes('정말 요청을 취소하시겠습니까?') ||
@@ -265,43 +283,47 @@ function Notification ({ message, handleNotice, handleMessage, modal }) {
             >
             메인화면으로
           </NoticeButton>
-          : message === '비밀번호가 수정되었습니다.'
-            ? <NoticeClose
-                onClick={() => {
-                  window.location.replace('/mypage');
-                }}
-              >
-              확인
-            </NoticeClose>
-            : message === '정말 탈퇴하시겠습니까?!g'
-              ? (
-                <NoticeButton onClick={withdrawalRequest}>탈퇴하기</NoticeButton>
-                )
-              : message === '정말 탈퇴하시겠습니까?!k'
+          : message === '로그인이 필요한 서비스입니다.'
+            ? <NoticeButton onClick={goLogin}>
+              로그인
+            </NoticeButton>
+            : message === '회원정보가 수정되었습니다.'
+              ? <NoticeClose
+                  onClick={() => {
+                    window.location.replace('/mypage');
+                  }}
+                >
+                확인
+              </NoticeClose>
+              : message === '정말 탈퇴하시겠습니까?!g'
                 ? (
-                  <NoticeButton onClick={kakaoWithdrawal}>탈퇴하기</NoticeButton>
+                  <NoticeButton onClick={withdrawalRequest}>탈퇴하기</NoticeButton>
                   )
-                : message.includes('정말 요청을 취소하시겠습니까?')
+                : message === '정말 탈퇴하시겠습니까?!k'
                   ? (
-                    <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>취소하기</NoticeButton>
+                    <NoticeButton onClick={kakaoWithdrawal}>탈퇴하기</NoticeButton>
                     )
-                  : message.includes('만료된 요청을 삭제하시겠습니까?')
+                  : message.includes('정말 요청을 취소하시겠습니까?')
                     ? (
-                      <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>삭제하기</NoticeButton>
+                      <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>취소하기</NoticeButton>
                       )
-                    : message.includes('요청이 완료되었습니다.')
+                    : message.includes('만료된 요청을 삭제하시겠습니까?')
                       ? (
-                        <NoticeButton onClick={() => {
-                          window.location.replace('/myrequest');
-                        }}
-                        >내역 확인하기
-                        </NoticeButton>
+                        <NoticeButton onClick={() => cancelRequest(message.split('!')[1])}>삭제하기</NoticeButton>
                         )
-                      : message.includes('리뷰를 삭제하시겠습니까?')
+                      : message.includes('요청이 완료되었습니다.')
                         ? (
-                          <NoticeButton onClick={() => handleDeleteReview(message.split('!')[1])}>삭제하기</NoticeButton>
+                          <NoticeButton onClick={() => {
+                            window.location.replace('/myrequest');
+                          }}
+                          >내역 확인하기
+                          </NoticeButton>
                           )
-                        : null}
+                        : message.includes('리뷰를 삭제하시겠습니까?')
+                          ? (
+                            <NoticeButton onClick={() => handleDeleteReview(message.split('!')[1])}>삭제하기</NoticeButton>
+                            )
+                          : null}
       </NoticeView>
     </NoticeBackdrop>
   );

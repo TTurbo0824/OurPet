@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import pug from '../../images/pug.jpeg';
@@ -13,7 +12,7 @@ import charge02 from '../../images/charge02.jpeg';
 import search from '../../images/search.png';
 import request from '../../images/request.png';
 import myhistory from '../../images/history.png';
-
+import last from '../../images/last.png';
 const LandingWrapper = styled.div`
   .main {
     display: flex;
@@ -22,14 +21,10 @@ const LandingWrapper = styled.div`
     justify-content: center;
   }
   .landing-container {
-    /* background-color: lavender;
-    ${media.tabletMini`background-color: cyan;`}
-    ${media.tablet`background-color: lime;`} */
     min-height: 20rem;
     margin-bottom: 1rem;
     padding: 0;
     ${media.tabletMini`padding: 1rem;`}
-    /* ${media.laptop`min-height: 36rem;`} */
   }
   .landing-container:first-child {
     min-height: 30rem;
@@ -40,18 +35,11 @@ const LandingWrapper = styled.div`
     margin: 0;
     padding: 0;
     background-color: #fafafa;
-    /* background-color: lavender; */
     padding-top: 4rem;
     padding-bottom: 7.5rem;
   }
-  .landing-container:last-of-type {
-    width: 100vw;
-    background-color: ${Colors.lightYellow};
-    margin-bottom: 0;
-    /* margin-bottom: 8rem; */
-  }
   .title {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: ${Colors.black};
     ${media.tabletMini`font-size: 2.15rem;`}
     ${media.tablet`font-size: 2.75rem;`}
@@ -76,7 +64,6 @@ const LandingWrapper = styled.div`
     flex-wrap: wrap;
     ${media.tablet`margin-top: 6.5rem;`}
     ${media.laptop`flex-wrap: nowrap; justify-content: center; margin: 4rem auto; padding-bottom: 10rem;`}
-    /* background-color: cyan; */
   }
   .intro2 {
     width: 26rem;
@@ -87,7 +74,6 @@ const LandingWrapper = styled.div`
     ${media.tabletMini`display: block; width: 26rem;`}
     padding-left: 1rem;
     ${media.tabletMini`padding-left: 2.75rem;`}
-    /* background-color: lavender; */
   }
   .intro2-con {
     margin-top: 1.5rem; 
@@ -104,7 +90,6 @@ const LandingWrapper = styled.div`
     ${media.tabletMini`flex-wrap: nowrap; width: fit-content;`}
     ${media.tablet`margin-right: 2.75rem;`}
     ${media.laptop`margin-top: 0;`}
-    /* background-color: pink; */
   }
   .price-card {
     background-color: white;
@@ -199,8 +184,8 @@ const LandingWrapper = styled.div`
   }
   .mobile-img {
     border-radius: 42px;
-    width: 18rem;
-    height: 32rem;
+    width: 17.5rem;
+    height: 33rem;
     box-shadow: 1px 1px 5px 2px ${Colors.lightGray};
     margin: 4.5rem auto;
     ${media.tablet`margin: auto 0 0 2.5rem; width: 18.5rem; height: 34rem; border-radius: 43px;`}
@@ -242,8 +227,37 @@ const ChargeImg = styled.img`
   border-radius: 8px 8px 0 0;
 `;
 
+const LastContainer = styled.div`
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin: 0 auto;
+  background-color: #fafafa;
+  margin-bottom: 0;
+  padding: 3rem 0 3.5rem;
+  .intro5-title {
+    width: 100%;
+    height: 3rem;
+    text-align: center;
+    font-size: 1.5rem;
+    color: ${Colors.black};
+    ${media.tablet`font-size: 1.75rem;`}
+    font-size: 1.8rem;
+    ${media.tabletMini`font-size: 2.15rem;`}
+    ${media.tablet`font-size: 2.75rem;`}
+  }
+  .last-img {
+    margin: 0 auto;
+    display: flex;
+    width: 16.5rem;
+    margin-top: 1rem;
+    ${media.tablet`margin-top: 2.75rem;`}
+  }
+ `;
+
 function LandingPage () {
-  const history = useHistory();
   const reviews = useSelector((state) => state.review).dogWalkers[0].review;
   let selectedReview = [...reviews];
   selectedReview = selectedReview.slice(0, 3);
@@ -253,9 +267,7 @@ function LandingPage () {
   const profileImage = [pug, minipin, corgi, default_profile];
 
   const handleClicked = () => {
-    history.push({
-      pathname: '/search'
-    });
+    window.location.replace('/search');
   };
 
   const handleEndpoint = (id) => {
@@ -325,10 +337,12 @@ function LandingPage () {
             <img className='mobile-img' alt='mobile-img' src={endpoint} />
           </div>
         </div>
-        <div className='landing-container'>
-          우리 아이 산책,
-          <button onClick={handleClicked}>워킹도그와 함께하기 {'>'} </button>
-        </div>
+        <LastContainer>
+          <div className='intro5-title'>우리 아이 산책,</div>
+          <img className='last-img' alt='mobile-img' src={last} />
+          <IntroButton onClick={handleClicked}>워킹도그와 함께하기!</IntroButton>
+
+        </LastContainer>
       </div>
     </LandingWrapper>
   );

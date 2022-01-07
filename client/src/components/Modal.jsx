@@ -63,7 +63,7 @@ const LogOutButton = styled.button`
 
 function Modal ({ handleModal, login }) {
   const nickname = useSelector((state) => state.user).walkingDogUserInfo.nickname;
-  const isGuest = !!nickname.includes('guest');
+  const isGuest = !!nickname.includes('guest#');
   const dispatch = useDispatch();
   const goLogin = () => {
     handleModal();

@@ -13,14 +13,7 @@ import TimeSelector from './TimeSelector';
 import TypeSelector from './TypeSelector';
 import LocationSelector from './LocationSelector';
 import ReviewContainer from './ReviewContainer';
-import profile from '../../images/profile_sample.jpeg';
 import { PageLoading } from '../../components/PageLoading';
-
-// ==================================================================
-//                               TO DO
-// ==================================================================
-//  1. 도그워커 소개 4-5개 작성
-//
 
 const DogWalkerPageWrapper = styled.div`
   .main {
@@ -42,10 +35,18 @@ const DogWalkerPageWrapper = styled.div`
   }
   .image-container {
     grid-area: img;
+    width: 8rem;
+    height: 8rem;
+    overflow: hidden;
+    position: relative;
+    /* border-radius: 50px; */
+    ${media.tablet`width: 10rem; height: 10rem;`}
   }
   .dogwalker-img {
     width: 8rem;
-    ${media.tablet`width: 10rem;`}
+    height: 8rem;
+    object-fit: cover;
+    ${media.tablet`width: 10rem; height: 10rem;`}
   }
   .name, .location {
     padding-left: 1rem;
@@ -68,7 +69,7 @@ const DogWalkerPageWrapper = styled.div`
   }
   .bottom-container {
     display: grid;
-    grid-template-areas: 'intro-c' 'tag-c' 'right-c' 'review-c';
+    grid-template-areas: 'right-c' 'intro-c' 'tag-c' 'review-c';
     grid-template-columns: 1fr;
     ${media.tablet`grid-template-areas: 'intro-c right-c' 'tag-c right-c'  'review-c right-c';`}
     ${media.tablet`grid-template-columns: 60% 40%;`}
@@ -78,7 +79,8 @@ const DogWalkerPageWrapper = styled.div`
     grid-area: intro-c;
     margin-bottom: 1.5rem;
     padding: 0 1rem;
-    ${media.tablet`margin-bottom: 2rem; padding: 0;`}
+    max-width: 100vw;
+    ${media.tablet`padding: 0; max-width: 38rem;`}
   }
   .tag-container {
     grid-area: tag-c;
@@ -94,7 +96,8 @@ const DogWalkerPageWrapper = styled.div`
   .right-container {
     grid-area: right-c;
     padding: 0 .8rem;
-    ${media.tablet`padding: 0;`}
+    margin-top: .25rem;
+    ${media.tablet`padding: 0; margin-top: 0;`}
   }
   .request-container {
     border: 1px solid ${Colors.lightGray};
@@ -116,8 +119,18 @@ const DogWalkerPageWrapper = styled.div`
     font-weight: bold;
     color: ${Colors.black};
   }
+  .intro {
+    color: ${Colors.darkGray};
+    font-size: .9rem;
+    word-break: break-all;
+    padding-right: 2.5rem;
+    line-height: 1.6rem;
+    /* background-color: lime; */
+  }
   .charge-container {
     margin-top: 2rem;
+    margin-bottom: -.5rem;
+    ${media.tablet`margin-bottom: 0;`}
   }
 `;
 
@@ -151,9 +164,15 @@ const RequestButton = styled.button`
 const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
   const location = useLocation();
   const dispatch = useDispatch();
+  const dogWalkerId = Number(location.pathname.split('id=')[1]);
+
+  if (dogWalkerId < 1 || dogWalkerId > 20 || isNaN(dogWalkerId)) {
+    window.location.replace('/');
+  }
+
   const token = useSelector((state) => state.user).token;
   const dogWalkerList = useSelector((state) => state.dogwalker).dogWalkers;
-  const dogWalkerId = Number(location.pathname.split('id=')[1]);
+
   let dogWalker = dogWalkerList.filter((dogwalker) => dogwalker.id === dogWalkerId);
   const rating = useSelector((state) => state.rating).dogWalkers[dogWalkerId - 1].rating;
   const reviews = useSelector((state) => state.review).dogWalkers[dogWalkerId - 1].review;
@@ -173,9 +192,13 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
         if (error.response.data.message === 'No requests are found') {
           setIsLoading(false);
         } else {
-          handleNotice(true);
-          handleMessage('오류가 발생하였습니다.');
-          console.log('error: ', error.response.data.message);
+          if (error.response.status === 404) {
+            window.location.replace('/');
+          } else {
+            handleNotice(true);
+            handleMessage('오류가 발생하였습니다.');
+            console.log('error: ', error.response.data.message);
+          }
         }
       }
     };
@@ -243,13 +266,10 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
         })
         .then((res) => {
           if (res.status === 200) {
-            setRequestOptions({ ...requestOptions, id: res.data.data.id });
+            dispatch(requestDogwalker({ ...requestOptions, id: res.data.data.id }));
+            handleNotice(true);
+            handleMessage('요청이 완료되었습니다.');
           }
-        })
-        .then(() => {
-          dispatch(requestDogwalker(requestOptions));
-          handleNotice(true);
-          handleMessage('요청이 완료되었습니다.');
         })
         .catch((error) => {
           if (error.response.status === 401) {
@@ -260,6 +280,9 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
           } else if (error.response.status === 409) {
             handleNotice(true);
             handleMessage('중복된 요청은 하실 수 없습니다.');
+          } else if (error.response.status === 413) {
+            handleNotice(true);
+            handleMessage('요청은 15개로 제한됩니다.');
           } else {
             console.log('error: ', error.response.data.message);
             handleNotice(true);
@@ -285,7 +308,9 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
             <div className='bottom-container'>
               <div className='intro-container'>
                 <div className='title'>도그워커 소개</div>
-                도그워커 소개
+                <div className='intro'>
+                  안녕하세요, 도그워커 {dogWalker.name}입니다! 몇 년 전 정말 사랑하는 제 반려견 쿠키를 하늘나라도 떠나보내고 그리움에 허전해하기도 했지만 우연히 도그워커라는 일을 알게 되었습니다. 아이들을 정말 사랑하는 저로서는 저에게 너무 잘 맞는 일이라고 생각해 시작하게 되었구요~! 저도 피치 못하게 쿠키 산책을 시켜주지 못했을 때엔 미안한 마음에 죄책감을 느끼기도 했는데요.. 그랬었기에 견주님 마음을 너무나 잘 이해하고 있습니다. 더 이상 산책 걱정하지 마세요! 우리 아이처럼 안전하고 즐거운 산책 시간을 책임지겠습니다~
+                </div>
               </div>
               <div className='tag-container'>
                 <div className='title'>이용 가능 서비스</div>

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { userLogout, getRequest, getHistory, getRating, getReview } from '../redux/action';
 import axios from 'axios';
@@ -16,11 +15,11 @@ const HeaderContainer = styled.div`
   align-items: start;
   ${media.tablet`justify-content: center; align-items: center;`}
   border-bottom: 1px solid rgba(150, 150, 150, 0.2);
-  border-color: white;
+  border-color: ${(props) => props.borderColor};
   grid-template-areas: 'pages';
   grid-template-columns: 1fr;
   height: ${(props) => props.showing};
-  ${media.tablet`border-color: ${(props) => props.borderColor}; height: 3.5rem; grid-template-areas: 'logo pages'; grid-template-columns: 50% 50%;`}
+  ${media.tablet`height: 3.5rem; grid-template-areas: 'logo pages'; grid-template-columns: 50% 50%;`}
   background-color: white;
 `;
 
@@ -64,12 +63,10 @@ const HeaderWrapper = styled.div`
     }
   }
   .logo-image {
-    padding-top: .1rem;
-    width: 5.75rem;
-    /* newly-added */
-    width: 5.75rem;
-    padding-top: .95rem;
-    ${media.tablet`padding-top: .4rem; width: 6.25rem;`}
+    cursor: pointer;
+    width: 6.25rem;
+    padding-top: 1.1rem;
+    ${media.tablet`padding-top: .2rem; width: 6.5rem;`}
   }
   .menu-container {
     display: flex;
@@ -121,10 +118,9 @@ const HLine = styled.div`
 
 function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }) {
   const dispatch = useDispatch();
-  const history = useHistory();
   const isLogin = useSelector((state) => state.user).token;
   const nickname = useSelector((state) => state.user).walkingDogUserInfo.nickname;
-  const isGuest = !!nickname.includes('guest');
+  const isGuest = !!nickname.includes('guest#');
   const [navState, setNavState] = useState('active');
 
   useEffect(() => window.addEventListener('resize', maintainNavState));
@@ -193,9 +189,13 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
 
   const goToMypage = () => {
     if (navState === 'close') setNavState('deactive');
-    history.push({ pathname: '/mypage' });
+    window.location.replace('/mypage');
   };
 
+  const goToMain = () => {
+    if (navState === 'close') setNavState('deactive');
+    window.location.replace('/');
+  }
   return (
     <HeaderWrapper>
       <div className={`menu-container ${navState}`} onClick={handleClick}>
@@ -205,9 +205,7 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
       </div>
       <HeaderContainer showing={navState === 'close' ? '100vh' : '1rem'} borderColor={scrolled ? 'rgba(150, 150, 150, 0.2)' : 'white'}>
         <div className={`header-container-1 ${navState}`}>
-          <Link to='/'>
-            <img src={logo} onClick={() => { if (navState === 'close') setNavState('deactive'); }} className='logo-image' alt='logo_img' />
-          </Link>
+          <img src={logo} onClick={goToMain} className='logo-image' alt='logo_img' />
         </div>
         <div className={`header-container-2 ${navState}`}>
           <HeaderButton onClick={goToSearch}>도그워커 찾기</HeaderButton>

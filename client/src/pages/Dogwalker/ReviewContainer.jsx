@@ -10,7 +10,7 @@ import { media } from '../../components/utils/_media-queries';
 import pug from '../../images/pug.jpeg';
 import minipin from '../../images/minipin.jpeg';
 import corgi from '../../images/corgi.jpeg';
-import default_profile from '../../images/default_profile.jpeg';
+import default_profile from '../../images/default_profile.png';
 
 const ReviewWrapper = styled.div`
   margin-bottom: 3rem;
@@ -115,7 +115,7 @@ const ReviewInput = styled.textarea`
 function ReviewContainer ({ token, modal, handleMessage, handleNotice, averageRating, rating, reviews }) {
   const dispatch = useDispatch();
   const userNickname = useSelector((state) => state.user).walkingDogUserInfo.nickname;
-  const profileImage = [pug, minipin, corgi, default_profile];
+  const profileImage = [pug, minipin, corgi];
   const [editOpen, setEditOpen] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editInput, setEditInput] = useState('');
@@ -216,7 +216,7 @@ function ReviewContainer ({ token, modal, handleMessage, handleNotice, averageRa
             <div className='profile-container'>
               {idx < 3
                 ? <img className='review-profile' alt='profile' src={profileImage[idx]} />
-                : <img className='review-profile' alt='profile' src={review.profile_url} />}
+                : <img className='review-profile' alt='profile' src={review.profile_url || default_profile} />}
             </div>
             <div className='nickname'>{review.nickname}</div>
             <div className='date'>서비스 이용 날짜: {review.date}</div>

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Colors } from '../components/utils/_var';
 import { media } from './utils/_media-queries';
@@ -74,7 +73,6 @@ const FooterWrapper = styled.div`
 `;
 
 function Footer ({ login, signup, handleNotice, handleMessage }) {
-  const history = useHistory();
   const isLogin = useSelector((state) => state.user).token;
 
   const goToMyPage = () => {
@@ -87,15 +85,11 @@ function Footer ({ login, signup, handleNotice, handleMessage }) {
   }
 
   const goToMain = () => {
-    history.push({
-      pathname: '/'
-    });
+    window.location.replace('/');
   };
 
   const goSearch = () => {
-    history.push({
-      pathname: '/search'
-    });
+    window.location.replace('/search');
   };
 
   const notAvailable = () => {
