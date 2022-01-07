@@ -5,8 +5,6 @@ const { users } = require('../../models');
 module.exports = async (req, res) => {
   try {
     const accessTokenData = isAuthorized(req);
-    // const accessTokenData = { id: req.headers.authorization };
-
     if (!accessTokenData) {
       return res.status(401).send({ message: 'You\'re not logged in.' });
     } else {
@@ -29,9 +27,7 @@ module.exports = async (req, res) => {
           message: 'Successfully withdrawn'
         });
       } else {
-        res.status(400).json({
-          message: 'error'
-        });
+        res.status(404).json({ message: 'User not found' });
       }
     }
   } catch (error) {

@@ -23,7 +23,6 @@ module.exports = async (req, res) => {
         where: {
           id: guestID,
           nickname: guestNickname,
-          createdAt: new Date(Date.now() - exTime)
         }
       });
     }, exTime);

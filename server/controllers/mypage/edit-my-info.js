@@ -7,17 +7,12 @@ require('sequelize-values')(Sequelize);
 // PATCH http://localhost:80/user-info
 module.exports = async (req, res) => {
   try {
-    // JUST FOR TESTING PURPOSES
-    // console.log(req.headers.authorization);
-    // const accessTokenData = { id: req.headers.authorization };
     const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
       const { nickname, password } = req.body;
-      // console.log(nickname, password);
-
       let userInfo = await users.findOne({
         where: {
           id: accessTokenData.id
@@ -51,9 +46,6 @@ module.exports = async (req, res) => {
         } else if (changedNickname === '' || userInfo.nickname === changedNickname) {
           changedNickname = userInfo.nickname;
         }
-
-        // console.log(changedNickname);
-        // console.log(encryptedPassword);
 
         await users.update(
           {

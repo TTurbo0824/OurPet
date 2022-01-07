@@ -3,9 +3,6 @@ const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
   try {
-    // JUST FOR TESTING PURPOSES
-    // console.log(req.headers.authorization);
-    // const accessTokenData = { id: req.headers.authorization };
     const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
@@ -28,7 +25,7 @@ module.exports = async (req, res) => {
           where: { historyId: id }
         });
 
-        return res.status(200).json({ message: 'ok' });
+        res.status(200).json({ message: 'ok' });
       }
     }
   } catch (error) {

@@ -4,9 +4,6 @@ const moment = require('moment');
 
 module.exports = async (req, res) => {
   try {
-    // console.log(req.headers.authorization);
-    // JUST FOR TESTING PURPOSES
-    // const accessTokenData = { id: req.headers.authorization };
     const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
@@ -82,7 +79,6 @@ module.exports = async (req, res) => {
       res.status(200).json({ message: 'ok', data: { id: tempId } });
     }
   } catch (error) {
-    console.log(error);
     res.status(400).json({ message: 'error' });
   }
 };
