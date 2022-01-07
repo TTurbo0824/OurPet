@@ -16,8 +16,8 @@ ReactDOM.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
-        <ScrollToTop />
-        <App />
+          <ScrollToTop />
+          <App />
         </BrowserRouter>
       </PersistGate>
     </Provider>
