@@ -7,7 +7,7 @@ export const Logo = styled.img`
   margin: .85rem auto .5rem;
   ${media.tabletMini`width: 7rem; margin: .9rem auto .5rem;`}
   ${media.tablet`width: 7.5rem; margin: 1rem auto .8rem;`}
-`
+`;
 export const Alertbox = styled.div`
   color: red;
   font-size: .85rem;
