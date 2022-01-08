@@ -43,7 +43,11 @@ function RatingEdit ({ handleModal, handleMessage, handleNotice, token, modal, t
           if (error.response.status === 401) {
             handleModal();
             modal();
-          } else console.log('error: ', error.response.data.message);
+          } else {
+            handleModal();
+            handleNotice(true);
+            handleMessage('오류가 발생하였습니다.');
+          }
         });
     }
   };
@@ -74,7 +78,6 @@ function RatingEdit ({ handleModal, handleMessage, handleNotice, token, modal, t
           handleModal();
           handleNotice(true);
           handleMessage('오류가 발생하였습니다.');
-          console.log('error: ', error.response.data.message);
         }
       });
   };

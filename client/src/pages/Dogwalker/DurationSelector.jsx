@@ -5,8 +5,6 @@ import { customStyles, Description } from '../../components/SelectBoxStyle';
 const DurationPickerWrapper = styled.div`
   width: 50%;
   padding-left: .45rem;
-  .description {
-  }
 `;
 
 function DurationSelector ({ requestOptions, setRequestOptions, chargeList }) {
@@ -30,15 +28,13 @@ function DurationSelector ({ requestOptions, setRequestOptions, chargeList }) {
   return (
     <DurationPickerWrapper>
       <Description>산책 시간</Description>
-      <div>
-        <Select
-          onChange={durationSelected}
-          styles={customStyles}
-          isSearchable={false}
-          placeholder='시간 선택'
-          options={options}
-        />
-      </div>
+      <Select
+        onChange={durationSelected}
+        styles={customStyles}
+        isSearchable={false}
+        placeholder='시간 선택'
+        options={options}
+      />
     </DurationPickerWrapper>
   );
 }

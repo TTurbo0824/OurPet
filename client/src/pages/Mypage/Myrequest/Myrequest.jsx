@@ -1,5 +1,4 @@
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -8,13 +7,14 @@ import { Colors } from '../../../components/utils/_var';
 import { media } from '../../../components/utils/_media-queries';
 import { MyPageTable } from '../../../components/MyPageComponents';
 axios.defaults.withCredentials = true;
-require('dotenv').config();
+
 const moment = require('moment');
 
 export const MyRequestWrapper = styled.div`
   .main {
     display: flex;
-    min-height: calc(100vh - 13.45rem);
+    min-height: calc(100vh - 15rem);
+    ${media.tablet`min-height: calc(100vh - 21.4rem);`}
   }
   .total {
     font-size: 1.1rem;
@@ -75,18 +75,14 @@ export const MyRequestWrapper = styled.div`
     align-self: center;
     align-items: center;
     justify-content: center;
-    /* background-color: navajowhite; */
   }
   .status, .cancel {
     margin-top: .5rem;
     ${media.tabletMini`margin-top: 0;`}
-    /* background-color: navajowhite; */
   }
-  
 `;
 
 function MyRequest ({ handleMessage, handleNotice }) {
-  const history = useHistory();
   const dogWalkerList = useSelector((state) => state.dogwalker).dogWalkers;
   const allRequest = useSelector((state) => state.request).dogWalkerRequest;
   const [IdList, setIdList] = useState([]);
@@ -138,8 +134,6 @@ function MyRequest ({ handleMessage, handleNotice }) {
     }
   };
 
-  // console.log('checked', CheckList);
-
   const walkerList = [];
 
   dogWalkerList.map((el) => (
@@ -151,9 +145,8 @@ function MyRequest ({ handleMessage, handleNotice }) {
       handleNotice(true);
       handleMessage('취소할 요청이 없습니다.');
     } else {
-      console.log(id);
       handleNotice(true);
-      handleMessage(`정말 요청을 취소하시겠습니까?!${id}`);
+      handleMessage(`정말 요청을 취소하시겠습니까?!#${id}`);
       setCheckList([]);
     }
   };
@@ -173,7 +166,7 @@ function MyRequest ({ handleMessage, handleNotice }) {
   };
 
   const handleClick = (id) => {
-    history.push({ pathname: `/dogwalker:id=${id}` });
+    window.location.replace(`/dogwalker:id=${id}`);
   };
 
   const addComma = (num) => {
@@ -195,7 +188,6 @@ function MyRequest ({ handleMessage, handleNotice }) {
           expiredRequest.push(el.id);
         }
       });
-      // console.log(expiredRequest);
 
       if (expiredRequest.length === 0) {
         handleNotice(true);
@@ -208,9 +200,7 @@ function MyRequest ({ handleMessage, handleNotice }) {
   };
 
   const handleSearchClicked = () => {
-    history.push({
-      pathname: '/search'
-    });
+    window.location.replace('/search');
   };
 
   return (
@@ -254,10 +244,8 @@ function MyRequest ({ handleMessage, handleNotice }) {
                     <div className='name'>{el.name}</div>
                     <div className='info'>{el.date} {el.time} {el.location}</div>
                     <div className='type'>{el.type}  <span>|</span> {el.duration}분 / {addComma(el.price)}원</div>
-                    {/* <div className='res-bottom'> */}
                     <div className='status'>{isExpired(el.date, el.time)}</div>
                     <div className='cancel bnt' onClick={() => deleteClick(el.id)}>요청 취소</div>
-                    {/* </div> */}
                   </div>
                 );
               })}

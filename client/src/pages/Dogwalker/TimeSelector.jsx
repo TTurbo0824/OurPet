@@ -4,11 +4,8 @@ import Select from 'react-select';
 import { customStyles, Description } from '../../components/SelectBoxStyle';
 
 const TimePickerWrapper = styled.div`
-  /* background-color: pink; */
   width: 50%;
   padding-right: .45rem;
-  .description {
-  }
 `;
 
 function TimeSelector ({ requestOptions, setRequestOptions }) {
@@ -23,15 +20,13 @@ function TimeSelector ({ requestOptions, setRequestOptions }) {
   return (
     <TimePickerWrapper>
       <Description>시작 시간</Description>
-      <div>
-        <Select
-          onChange={timeSelected}
-          styles={customStyles}
-          isSearchable={false}
-          placeholder='시간 선택'
-          options={options}
-        />
-      </div>
+      <Select
+        onChange={timeSelected}
+        styles={customStyles}
+        isSearchable={false}
+        placeholder='시간 선택'
+        options={options}
+      />
     </TimePickerWrapper>
   );
 }

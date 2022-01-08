@@ -4,9 +4,7 @@ import { editProfile } from '../../../redux/action';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
-// import default_profile from '../../../images/default_profile.jpeg';
 import default_profile from '../../../images/default_profile.png';
-
 import { HistoryButton, ProfileImage, ReviewView } from '../../../components/MyPageComponents';
 import { Alertbox, Backdrop } from '../../../components/UserComponents';
 import CloseButton from '../../../components/CloseButton';
@@ -99,7 +97,6 @@ function UserProfile ({ profile_url, token, handleMessage, handleNotice, modal, 
             handleProfileClose();
             handleNotice(true);
             handleMessage('오류가 발생하였습니다.');
-            console.log('error: ', error.response.data.message);
           }
         });
     }

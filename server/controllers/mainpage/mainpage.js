@@ -5,7 +5,6 @@ const dummyRating = require('./dummyRating.js');
 
 module.exports = async (req, res) => {
   try {
-    // console.log(dummyRating);
     let allRatings = await histories.findAll({
       include: [
         {
@@ -46,7 +45,6 @@ module.exports = async (req, res) => {
 
     res.status(200).json({
       data: {
-        // ratings: rating,
         allRating: ratingData
       },
       message: 'ok'

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Colors } from '../../components/utils/_var';
@@ -15,7 +14,6 @@ const MainpageWrapper = styled.div`
   .main {
     display: flex;
     min-height: calc(100vh - 8.9rem);
-    /* padding-top: 1rem; */
     padding: 0 1.25rem; 
     ${media.tablet`padding: 1rem 0;`}
   }
@@ -142,7 +140,6 @@ const Reset = styled.div`
 `;
 
 function Mainpage ({ handleMessage, handleNotice }) {
-  const history = useHistory();
   let dogWalkers = useSelector((state) => state.dogwalker).dogWalkers;
   const [location, setLocation] = useState('');
   const [walkerResult, setWalkerResult] = useState(dogWalkers);
@@ -201,7 +198,6 @@ function Mainpage ({ handleMessage, handleNotice }) {
           setIsPageLoading(false);
           handleNotice(true);
           handleMessage('오류가 발생하였습니다.');
-          console.log('error: ', error.response.data.message);
         }
       }
     };
@@ -346,7 +342,6 @@ function Mainpage ({ handleMessage, handleNotice }) {
   };
 
   const handleClick = (dogwalker) => {
-    // history.push({ pathname: `/dogwalker:id=${dogwalker.id}` });
     window.location.replace(`/dogwalker:id=${dogwalker.id}`);
   };
 

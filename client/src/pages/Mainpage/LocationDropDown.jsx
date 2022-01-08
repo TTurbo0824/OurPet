@@ -45,7 +45,6 @@ function LocationDropDown ({ setLocation }) {
       ...provided,
       cursor: 'pointer',
       color: state.isSelected ? 'black' : Colors.darkGray
-      // backgroundColor: state.isSelected ? 'black' : Colors.darkGray,
     }),
     control: (base) => ({
       ...base,

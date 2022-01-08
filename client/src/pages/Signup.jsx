@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-// import logo from '../images/logo.png';
 import logo from '../images/logo_text.png';
 import { Colors } from '../components/utils/_var';
 import { media } from '../components/utils/_media-queries';
-import { Alertbox, Backdrop } from '../components/UserComponents';
+import { Logo, Alertbox, Backdrop } from '../components/UserComponents';
 import CloseButton from '../components/CloseButton';
 
 const SignupView = styled.div`
@@ -26,10 +25,6 @@ const SignupView = styled.div`
     ${media.tabletMini`width: 7rem; margin: .9rem auto .5rem;`}
     ${media.tablet`width: 7.25rem; margin: 1rem auto .8rem;`}
   }
-  /* .logo {
-    width: 7.5rem;
-    margin: -.2rem auto .5rem;
-  } */
   .veri {
     cursor: pointer;
     font-size: .75rem;
@@ -256,7 +251,6 @@ function Signup ({ login, handleModal, handleMessage, handleNotice }) {
         })
         .catch((error) => {
           setErrorMsg('오류가 발생했습니다');
-          console.log(error.response.data.message);
         });
     }
   };
@@ -270,7 +264,7 @@ function Signup ({ login, handleModal, handleMessage, handleNotice }) {
     <Backdrop>
       <SignupView>
         <CloseButton onClick={handleModal} />
-        <img className='logo' src={logo} alt='logo' />
+        <Logo src={logo} alt='logo' />
         <SignUpInputContainer>
           <SignUpInputField onChange={inputCheck('nickname')} placeholder='닉네임 (3-8자)' />
           <SignUpInputField onChange={inputCheck('email')} placeholder='이메일' />

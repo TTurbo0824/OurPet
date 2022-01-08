@@ -148,9 +148,7 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
       const token = isLogin;
 
       axios
-        .post(
-          process.env.REACT_APP_API_URL + '/logout',
-          { data: null },
+        .post(`${process.env.REACT_APP_API_URL}/logout`, { data: null },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -177,7 +175,6 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
           } else {
             handleNotice(true);
             handleMessage('오류가 발생하였습니다.');
-            console.log('error: ', error.response.data.message);
           }
         });
     }
@@ -195,7 +192,8 @@ function Header ({ login, signup, modal, handleMessage, handleNotice, scrolled }
   const goToMain = () => {
     if (navState === 'close') setNavState('deactive');
     window.location.replace('/');
-  }
+  };
+
   return (
     <HeaderWrapper>
       <div className={`menu-container ${navState}`} onClick={handleClick}>

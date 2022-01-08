@@ -20,16 +20,14 @@ function TypeSelector ({ dogType, requestOptions, setRequestOptions, chargeList 
 
   return (
     <TypePickerWrapper>
-      <div className='type-container'>
-        <Description>반려동물 종류</Description>
-        <Select
-          onChange={setType}
-          styles={customStyles}
-          isSearchable={false}
-          placeholder='반려동물 선택'
-          options={options}
-        />
-      </div>
+      <Description>반려동물 종류</Description>
+      <Select
+        onChange={setType}
+        styles={customStyles}
+        isSearchable={false}
+        placeholder='반려동물 선택'
+        options={options}
+      />
     </TypePickerWrapper>
   );
 }

@@ -29,7 +29,6 @@ module.exports = {
       if (!accessTokenData) {
         return res.status(401).send({ message: 'You\'re not logged in.' });
       } else {
-        // console.log(req.file);
         await users.update(
           {
             img_url: req.file.location
@@ -41,7 +40,6 @@ module.exports = {
         res.status(200).json({ data: payload, message: 'ok' });
       }
     } catch (error) {
-      console.log(error);
       res.status(400).json({ message: 'error' });
     }
   }

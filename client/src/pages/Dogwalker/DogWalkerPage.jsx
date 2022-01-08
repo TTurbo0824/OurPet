@@ -39,7 +39,6 @@ const DogWalkerPageWrapper = styled.div`
     height: 8rem;
     overflow: hidden;
     position: relative;
-    /* border-radius: 50px; */
     ${media.tablet`width: 10rem; height: 10rem;`}
   }
   .dogwalker-img {
@@ -125,7 +124,6 @@ const DogWalkerPageWrapper = styled.div`
     word-break: break-all;
     padding-right: 2.5rem;
     line-height: 1.6rem;
-    /* background-color: lime; */
   }
   .charge-container {
     margin-top: 2rem;
@@ -197,7 +195,6 @@ const DogWalkerPage = ({ modal, handleMessage, handleNotice }) => {
           } else {
             handleNotice(true);
             handleMessage('오류가 발생하였습니다.');
-            console.log('error: ', error.response.data.message);
           }
         }
       }

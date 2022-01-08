@@ -7,8 +7,7 @@ require('sequelize-values')(Sequelize);
 module.exports = async (req, res) => {
   try {
     const accessTokenData = isAuthorized(req);
-    // const accessTokenData = { id: req.headers.authorization };
-    // console.log(accessTokenData.id);
+
     if (!accessTokenData) {
       return res.status(401).json({ message: 'You\'re not logged in' });
     } else {
@@ -118,7 +117,6 @@ module.exports = async (req, res) => {
       res.status(200).json({ message: 'ok', data: { allRequests: defaultRequest, allHistories: defaultHistory } });
     }
   } catch (error) {
-    console.log(error);
     res.status(400).json({ message: 'error' });
   }
 };

@@ -5,9 +5,6 @@ require('sequelize-values')(Sequelize);
 
 module.exports = async (req, res) => {
   try {
-    // JUST FOR TESTING PURPOSES
-    // console.log(req.headers.authorization);
-    // const accessTokenData = { id: req.headers.authorization };
     const accessTokenData = isAuthorized(req);
 
     if (!accessTokenData) {
@@ -47,7 +44,6 @@ module.exports = async (req, res) => {
         allRatings = allRatings.map((el) => {
           return {
             id: el.id,
-            // historyId: el.historyId,
             dogwalkerId: el.dogwalkerId,
             rating: el.ratings[0].rating
           };
@@ -80,7 +76,6 @@ module.exports = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error);
     res.status(400).json({ message: 'error' });
   }
 };

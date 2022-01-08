@@ -51,7 +51,6 @@ function Rating ({ handleModal, handleMessage, handleNotice, historyInfo, token,
             handleModal();
             handleNotice(true);
             handleMessage('오류가 발생하였습니다.');
-            console.log('error: ', error.response.data.message);
           }
         });
     } else {
