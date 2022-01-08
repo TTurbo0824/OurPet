@@ -81,7 +81,7 @@ function Footer ({ login, signup, handleNotice, handleMessage }) {
 
   let userContent = <><div className='item' onClick={login}>로그인</div><div className='item' onClick={signup}>회원가입</div></>;
   if (isLogin !== '') {
-    userContent = <div className='item' onClick={goToMyPage}>회원정보</div>;
+    userContent = <div className='item' onClick={goToMyPage}>마이페이지</div>;
   }
 
   const goToMain = () => {
@@ -134,7 +134,13 @@ function Footer ({ login, signup, handleNotice, handleMessage }) {
           </div>
           <div>
             <span className='copyright'>
-              &copy; {`Kyungjoo Ha ${new Date().getFullYear()}`}
+              <a
+                href='https://github.com/TTurbo0824'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                &copy; {`Kyungjoo Ha ${new Date().getFullYear()}`}
+              </a>
             </span>
           </div>
         </div>

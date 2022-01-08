@@ -109,7 +109,6 @@ const ReviewInput = styled.textarea`
   :focus {
     outline: none;
   }
-  /* background-color: lavender; */
 `;
 
 function ReviewContainer ({ token, modal, handleMessage, handleNotice, averageRating, rating, reviews }) {

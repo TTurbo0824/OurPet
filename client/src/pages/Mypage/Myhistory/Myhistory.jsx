@@ -1,10 +1,7 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
-import { deleteHistory } from '../../../redux/action';
+import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-// import { Colors } from '../../../components/utils/_var';
 import { media } from '../../../components/utils/_media-queries';
 import { MyPageTable } from '../../../components/MyPageComponents';
 import TopNavigation from '../../../components/TopNavigation';
@@ -13,12 +10,12 @@ import RatingEdit from './RatingEdit';
 import Review from './Review';
 import ReviewEdit from './ReviewEdit';
 axios.defaults.withCredentials = true;
-require('dotenv').config();
 
 export const MyHistoryWrapper = styled.div`
   .main {
     display: flex;
-    min-height: calc(100vh - 13.45rem);
+    min-height: calc(100vh - 15rem);
+    ${media.tablet`min-height: calc(100vh - 21.4rem);`}
   }
   .container {
     margin: 1rem auto;
@@ -37,7 +34,6 @@ export const MyHistoryWrapper = styled.div`
       'check img info info info'
       'check img type type type'
       'check rating rating review review';
-      /* 'check review review'; */
     ${media.tabletMini`grid-template-areas:
       'check img title rating review'
       'check img info rating review'
@@ -53,20 +49,7 @@ export const MyHistoryWrapper = styled.div`
   }
 `;
 
-// ==================================================================
-//                               TO DO
-// ==================================================================
-//  1. 기본 틀 잡기
-//  2. 평점 등록 모달 생성
-//  3. 리뷰 등록 모달 생성
-//
-
 function MyHistory ({ modal, handleMessage, handleNotice }) {
-  // document.querySelectorAll('input[type=checkbox]').forEach( el => {console.log(el.checked)} );
-  // document.querySelectorAll('input[type=checkbox]').forEach( el => el.checked = false );
-
-  const dispatch = useDispatch();
-  const history = useHistory();
   const token = useSelector((state) => state.user).token;
   const [openRating, setOpenRating] = useState(false);
   const [openRatingEdit, setOpenRatingEdit] = useState(false);
@@ -86,7 +69,6 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const [CheckList, setCheckList] = useState([]);
 
   const allHistories = useSelector((state) => state.history).dogWalkerHistory;
-  // console.log(allHistories);
 
   useEffect(() => {
     const ids = [];
@@ -119,7 +101,6 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   const givenReviewIds = givenReviews.map((el) => el.id) || [];
 
   const handleRatingOpen = (id) => {
-    // console.log(dogwalkerId);
     setHistoryInfo({ ...historyInfo, historyId: id });
     setOpenRating(true);
   };
@@ -162,7 +143,6 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
     setOpenRatingEdit(true);
   };
 
-  // console.log(targetReview);
   const handleRatingEditClose = () => {
     setOpenRatingEdit(false);
   };
@@ -171,7 +151,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleClick = (id) => {
-    history.push({ pathname: `/dogwalker:id=${id}` });
+    window.location.replace(`/dogwalker:id=${id}`);
   };
 
   const addComma = (num) => {
@@ -182,35 +162,13 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleHistoryDelete = () => {
-    // console.log(CheckList);
-    // dispatch(deleteHistory(CheckList));
     if (allHistories.length === 0) {
       handleNotice(true);
       handleMessage('삭제할 내역이 없습니다.');
     } else if (CheckList.length > 0) {
+      handleNotice(true);
+      handleMessage(`정말 내역을 삭제하시겠습니까?!${CheckList}`);
       setCheckList([]);
-      axios
-        .delete(process.env.REACT_APP_API_URL + '/history', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          data: {
-            serviceId: CheckList
-          }
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            handleNotice(true);
-            handleMessage('내역이 삭제되었습니다.');
-            dispatch(deleteHistory(CheckList));
-          }
-        })
-        .catch((error) => {
-          if (error.response.status === 401) {
-            modal();
-          } else console.log('error: ', error.response.data.message);
-        });
     } else {
       handleNotice(true);
       handleMessage('항목을 선택해주세요.');
@@ -218,9 +176,7 @@ function MyHistory ({ modal, handleMessage, handleNotice }) {
   };
 
   const handleSearchClicked = () => {
-    history.push({
-      pathname: '/search'
-    });
+    window.location.replace('/search');
   };
 
   return (

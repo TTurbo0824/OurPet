@@ -25,7 +25,6 @@ const DogWalkerWrapper = styled.div`
     box-shadow: 1px 1px 5px 2px ${Colors.lightGray};
     margin-bottom: 2rem;
     padding: 0.5rem;
-    /* background-color: lavender; */
   }
   .dogwalker-img {
     grid-area: img;

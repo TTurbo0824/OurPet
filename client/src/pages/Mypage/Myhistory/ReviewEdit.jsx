@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { editReview } from '../../../redux/action';
 import axios from 'axios';
-// import styled from 'styled-components';
 import { Colors } from '../../../components/utils/_var';
 import { Alertbox, Backdrop } from '../../../components/UserComponents';
 import CloseButton from '../../../components/CloseButton';
@@ -20,8 +19,7 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
   };
 
   const handleEditReview = () => {
-    if (!walkerReview || walkerReview.length < 5) {
-      // if (!walkerReview || walkerReview.length < 10) {
+    if (!walkerReview || walkerReview.length < 10) {
       setErrorMsg('리뷰를 10자 이상 작성해주세요');
     } else if (walkerReview === content) {
       setErrorMsg('수정 사항을 입력해주세요.');
@@ -49,7 +47,6 @@ function ReviewEdit ({ modal, token, handleNotice, handleMessage, handleModal, t
             handleModal();
             handleNotice(true);
             handleMessage('오류가 발생하였습니다.');
-            console.log('error: ', error.response.data.message);
           }
         });
     }

@@ -8,14 +8,13 @@ import { media } from '../../../components/utils/_media-queries';
 import { Alertbox, InputField } from '../../../components/UserComponents';
 import TopNavigation from '../../../components/TopNavigation';
 import UserProfile from './UserProfile';
-// import default_profile from '../../../images/default_profile.jpeg';
 import default_profile from '../../../images/default_profile.png';
 import { ProfileImage } from '../../../components/MyPageComponents';
 
 export const MyinfoWrapper = styled.div`
   .main {
     display: flex;
-    min-height: calc(100vh - 13.45rem);
+    min-height: calc(100vh - 15rem);
   }
   .profile-edit {
     cursor: pointer;
@@ -36,9 +35,8 @@ export const MyinfoView = styled.div`
   background-color: white;
   position: relative;
   text-align: center;
-  margin-bottom: 2.5rem;
-  /* ${media.tabletMini`margin-bottom: 2.5rem;`} */
-  /* background-color: lavender; */
+  margin-bottom: 0rem;
+  ${media.tablet`margin-bottom: 2.5rem;`}
   input:disabled {
     background: ${Colors.lightGray};
     color: ${Colors.gray};
@@ -191,10 +189,7 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
     }
   };
 
-  // console.log(checkNickname, checkPassword, checkRetypePassword);
-
   const handleEditRequest = () => {
-    // console.log(myInfo);
     if (isGuest) {
       setErrorMsg('체험하기 중에는 이용할 수 없습니다');
     } else if (checkPassword === 'length') {
@@ -240,7 +235,8 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
           } else if (error.response.status === 409) {
             setErrorMsg('중복되는 닉네임입니다.');
           } else {
-            console.log('error: ', error.response.data.message);
+            handleNotice(true);
+            handleMessage('오류가 발생하였습니다.');
           }
         });
     }
@@ -262,10 +258,13 @@ function Myinfo ({ modal, handleMessage, handleNotice }) {
             ? handleMessage('정말 탈퇴하시겠습니까?!k')
             : handleMessage('정말 탈퇴하시겠습니까?!g');
         })
-        .catch((err) => {
-          if (err.response.data.message === 'You\'re not logged in') {
+        .catch((error) => {
+          if (error.response.status === 401) {
             modal();
-          } else console.log(err.response.data.message);
+          } else {
+            handleNotice(true);
+            handleMessage('오류가 발생하였습니다.');
+          }
         });
     }
   };

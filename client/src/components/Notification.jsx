@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
-import { cancelDogwalker, deleteReview } from '../redux/action';
+import { cancelDogwalker, deleteHistory, deleteReview } from '../redux/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Colors } from './utils/_var';
@@ -114,7 +114,6 @@ function Notification ({ login, handleModal, message, handleNotice, handleMessag
           modal();
         } else {
           handleMessage('오류가 발생하였습니다.');
-          console.log('error: ', error.response.data.message);
         }
       });
   };
@@ -129,7 +128,6 @@ function Notification ({ login, handleModal, message, handleNotice, handleMessag
           },
           fail: (error) => {
             handleMessage('오류가 발생하였습니다.');
-            console.log('error: ', error.response.data.message);
           }
         });
       }
@@ -137,6 +135,7 @@ function Notification ({ login, handleModal, message, handleNotice, handleMessag
   };
 
   const cancelRequest = (id) => {
+    id = id.substring(1, id.length);
     let ids = id.split(',');
     ids = ids.map((el) => Number(el));
     setDeleteIds(ids);
@@ -162,7 +161,36 @@ function Notification ({ login, handleModal, message, handleNotice, handleMessag
           modal();
         } else {
           handleMessage('오류가 발생하였습니다.');
-          console.log('error: ', error.response.data.message);
+        }
+      });
+  };
+
+  const handleDeleteHistory = (id) => {
+    let ids = id.split(',');
+    ids = ids.map((el) => Number(el));
+    setDeleteIds(ids);
+
+    axios
+      .delete(process.env.REACT_APP_API_URL + '/history', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        data: {
+          serviceId: ids
+        }
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          handleNotice(true);
+          handleMessage('내역이 삭제되었습니다.');
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          modal();
+        } else {
+          handleMessage('오류가 발생하였습니다.');
         }
       });
   };
@@ -197,7 +225,6 @@ function Notification ({ login, handleModal, message, handleNotice, handleMessag
           modal();
         } else {
           handleMessage('오류가 발생하였습니다.');
-          console.log('error: ', error.response.data.message);
         }
       });
   };
@@ -221,35 +248,45 @@ function Notification ({ login, handleModal, message, handleNotice, handleMessag
                   dispatch(cancelDogwalker(deleteIds));
                 }}
               />
-            : message === '리뷰가 수정되었습니다.!' || message === '리뷰가 삭제되었습니다.!'
+            : message.includes('내역이 삭제되었습니다')
               ? <FontAwesomeIcon
                   icon={faTimes}
                   color={Colors.gray}
                   onClick={() => {
                     handleNotice(false);
-                    window.location.reload();
+                    dispatch(deleteHistory(deleteIds));
                   }}
                 />
-              : message === '오류가 발생하였습니다.'
-              ? <FontAwesomeIcon
-                  icon={faTimes}
-                  color={Colors.gray}
-                  onClick={() => {
-                    window.location.replace('/');
-                  }}
-                />
-              : <FontAwesomeIcon
-                  icon={faTimes}
-                  color={Colors.gray}
-                  onClick={() => {
-                    handleNotice(false);
-                  }}
-                />}
+              : message === '리뷰가 수정되었습니다.!' || message === '리뷰가 삭제되었습니다.!'
+                ? <FontAwesomeIcon
+                    icon={faTimes}
+                    color={Colors.gray}
+                    onClick={() => {
+                      handleNotice(false);
+                      window.location.reload();
+                    }}
+                  />
+                : message === '오류가 발생하였습니다.'
+                  ? <FontAwesomeIcon
+                      icon={faTimes}
+                      color={Colors.gray}
+                      onClick={() => {
+                        window.location.replace('/');
+                      }}
+                    />
+                  : <FontAwesomeIcon
+                      icon={faTimes}
+                      color={Colors.gray}
+                      onClick={() => {
+                        handleNotice(false);
+                      }}
+                    />}
         </CloseIcon>
         <Message
           topMargin={
             message.includes('정말 요청을 취소하시겠습니까?') ||
             message.includes('만료된 요청을 삭제하시겠습니까?') ||
+            message.includes('정말 내역을 삭제하시겠습니까?') ||
             message.includes('리뷰를 삭제하시겠습니까?') ||
             message.includes('정말 탈퇴하시겠습니까?') ||
             message === '요청이 완료되었습니다.' ||
@@ -266,6 +303,7 @@ function Notification ({ login, handleModal, message, handleNotice, handleMessag
           {message.includes('정말 요청을 취소하시겠습니까?') ||
           message.includes('만료된 요청을 삭제하시겠습니까?') ||
           message.includes('정말 탈퇴하시겠습니까?') ||
+          message.includes('정말 내역을 삭제하시겠습니까?') ||
           message === '리뷰가 수정되었습니다.!' ||
           message.includes('리뷰를 삭제하시겠습니까?') ||
           message === '리뷰가 삭제되었습니다.!'
@@ -319,11 +357,15 @@ function Notification ({ login, handleModal, message, handleNotice, handleMessag
                           >내역 확인하기
                           </NoticeButton>
                           )
-                        : message.includes('리뷰를 삭제하시겠습니까?')
+                        : message.includes('정말 내역을 삭제하시겠습니까?')
                           ? (
-                            <NoticeButton onClick={() => handleDeleteReview(message.split('!')[1])}>삭제하기</NoticeButton>
+                            <NoticeButton onClick={() => handleDeleteHistory(message.split('!')[1])}>삭제하기</NoticeButton>
                             )
-                          : null}
+                          : message.includes('리뷰를 삭제하시겠습니까?')
+                            ? (
+                              <NoticeButton onClick={() => handleDeleteReview(message.split('!')[1])}>삭제하기</NoticeButton>
+                              )
+                            : null}
       </NoticeView>
     </NoticeBackdrop>
   );

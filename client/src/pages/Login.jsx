@@ -6,7 +6,7 @@ import { userLogin, getHistory, getRequest, resetHistory, resetRequest, getRatin
 import logo from '../images/logo_text.png';
 import { Colors } from '../components/utils/_var';
 import { media } from '../components/utils/_media-queries';
-import { Alertbox, Backdrop, InputField } from '../components/UserComponents';
+import { Logo, Alertbox, Backdrop, InputField } from '../components/UserComponents';
 import CloseButton from '../components/CloseButton';
 import kakaoLogo from '../images/kakao_logo.png';
 
@@ -17,23 +17,13 @@ const LoginView = styled.div`
   width: 18.4rem; 
   height: 21.7rem;
   ${media.tabletMini`width: 19.5rem; height: 22.5rem;`}
-  ${media.tablet`width: 20rem; height: 23.5rem;`}
+  ${media.tablet`width: 20rem; height: 23rem;`}
   background-color: white;
   position: relative;
   text-align: center;
   padding-top: 0.7rem;
   box-shadow: 8px 8px grey;
   ${media.tablet`box-shadow: 10px 10px grey;`}
-  .logo {
-    width: 6.75rem;
-    margin: .85rem auto .5rem;
-    ${media.tabletMini`width: 7rem; margin: .9rem auto .75rem;`}
-    ${media.tablet`width: 7.25rem; margin: 1.25rem auto .8rem;`}
-  }
-  /* .logo {
-    width: 7.5rem;
-    margin: 0.7rem auto 1rem;
-  } */
 `;
 
 const LoginInputContainer = styled.div`
@@ -85,7 +75,6 @@ const KakaoContent = styled.div`
   vertical-align: middle;
   margin: auto 1.8rem auto 0;
   font-size: .9rem;
-  ${media.tablet`font-size: .9rem;`}
   color: #000000 85%;
 `;
 
@@ -93,7 +82,6 @@ const SignupSpan = styled.span`
   font-size: .8rem;
   margin: auto .2rem auto .1rem;
   text-align: right;
-  color: ${Colors.gray};
   color: ${(props) => props.textColor};
   cursor: ${(props) => (props.textColor === Colors.gray ? 'pointer' : 'normal')};
   :hover {
@@ -177,7 +165,6 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
           handleModal();
           handleNotice(true);
           handleMessage('오류가 발생하였습니다.');
-          console.log('error: ', error.response.data.message);
         }
       });
   };
@@ -213,7 +200,6 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
             handleModal();
             handleNotice(true);
             handleMessage('오류가 발생하였습니다.');
-            console.log('error: ', error.response.data.message);
           }
         });
       }
@@ -270,7 +256,6 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
         handleModal();
         handleNotice(true);
         handleMessage('오류가 발생하였습니다.');
-        console.log('error: ', error.response.data.message);
       });
   };
 
@@ -278,7 +263,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
     <Backdrop>
       <LoginView>
         <CloseButton onClick={handleModal} />
-        <img className='logo' src={logo} alt='logo' />
+        <Logo src={logo} alt='logo' />
         <LoginInputContainer>
           <InputField
             onChange={handleInputValue('email')}
