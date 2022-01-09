@@ -2,11 +2,9 @@ export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
 export const EDIT_INFO = 'EDIT_INFO';
 export const EDIT_PROFILE = 'EDIT_PROFILE';
-export const RESET_REQUEST = 'RESET_REQUEST';
 export const GET_REQUEST = 'GET_REQUEST';
 export const REQUEST_DOGWALKER = 'REQUEST_DOGWALKER';
 export const CANCEL_DOGWALKER = 'CANCEL_DOGWALKER';
-export const RESET_HISTORY = 'RESET_HISTORY';
 export const GET_HISTORY = 'GET_HISTORY';
 export const DELETE_HISTORY = 'DELETE_HISTORY';
 export const GET_RATING = 'GET_RATING';
@@ -38,10 +36,6 @@ export const editProfile = (img_url) => ({
   payload: img_url
 });
 
-export const resetRequest = () => ({
-  type: RESET_REQUEST
-});
-
 export const getRequest = (request) => ({
   type: GET_REQUEST,
   payload: request
@@ -55,10 +49,6 @@ export const requestDogwalker = (request) => ({
 export const cancelDogwalker = (ids) => ({
   type: CANCEL_DOGWALKER,
   payload: ids
-});
-
-export const resetHistory = () => ({
-  type: RESET_HISTORY
 });
 
 export const getHistory = (history) => ({

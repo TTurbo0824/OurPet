@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { userLogin, getHistory, getRequest, resetHistory, resetRequest, getRating, getReview } from '../redux/action';
+import { userLogin, getHistory, getRequest, getRating, getReview } from '../redux/action';
 import logo from '../images/logo_text.png';
 import { Colors } from '../components/utils/_var';
 import { media } from '../components/utils/_media-queries';
@@ -207,8 +207,6 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   };
 
   const guestLoginRequest = () => {
-    dispatch(resetRequest());
-    dispatch(resetHistory());
     dispatch(getRating([]));
     dispatch(getReview([]));
 
