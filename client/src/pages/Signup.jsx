@@ -227,8 +227,9 @@ function Signup ({ login, handleModal, handleMessage, handleNotice }) {
           } else if (error.response.data.message === 'conflict: nickname') {
             setErrorMsg('이미 가입된 닉네임입니다');
           } else {
-            console.log('error: ', error.response.data.message);
-            setErrorMsg('오류가 발생했습니다');
+            handleModal();
+            handleNotice(true);
+            handleMessage('오류가 발생하였습니다.');
           }
         });
     }
@@ -250,7 +251,9 @@ function Signup ({ login, handleModal, handleMessage, handleNotice }) {
           }
         })
         .catch((error) => {
-          setErrorMsg('오류가 발생했습니다');
+          handleModal();
+          handleNotice(true);
+          handleMessage('오류가 발생하였습니다.');
         });
     }
   };
