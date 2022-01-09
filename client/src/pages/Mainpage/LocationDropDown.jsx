@@ -56,7 +56,7 @@ function LocationDropDown ({ setLocation }) {
       }
     }),
     input: (styles) => ({ ...styles, ...icon('hidden'), height: '2.25rem' }),
-    placeholder: (styles) => ({ ...styles, ...icon() }),
+    placeholder: (styles) => ({ ...styles, ...icon(), whiteSpace: 'nowrap', overflowX: 'hidden' }),
     singleValue: (styles) => ({ ...styles, ...icon() })
   };
 
