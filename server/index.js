@@ -27,6 +27,7 @@ app.post('/signup', controllers.signup);
 app.post('/auth', controllers.auth);
 app.post('/login', controllers.login);
 app.post('/logout', controllers.logout);
+app.post('/reset-password', controllers.resetPassword);
 app.get('/my-data', controllers.myData);
 app.post('/kakao', controllers.kakao);
 app.get('/guest', controllers.guest);

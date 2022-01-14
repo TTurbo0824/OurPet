@@ -3,6 +3,7 @@ module.exports = {
   auth: require('./users/auth'),
   login: require('./users/login'),
   logout: require('./users/logout'),
+  resetPassword: require('./users/reset-password'),
   myData: require('./users/my-data'),
   kakao: require('./users/kakao'),
   guest: require('./guest/guest'),
