@@ -9,10 +9,11 @@ import { media } from '../components/utils/_media-queries';
 import { Logo, Alertbox, Backdrop, InputField } from '../components/UserComponents';
 import CloseButton from '../components/CloseButton';
 import kakaoLogo from '../images/kakao_logo.png';
+import ResetPassword, { Veri } from './ResetPassword';
 
 const { Kakao } = window;
 
-const LoginView = styled.div`
+export const LoginView = styled.div`
   box-sizing: border-box;
   width: 18.4rem; 
   height: 21.7rem;
@@ -33,7 +34,7 @@ const LoginInputContainer = styled.div`
   align-items: center;
 `;
 
-const LoginButton = styled.button`
+export const LoginButton = styled.button`
   cursor: pointer;
   margin: .1rem auto .3rem;
   font-size: .85rem;
@@ -91,6 +92,8 @@ const SignupSpan = styled.span`
 
 function Login ({ signup, handleModal, handleMessage, handleNotice }) {
   const dispatch = useDispatch();
+  const [resetOpen, setResetOpen] = useState(false);
+
   const [loginInfo, setLoginInfo] = useState({
     email: '',
     password: ''
@@ -160,7 +163,7 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
         if (error.response.data.message === 'please check your password and try again') {
           setErrorMsg('잘못된 비밀번호입니다');
         } else if (error.response.data.message === 'Invalid user') {
-          setErrorMsg('등록되지 않은 이메일입니다');
+          setErrorMsg('가입되지 않은 이메일입니다');
         } else {
           handleModal();
           handleNotice(true);
@@ -257,40 +260,53 @@ function Login ({ signup, handleModal, handleMessage, handleNotice }) {
       });
   };
 
+  const handleResetOpen = () => {
+    setResetOpen(true);
+  };
   return (
     <Backdrop>
       <LoginView>
         <CloseButton onClick={handleModal} />
         <Logo src={logo} alt='logo' />
-        <LoginInputContainer>
-          <InputField
-            onChange={handleInputValue('email')}
-            onKeyPress={(e) => {
-              enter(e);
-            }}
-            placeholder='이메일'
-          />
-          <InputField
-            type='password'
-            onChange={handleInputValue('password')}
-            onKeyPress={(e) => {
-              enter(e);
-            }}
-            placeholder='비밀번호'
-          />
-        </LoginInputContainer>
-        <LoginButton onClick={handleLoginRequest}>로그인</LoginButton>
-        <KakaoButton onClick={kakaoLogin}>
-          <img src={kakaoLogo} alt='kakao-logo' width='20px' />
-          <KakaoContent>카카오 로그인</KakaoContent>
-        </KakaoButton>
-        <div>
-          <SignupSpan textColor={Colors.gray} onClick={goSignup}>회원가입</SignupSpan>
-          <SignupSpan>|</SignupSpan>
-          <SignupSpan textColor={Colors.gray} onClick={guestLoginRequest}>체험하기</SignupSpan>
-        </div>
-        <Alertbox>{errorMsg}</Alertbox>
+        {!resetOpen
+          ? <>
+            <LoginInputContainer>
+              <InputField
+                onChange={handleInputValue('email')}
+                onKeyPress={(e) => {
+                  enter(e);
+                }}
+                placeholder='이메일'
+              />
+              <InputField
+                type='password'
+                onChange={handleInputValue('password')}
+                onKeyPress={(e) => {
+                  enter(e);
+                }}
+                placeholder='비밀번호'
+              />
+            </LoginInputContainer>
+            <Veri onClick={handleResetOpen}>비밀번호를 잊어버리셨나요?</Veri>
+            <LoginButton onClick={handleLoginRequest}>로그인</LoginButton>
+            <KakaoButton onClick={kakaoLogin}>
+              <img src={kakaoLogo} alt='kakao-logo' width='20px' />
+              <KakaoContent>카카오 로그인</KakaoContent>
+            </KakaoButton>
+            <div>
+              <SignupSpan textColor={Colors.gray} onClick={goSignup}>회원가입</SignupSpan>
+              <SignupSpan>|</SignupSpan>
+              <SignupSpan textColor={Colors.gray} onClick={guestLoginRequest}>체험하기</SignupSpan>
+            </div>
+            <Alertbox>{errorMsg}</Alertbox>
+          </>
+          : <ResetPassword
+              handleModal={handleModal}
+              handleMessage={handleMessage}
+              handleNotice={handleNotice}
+            />}
       </LoginView>
+
     </Backdrop>
   );
 }
