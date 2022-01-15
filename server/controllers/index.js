@@ -12,6 +12,7 @@ module.exports = {
   dogwalker: require('./dogwalkers/dogwalker'),
   myInfo: require('./mypage/myinfo'),
   editMyInfo: require('./mypage/edit-my-info'),
+  editPassword: require('./mypage/edit-password'),
   editProfile: require('./mypage/profile-image'),
   withdrawal: require('./mypage/withdrawal'),
   myRequest: require('./request/myrequest'),

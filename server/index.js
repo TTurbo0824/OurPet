@@ -36,6 +36,7 @@ app.get('/mainpage', controllers.mainpage);
 app.get('/dogwalker', controllers.dogwalker);
 app.get('/user-info', controllers.myInfo);
 app.patch('/user-info', controllers.editMyInfo);
+app.patch('/user-password', controllers.editPassword);
 app.patch('/profile-image', editProfile.upload.single('image'), editProfile.sendPost);
 app.delete('/withdrawal', controllers.withdrawal);
 app.get('/request', controllers.myRequest);
