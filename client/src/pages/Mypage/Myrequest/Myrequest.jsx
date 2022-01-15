@@ -194,7 +194,7 @@ function MyRequest ({ handleMessage, handleNotice }) {
         handleMessage('만료된 요청이 없습니다.');
       } else {
         handleNotice(true);
-        handleMessage(`만료된 요청을 삭제하시겠습니까?!${expiredRequest}`);
+        handleMessage(`만료된 요청을 삭제하시겠습니까?!#${expiredRequest}`);
       }
     }
   };

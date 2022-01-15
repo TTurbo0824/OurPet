@@ -46,3 +46,22 @@ export const InputField = styled.input`
     font-size: .8rem;
   }
 `;
+
+export const PasswordField = styled.input`
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 15px;
+  color: ${Colors.darkGray};
+  padding: .5rem 1rem;
+  margin-bottom: .5rem;
+  width: 13rem;
+  height: 2rem;
+  ${media.tablet`width: 13.5rem; height: 2.2rem;`}
+  :focus {
+    outline: none;
+  }
+  ::-webkit-input-placeholder {
+    color: ${Colors.gray};
+    font-size: .8rem;
+  }
+`;

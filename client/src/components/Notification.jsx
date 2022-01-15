@@ -295,7 +295,8 @@ function Notification ({ login, handleModal, message, handleNotice, handleMessag
             message === '회원가입 성공!' ||
             message === '회원정보가 수정되었습니다.' ||
             message === '회원탈퇴가 완료되었습니다.' ||
-            message === '로그인이 필요한 서비스입니다.'
+            message === '로그인이 필요한 서비스입니다.' ||
+            message === '비밀번호가 수정되었습니다.'
               ? '.4rem'
               : message.includes('체험하기 중에는 이용할') ? '.6rem' : '1.2rem'
           }
@@ -321,7 +322,7 @@ function Notification ({ login, handleModal, message, handleNotice, handleMessag
             >
             메인화면으로
           </NoticeButton>
-          : message === '로그인이 필요한 서비스입니다.'
+          : message === '로그인이 필요한 서비스입니다.' || message === '비밀번호가 수정되었습니다.'
             ? <NoticeButton onClick={goLogin}>
               로그인
             </NoticeButton>
